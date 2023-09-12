@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="VocabTrainer.Views.LearningModeOneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VocabTrainer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel>
+            <StackPanel Margin="10,0,0,0">
+                <TextBlock Foreground="white" FontSize="24">German</TextBlock>
+                <TextBlock x:Name="germanWord" Foreground="white" FontSize="24" Margin="5,0,0,0"/>
+            </StackPanel>
+            <StackPanel Margin="10,25,0,30">
+                <TextBlock Foreground="white" FontSize="24">English</TextBlock>
+                <TextBlock x:Name="englishWord" Foreground="white" FontSize="24" Margin="5,0,0,0"/>
+            </StackPanel>
+            <Button Width="180" Height="30" FontSize="18" Click="NextWord" IsDefault="True">next word</Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,14 @@
+[
+  {
+    "WordlistName": "words",
+    "FirstLanguage": "german",
+    "SecondLanguage": "english",
+    "IsTrue": true
+  },
+  {
+    "WordlistName": "testsdf",
+    "FirstLanguage": "test",
+    "SecondLanguage": "test",
+    "IsTrue": true
+  }
+]
