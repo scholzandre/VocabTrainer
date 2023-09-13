@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VocabTrainer.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             MouseDown="Windows_MouseDown">
+
     <Grid>
         <TextBlock Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Add wordlists</TextBlock>
         <StackPanel>

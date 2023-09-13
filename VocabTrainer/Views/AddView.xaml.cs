@@ -29,5 +29,10 @@ namespace VocabTrainer.Views {
                 }
             }
         }
+
+        private void Windows_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Windows_MouseDown(sender, e);
+        }
     }
 }

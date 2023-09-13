@@ -29,7 +29,7 @@ namespace VocabTrainer {
             DataContext = new SettingsView(Settings.GetSettings(), WordlistsList.GetWordlists());
         }
 
-        private void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
+        public void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
