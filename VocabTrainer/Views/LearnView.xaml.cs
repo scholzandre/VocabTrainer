@@ -40,7 +40,7 @@ namespace VocabTrainer.Views {
                 emptyList = false;
             }
             int random = Random.Next(0, learningModes.Count());
-            if (learningModes.Count() > 0) {
+            if (learningModes.Count() > 0 && allWords != 0) {
                 switch (learningModes[random]) {
                     case 1:
                         DataContext = new LearningModeOneView(this, Counter);

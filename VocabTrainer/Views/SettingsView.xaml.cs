@@ -14,23 +14,23 @@ namespace VocabTrainer.Views {
             set {
                 settingsList = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("settingsList"));
+                CreateGUI();
             }
         }
-
+        private bool updatingSettings = false;
         private List<WordlistsList> wordlistsSettings;
         public List<WordlistsList> WordlistsSettings {
             get { return wordlistsSettings; }
             set {
                 wordlistsSettings = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wordlistsSettings"));
+                CreateGUIWordlists();
             }
         }
         public SettingsView(List<Settings> setting, List<WordlistsList> wordlists) {
+            InitializeComponent();
             SettingsList = setting;
             WordlistsSettings = wordlists;
-            InitializeComponent();
-            CreateGUI();
-            CreateGUIWordlists();
         }
         public void CreateGUI() {
             Grid mainGrid = new Grid();
@@ -70,7 +70,32 @@ namespace VocabTrainer.Views {
             RowDefinition lastRow = new RowDefinition();
             mainGrid.RowDefinitions.Add(lastRow);
             Grid.SetRow(mainGrid, 1);
+            stackPanelGeneralSettings.Children.Clear();
             stackPanelGeneralSettings.Children.Add(mainGrid);
+        }
+        private void CheckBox_Checked_Settings(object sender, RoutedEventArgs e, string name) {
+            if (!updatingSettings) {
+                int number = getIndex(name);
+                if (number == 1) {  
+                    SettingsList[0].IsTrue = false;
+                } else if (number == 0) {
+                    SettingsList[1].IsTrue = false;
+                }
+                SettingsList[number].IsTrue = true;
+                UpdateSettingsList();
+            }
+        }
+        private void UpdateSettingsList() {
+            updatingSettings = true;
+            Settings.WriteSettings(SettingsList);
+            SettingsList = Settings.GetSettings();
+            updatingSettings = false;
+        }
+        private void CheckBox_UnChecked_Settings(object sender, RoutedEventArgs e, string name) {
+            int number = getIndex(name);
+            SettingsList[number].IsTrue = false;
+            Settings.WriteSettings(SettingsList);
+            SettingsList = Settings.GetSettings();
         }
 
         public void CreateGUIWordlists() {
@@ -132,32 +157,21 @@ namespace VocabTrainer.Views {
             stackPanelWordlistsSettings.Children.Add(mainGrid);
         }
 
-        private void CheckBox_Checked_Settings(object sender, RoutedEventArgs e, string name) {
-            int number = getIndex(name);
-            SettingsList[number].IsTrue = true;
-            Settings.WriteSettings(SettingsList);
-        }
-        private void CheckBox_UnChecked_Settings(object sender, RoutedEventArgs e, string name) {
-            int number = getIndex(name);
-            SettingsList[number].IsTrue = false;
-            Settings.WriteSettings(SettingsList);
-            SettingsList = Settings.GetSettings();
-            stackPanelGeneralSettings.Children.Clear();
-            CreateGUI();
-        }
-
         private void CheckBox_Checked_Wordlists(object sender, RoutedEventArgs e, string name) {
             int number = getIndex(name);
             WordlistsSettings[number].IsTrue = true;
             WordlistsList.WriteWordlistsList(WordlistsSettings);
+            if (!updatingSettings) {
+                UpdateSettingsList();
+            }
         }
         private void CheckBox_UnChecked_Wordlists(object sender, RoutedEventArgs e, string name) {
             int number = getIndex(name);
             WordlistsSettings[number].IsTrue = false;
             WordlistsList.WriteWordlistsList(WordlistsSettings);
-            WordlistsSettings = WordlistsList.GetWordlists();
-            stackPanelWordlistsSettings.Children.Clear();
-            CreateGUIWordlists();
+            if (!updatingSettings) {
+                UpdateSettingsList();
+            }
         }
 
         private int getIndex(string name) {
