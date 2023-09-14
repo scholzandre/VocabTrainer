@@ -26,7 +26,7 @@ namespace VocabTrainer.Views {
             checkButton.IsEnabled = false;
             if (Counter < vocabulary.Count()) {
                 if (germanWordBox.IsReadOnly == true) { 
-                    if (englishWordBox.Text != vocabulary[Counter].English) {
+                    if (englishWordBox.Text.ToLower() != vocabulary[Counter].English.ToLower()) {
                         englishWordBox.Text = vocabulary[Counter].English;
                         englishWordBox.Foreground = Brushes.Red;
                         answer.Text = "wrong";
@@ -36,7 +36,7 @@ namespace VocabTrainer.Views {
                     }
 
                 } else if (englishWordBox.IsReadOnly == true) { 
-                    if (germanWordBox.Text != vocabulary[Counter].German) {
+                    if (germanWordBox.Text.ToLower() != vocabulary[Counter].German.ToLower()) {
                         germanWordBox.Text = vocabulary[Counter].German;
                         germanWordBox.Foreground = Brushes.Red;
                         answer.Text = "wrong";
