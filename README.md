@@ -1,3 +1,6 @@
 # VocabTrainer
-Things that need to be added:
-	- Learning Mode two -> not case sensitive 
+Ideas: 
+	- highlighting words with star
+	- Translater with Deepl?
+	- optimize LM2 for multiple words 
+	- show learning progress
