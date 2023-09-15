@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
@@ -25,8 +26,20 @@ namespace VocabTrainer.Views {
         public async void CheckAnswer(object sender, RoutedEventArgs e) {
             checkButton.IsEnabled = false;
             if (Counter < vocabulary.Count()) {
-                if (germanWordBox.IsReadOnly == true) { 
-                    if (englishWordBox.Text.ToLower() != vocabulary[Counter].English.ToLower()) {
+                List<string> correctAnswer;
+                List<string> answers;
+                bool isCorrect = false;
+                bool isPartyCorrect = false;
+                bool atLeastOneCorrect = false;
+                bool toManyWords = false;
+                if (germanWordBox.IsReadOnly == true) {
+
+                    (bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) returnedBools = CheckInput(SplitAnswer(vocabulary[Counter].English.ToLower()), SplitAnswer(englishWordBox.Text.ToLower()), isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords); 
+
+                    if (returnedBools.isPartyCorrect && !returnedBools.isCorrect && returnedBools.atLeastOneCorrect || returnedBools.isCorrect && returnedBools.atLeastOneCorrect && returnedBools.toManyWords) {
+                        englishWordBox.Foreground = Brushes.Orange;
+                        answer.Text = "yeah";
+                    } else if (!returnedBools.isCorrect) {
                         englishWordBox.Text = vocabulary[Counter].English;
                         englishWordBox.Foreground = Brushes.Red;
                         answer.Text = "wrong";
@@ -35,8 +48,13 @@ namespace VocabTrainer.Views {
                         answer.Text = "correct";
                     }
 
-                } else if (englishWordBox.IsReadOnly == true) { 
-                    if (germanWordBox.Text.ToLower() != vocabulary[Counter].German.ToLower()) {
+                } else if (englishWordBox.IsReadOnly == true) {
+                    (bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) returnedBools = CheckInput(SplitAnswer(vocabulary[Counter].German.ToLower()), SplitAnswer(germanWordBox.Text.ToLower()), isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords);
+
+                    if (returnedBools.isPartyCorrect && !returnedBools.isCorrect && returnedBools.atLeastOneCorrect || returnedBools.isCorrect && returnedBools.atLeastOneCorrect && returnedBools.toManyWords) {
+                        germanWordBox.Foreground = Brushes.Orange;
+                        answer.Text = "yeah";
+                    } else if (!returnedBools.isCorrect) {
                         germanWordBox.Text = vocabulary[Counter].German;
                         germanWordBox.Foreground = Brushes.Red;
                         answer.Text = "wrong";
@@ -45,10 +63,38 @@ namespace VocabTrainer.Views {
                         answer.Text = "correct";
                     }
                 }  
-
                 await new ExtraFunctions().Wait();
                 _parentLearnView.getCounter();
             }
+        }
+
+        public List<string> SplitAnswer(string answerString) {
+            string[] answers = answerString.Split(',');
+            for (int i = 0; i < answers.Length; i++) {
+                answers[i] = answers[i].Trim();
+            }
+            return new List<string>(answers);
+        }
+
+        public (bool, bool, bool, bool) CheckInput(List<string> correctAnswer, List<string> answers, bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) {
+            if (answers.Count > correctAnswer.Count) {
+                toManyWords = true;
+            }
+            for (int i = 0; i < correctAnswer.Count; i++) {
+                for (int j = 0; j < answers.Count; j++) {
+                    if (answers[j] == correctAnswer[i]) {
+                        answers.Remove(answers[j]);
+                        isCorrect = true;
+                        isPartyCorrect = false;
+                        atLeastOneCorrect = true;
+                        break;
+                    } else {
+                        isCorrect = false;
+                        isPartyCorrect = true;
+                    }
+                }
+            }
+            return (isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords);
         }
 
         public bool checkEmptyLocal() {
