@@ -16,8 +16,15 @@
                 <TextBlock Foreground="white" FontSize="24">English</TextBlock>
                 <TextBox x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0"/>
             </StackPanel>
-            <Button x:Name="checkButton" Width="180" Height="30" FontSize="18" Click="CheckAnswer" IsDefault="True">check answer</Button>
-            <TextBlock/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="311*"/>
+                    <ColumnDefinition Width="489*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18" Click="CheckAnswer" HorizontalAlignment="Left" IsDefault="True">check answer</Button>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right" Click="StarWord"/>
+            </Grid>
             <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>

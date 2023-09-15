@@ -9,7 +9,8 @@ using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
-        List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
+        List<VocabularyEntry> vocabulary;
+        public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
         public int Counter { get; set; }
         private LearnView _parentLearnView;
 
@@ -18,10 +19,11 @@ namespace VocabTrainer.Views {
         public LearningModeTwoView(LearnView parentLearnView, int counter) {
             _parentLearnView = parentLearnView;
             Counter = counter;
-            vocabulary = parentLearnView.allWordsList;
+            Vocabulary = parentLearnView.allWordsList;
             InitializeComponent();
             CreateQuestion();
             checkEmptyLocal();
+            SetStar();
         }
         public async void CheckAnswer(object sender, RoutedEventArgs e) {
             checkButton.IsEnabled = false;
@@ -125,6 +127,39 @@ namespace VocabTrainer.Views {
                 germanWordBox.Text = string.Empty;
                 germanWordBox.IsReadOnly = false;
             }
+        }
+
+        private void SetStar() {
+            VocabularyEntry marked = new VocabularyEntry();
+            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.German = Vocabulary[Counter].German;
+            marked.English = Vocabulary[Counter].English;
+            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
+            for (int i = 0; i < vocabulary.Count; i++) {
+                if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
+                    markedButton.Content = "★";
+                }
+            }
+        }
+        private void StarWord(object sender, RoutedEventArgs e) {
+            VocabularyEntry marked = new VocabularyEntry();
+            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.German = Vocabulary[Counter].German;
+            marked.English = Vocabulary[Counter].English;
+            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
+
+            if (markedButton.Content.ToString() == "☆") {
+                markedButton.Content = "★";
+                vocabulary.Add(marked);
+            } else if (markedButton.Content.ToString() == "★") {
+                markedButton.Content = "☆";
+                for (int i = 0; i < vocabulary.Count; i++) {
+                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
+                        vocabulary.Remove(vocabulary[i]);
+                    }
+                }
+            }
+            VocabularyEntry.WriteData(marked, vocabulary);
         }
     }
 }
