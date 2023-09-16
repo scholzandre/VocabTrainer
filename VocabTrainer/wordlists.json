@@ -3,12 +3,18 @@
     "WordlistName": "words",
     "FirstLanguage": "german",
     "SecondLanguage": "english",
-    "IsTrue": true
+    "IsTrue": false
   },
   {
     "WordlistName": "testsdf",
     "FirstLanguage": "test",
     "SecondLanguage": "test",
+    "IsTrue": false
+  },
+  {
+    "WordlistName": "Marked",
+    "FirstLanguage": "-",
+    "SecondLanguage": "-",
     "IsTrue": true
   }
 ]
