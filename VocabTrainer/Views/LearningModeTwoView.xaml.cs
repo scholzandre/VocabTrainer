@@ -11,6 +11,8 @@ namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
         List<VocabularyEntry> vocabulary;
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
+        List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
+
         public int Counter { get; set; }
         private LearnView _parentLearnView;
 
@@ -20,6 +22,7 @@ namespace VocabTrainer.Views {
             _parentLearnView = parentLearnView;
             Counter = counter;
             Vocabulary = parentLearnView.allWordsList;
+            languages = parentLearnView.langues;
             InitializeComponent();
             CreateQuestion();
             checkEmptyLocal();
@@ -110,6 +113,9 @@ namespace VocabTrainer.Views {
             }
         }
         public void CreateQuestion() {
+            firstLanguage.Text = languages[Counter].firstLanguage;
+            secondLanguage.Text = languages[Counter].secondLanguage;
+
             answer.Text = string.Empty;
             checkButton.IsEnabled = true;
             germanWordBox.Foreground = Brushes.Black;

@@ -9,11 +9,11 @@
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,10,0">
-                <TextBlock Foreground="white" FontSize="24">German</TextBlock>
+                <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
                 <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0"/>
             </StackPanel>
             <StackPanel Margin="10,25,10,30">
-                <TextBlock Foreground="white" FontSize="24">English</TextBlock>
+                <TextBlock x:Name="secondLanguage" Foreground="white" FontSize="24">English</TextBlock>
                 <TextBox x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0"/>
             </StackPanel>
 

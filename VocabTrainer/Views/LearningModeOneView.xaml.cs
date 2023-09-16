@@ -7,14 +7,19 @@ using System.Windows.Controls;
 namespace VocabTrainer.Views {
     public partial class LearningModeOneView : UserControl {
         List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
+        List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
         public int Counter { get; set; }
         private LearnView _parentLearnView;
         public LearningModeOneView(LearnView parentLearnView, int counter) {
             _parentLearnView = parentLearnView;
             Counter = counter;
             vocabulary = parentLearnView.allWordsList;
+            languages = parentLearnView.langues;
             InitializeComponent();
             CheckEmptyLocal();
+
+            firstLanguage.Text = languages[Counter].firstLanguage;
+            secondLanguage.Text = languages[Counter].secondLanguage;
             germanWord.Text = vocabulary[Counter].German;
             englishWord.Text = vocabulary[Counter].English;
             SetStar();
@@ -23,9 +28,6 @@ namespace VocabTrainer.Views {
         public LearningModeOneView() { }
         private void NextWord(object sender, RoutedEventArgs e) {
             if (Counter < vocabulary.Count()) {
-                germanWord.Text = vocabulary[Counter].German;
-                englishWord.Text = vocabulary[Counter].English;
-
                 _parentLearnView.getCounter();
             }
         }
