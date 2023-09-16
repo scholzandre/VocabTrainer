@@ -36,7 +36,7 @@ namespace VocabTrainer {
             }
             if (!learningModeAvailable) settings[2].IsTrue = true;
 
-            (int allWordsCounter, List<VocabularyEntry> allWords) = new WordlistsList().GetAllWords();
+            (int allWordsCounter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage)> allWords) = new WordlistsList().GetAllWords();
             if (allWordsCounter == 0) {
                 foreach (Settings setting in settings) { 
                     setting.IsTrue = false;

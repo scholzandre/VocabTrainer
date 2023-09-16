@@ -20,6 +20,7 @@ namespace VocabTrainer.Views {
         List<int> counters = new List<int>();
         List<Settings> settings = Settings.GetSettings();
         public List<VocabularyEntry> allWordsList = new List<VocabularyEntry>();
+        public List<(string, string)> langues = new List<(string, string)>();
         bool randomOrder, upCountingOrder = false;
         bool emptyList = true;
         public int allWords = 0;
@@ -104,9 +105,13 @@ namespace VocabTrainer.Views {
         }
         public void GetWordsAndCounter() {
             WordlistsList wordlistsList = new WordlistsList();
-            (int counter, List<VocabularyEntry> words) allWordsAndCounter = wordlistsList.GetAllWords();
+            (int counter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage)> words) allWordsAndCounter = wordlistsList.GetAllWords();
             allWords = allWordsAndCounter.counter;
-            allWordsList = allWordsAndCounter.words;
+            allWordsList = allWordsAndCounter.words.Select(x => x.entry).ToList();
+
+            for (int i = 0; i < allWordsAndCounter.counter; i++) {
+                langues.Add((allWordsAndCounter.words[i].firstLanguage, allWordsAndCounter.words[i].secondLanguage));
+            }
         }
 
         private void Windows_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
