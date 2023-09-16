@@ -67,13 +67,17 @@ namespace VocabTrainer.Views {
         }
         public void CreateButton(TextBox name, TextBox firstLanguage, TextBox secondLanguage, Grid grid, int i, string content) {
             Button button = new Button();
-            button.Content = content;
-            Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
-            buttonTagsR.Add("NameTextBox", name);
-            buttonTagsR.Add("FirstLanguageTextbox", firstLanguage);
-            buttonTagsR.Add("SecondLanguageTextbox", secondLanguage);
-            button.Tag = buttonTagsR;
-            button.Click += (content == "R") ? (RoutedEventHandler)Rename : Remove;
+            if (name.Text != "Marked") {
+                button.Content = content;
+                Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
+                buttonTagsR.Add("NameTextBox", name);
+                buttonTagsR.Add("FirstLanguageTextbox", firstLanguage);
+                buttonTagsR.Add("SecondLanguageTextbox", secondLanguage);
+                button.Tag = buttonTagsR;
+                button.Click += (content == "R") ? (RoutedEventHandler)Rename : Remove;
+            } else {
+                button.Content = "/";
+            }
             button.Name = $"B{i}";
             button.Margin = new Thickness(0, 0, 10, 10);
             button.Width = 25;
