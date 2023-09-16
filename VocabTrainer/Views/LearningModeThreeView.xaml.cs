@@ -4,22 +4,23 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeThreeView : UserControl {
         int Counter { get; set; }
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         int Language { get; set; }
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         private LearnView _parentLearnView;
         List<int> ints = new List<int>();
-        List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
+        private List<VocabularyEntry> vocabulary;
+        public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
         int correctAnswerOrder = 0;
         public LearningModeThreeView(LearnView parentLearnView, int counter) {
             _parentLearnView = parentLearnView;
             Counter = counter;
             vocabulary = parentLearnView.allWordsList;
             InitializeComponent();
+            SetStar();
             CreateQuestion();
         }
         public void CreateQuestion() {
@@ -93,17 +94,46 @@ namespace VocabTrainer.Views {
             {
                 if (item is Button button) {
                     button.IsEnabled = false;
-#pragma warning disable CS0252 // Possible unintended reference comparison; left hand side needs cast
-#pragma warning disable CS0252 // Possible unintended reference comparison; left hand side needs cast
                     if (button.Content == vocabulary[Counter].German || button.Content == vocabulary[Counter].English) {
                         button.Foreground = Brushes.Green;
                     }
-#pragma warning restore CS0252 // Possible unintended reference comparison; left hand side needs cast
-#pragma warning restore CS0252 // Possible unintended reference comparison; left hand side needs cast
                 }
             };
             await new ExtraFunctions().Wait();
             _parentLearnView.getCounter();
+        }
+
+        private void SetStar() {
+            VocabularyEntry marked = new VocabularyEntry();
+            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.German = Vocabulary[Counter].German;
+            marked.English = Vocabulary[Counter].English;
+            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
+            for (int i = 0; i < vocabulary.Count; i++) {
+                if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
+                    markedButton.Content = "★";
+                }
+            }
+        }
+        private void StarWord(object sender, RoutedEventArgs e) {
+            VocabularyEntry marked = new VocabularyEntry();
+            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.German = Vocabulary[Counter].German;
+            marked.English = Vocabulary[Counter].English;
+            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
+
+            if (markedButton.Content.ToString() == "☆") {
+                markedButton.Content = "★";
+                vocabulary.Add(marked);
+            } else if (markedButton.Content.ToString() == "★") {
+                markedButton.Content = "☆";
+                for (int i = 0; i < vocabulary.Count; i++) {
+                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
+                        vocabulary.Remove(vocabulary[i]);
+                    }
+                }
+            }
+            VocabularyEntry.WriteData(marked, vocabulary);
         }
     }
 }
