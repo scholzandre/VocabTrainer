@@ -26,9 +26,9 @@ namespace VocabTrainer.Views {
         Random Random = new Random();
 
         public LearnView() {
+            InitializeComponent();
             getLearningModes();
             GetWordsAndCounter();
-            InitializeComponent();
             UpdateDataContext();
         }
 
@@ -57,6 +57,7 @@ namespace VocabTrainer.Views {
                         break;
                 }
             } else {
+                DataContext =  null;
                 header.Text = "No learning mode available - not enough words";
             }
         }
