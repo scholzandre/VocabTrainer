@@ -13,7 +13,9 @@ namespace VocabTrainer.Views {
         public void FillComboBox() {
             List<WordlistsList> wordlists = WordlistsList.GetWordlists();
             for (int i = 0; i < wordlists.Count; i++) {
-                comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
+                if (wordlists[i].WordlistName != "Marked") { 
+                    comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
+                }
             }
         }
 
