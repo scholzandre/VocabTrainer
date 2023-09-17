@@ -29,6 +29,7 @@ namespace VocabTrainer.Views {
         }
         public void ShowDiagram(SeriesCollection seriesCollection) {
             pieChart.Series = seriesCollection;
+            pieChart.DataTooltip = null; // disables further information
         }
     }
 }
