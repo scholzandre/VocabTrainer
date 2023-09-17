@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using VocabTrainer.ViewModels;
+using System.Windows.Controls;
+using System;
 
 namespace VocabTrainer {
     public partial class MainWindow : Window {
@@ -9,8 +12,13 @@ namespace VocabTrainer {
 
         public MainWindow() {
             InitializeComponent();
+            Analysis_Clicked(new Button(), new RoutedEventArgs());
         }
 
+
+        private void Analysis_Clicked(object sender, RoutedEventArgs e) { 
+            new AnalysisViewModel(this);
+        }
         private void Learn_Clicked(object sender, RoutedEventArgs e) {
             DataContext = new LearnView();
         }

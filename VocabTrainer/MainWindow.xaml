@@ -65,11 +65,12 @@
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="2">
                         <StackPanel>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Add words" Click="AddWords_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Manage" Click="Manage_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" x:Name="Learn" Content="Learn" Click="Learn_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Add wordlist" Click="AddWordlists_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Manage lists" Click="ManageWordlists_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" x:Name="Learn" Content="Learn" Click="Learn_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Content="Add words" Click="AddWords_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Content="Manage" Click="Manage_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Content="Analysis" Click="Analysis_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Settings" Click="Settings_Clicked"/>
                         </StackPanel>
                     </Border>
