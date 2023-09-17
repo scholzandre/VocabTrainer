@@ -18,16 +18,16 @@
             <RowDefinition Height="413*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Add words</TextBlock>
-        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="comboWordlists" Height="24" Width="350"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="comboWordlists" Height="24" Width="350" DropDownClosed="closed"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Margin="10,0,10,0">
                 <StackPanel Margin="0,55,0,0">
-                    <TextBlock Foreground="white" FontSize="24">German</TextBlock>
+                    <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
                     <TextBox x:Name="germanWord" FontSize="24" Margin="5,0,5,0"/>
                 </StackPanel>
                 <StackPanel Margin="0,25,0,30">
-                    <TextBlock Foreground="White" FontSize="24">English</TextBlock>
+                    <TextBlock x:Name="secondLanguage" Foreground="White" FontSize="24"/>
                     <TextBox x:Name="englishWord" FontSize="24" Margin="5,0,5,0"/>
                 </StackPanel>
                 <Button Width="180" Height="30" FontSize="18" Click="AddWord">Add word</Button>
