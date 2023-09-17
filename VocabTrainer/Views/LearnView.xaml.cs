@@ -21,6 +21,7 @@ namespace VocabTrainer.Views {
         List<Settings> settings = Settings.GetSettings();
         public List<VocabularyEntry> allWordsList = new List<VocabularyEntry>();
         public List<(string, string)> langues = new List<(string, string)>();
+        public List<string> files = new List<string>();
         bool randomOrder, upCountingOrder = false;
         bool emptyList = true;
         public int allWords = 0;
@@ -105,10 +106,10 @@ namespace VocabTrainer.Views {
         }
         public void GetWordsAndCounter() {
             WordlistsList wordlistsList = new WordlistsList();
-            (int counter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage)> words) allWordsAndCounter = wordlistsList.GetAllWords();
+            (int counter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage, string file)> words) allWordsAndCounter = wordlistsList.GetAllWords();
             allWords = allWordsAndCounter.counter;
             allWordsList = allWordsAndCounter.words.Select(x => x.entry).ToList();
-
+            files = allWordsAndCounter.words.Select(x => x.file).ToList();
             for (int i = 0; i < allWordsAndCounter.counter; i++) {
                 langues.Add((allWordsAndCounter.words[i].firstLanguage, allWordsAndCounter.words[i].secondLanguage));
             }
