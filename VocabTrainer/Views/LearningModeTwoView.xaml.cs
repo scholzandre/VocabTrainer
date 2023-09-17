@@ -13,6 +13,7 @@ namespace VocabTrainer.Views {
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
         List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
 
+        public List<string> files = new List<string>();
         public int Counter { get; set; }
         private LearnView _parentLearnView;
 
@@ -23,6 +24,7 @@ namespace VocabTrainer.Views {
             Counter = counter;
             Vocabulary = parentLearnView.allWordsList;
             languages = parentLearnView.langues;
+            files = parentLearnView.files;
             InitializeComponent();
             CreateQuestion();
             checkEmptyLocal();
@@ -37,6 +39,11 @@ namespace VocabTrainer.Views {
                 bool isPartyCorrect = false;
                 bool atLeastOneCorrect = false;
                 bool toManyWords = false;
+                VocabularyEntry entry = new VocabularyEntry();
+                entry.FilePath = $"./../../{files[Counter]}.json";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+
+
                 if (germanWordBox.IsReadOnly == true) {
 
                     (bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) returnedBools = CheckInput(SplitAnswer(vocabulary[Counter].English.ToLower()), SplitAnswer(englishWordBox.Text.ToLower()), isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords); 
@@ -68,6 +75,19 @@ namespace VocabTrainer.Views {
                         answer.Text = "correct";
                     }
                 }  
+                for (int i = 0; i < entries.Count; i++) {
+                    if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
+                        entries[i].Seen = true;
+                        if (answer.Text == "correct") {
+                            entries[i].Repeated++;
+                            entries[i].LastTimeWrong = false;
+                        } else {
+                            entries[i].Repeated = 0;
+                            entries[i].LastTimeWrong = true;
+                        }
+                        VocabularyEntry.WriteData(entry, entries);
+                    }
+                }
                 await new ExtraFunctions().Wait();
                 _parentLearnView.getCounter();
             }

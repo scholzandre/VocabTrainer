@@ -13,7 +13,8 @@ namespace VocabTrainer.Views {
         List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
         int indexFirstChoice;
         int indexSecondChoice;
-        int alreadyConnected;
+        int alreadyConnected; 
+        public List<string> files = new List<string>();
         bool firstChoice = false;
         bool secondCoice = false;
         Button senderQuestion = null;
@@ -24,6 +25,7 @@ namespace VocabTrainer.Views {
             _parentLearnView = parentLearnView;
             Counter = counter;
             vocabulary = parentLearnView.allWordsList;
+            files = parentLearnView.files;
             InitializeComponent();
             newGrid = (Grid)grid;
             CreateQuestion();
@@ -101,6 +103,11 @@ namespace VocabTrainer.Views {
         }
 
         private async void CheckAnswer() {
+            VocabularyEntry entry = new VocabularyEntry();
+            entry.FilePath = $"./../../{files[indexFirstChoice]}.json";
+            List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+
+
             if (vocabulary[indexFirstChoice].German == vocabulary[indexSecondChoice].German) {
                 senderQuestion.Foreground = Brushes.Green;
                 senderQuestion.IsEnabled = false;
@@ -115,6 +122,19 @@ namespace VocabTrainer.Views {
                 senderAnswer.Foreground = Brushes.Red;
                 await new ExtraFunctions().Wait();
                 ChangeBackground();
+            }
+            for (int i = 0; i < entries.Count; i++) {
+                if (entries[i].German == vocabulary[indexFirstChoice].German && entries[i].English == vocabulary[indexFirstChoice].English) {
+                    entries[i].Seen = true;
+                    if (senderQuestion.Foreground == Brushes.Green) {
+                        entries[i].Repeated++;
+                        entries[i].LastTimeWrong = false;
+                    } else {
+                        entries[i].Repeated = 0;
+                        entries[i].LastTimeWrong = true;
+                    }
+                    VocabularyEntry.WriteData(entry, entries);
+                }
             }
             if (alreadyConnected >= 5) {
                 message.Text = "correct";

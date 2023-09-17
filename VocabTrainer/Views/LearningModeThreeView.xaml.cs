@@ -12,13 +12,16 @@ namespace VocabTrainer.Views {
         int Language { get; set; }
         private LearnView _parentLearnView;
         List<int> ints = new List<int>();
-        private List<VocabularyEntry> vocabulary;
+        private List<VocabularyEntry> vocabulary; 
+        public List<string> files = new List<string>();
+
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
         int correctAnswerOrder = 0;
         public LearningModeThreeView(LearnView parentLearnView, int counter) {
             _parentLearnView = parentLearnView;
             Counter = counter;
             vocabulary = parentLearnView.allWordsList;
+            files = parentLearnView.files;
             InitializeComponent();
             SetStar();
             CreateQuestion();
@@ -86,6 +89,10 @@ namespace VocabTrainer.Views {
 
         private async void checkAnswer(string answer, object sender) {
             Button senderButton = (Button)sender;
+            VocabularyEntry entry = new VocabularyEntry();
+            entry.FilePath = $"./../../{files[Counter]}.json";
+            List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+
             if (Language == 2 && answer != vocabulary[Counter].German || Language == 1 && answer != vocabulary[Counter].English) {
                 senderButton.Foreground = Brushes.Red;
             }
@@ -93,12 +100,25 @@ namespace VocabTrainer.Views {
             foreach (var item in grid2.Children)
             {
                 if (item is Button button) {
-                    button.IsEnabled = false;
-                    if (button.Content == vocabulary[Counter].German || button.Content == vocabulary[Counter].English) {
+                    if (button.Content.ToString() != "☆" && button.Content.ToString() != "★") button.IsEnabled = false;
+                    if (button.Content.ToString() == vocabulary[Counter].German || button.Content.ToString() == vocabulary[Counter].English) {
                         button.Foreground = Brushes.Green;
                     }
                 }
             };
+            for (int i = 0; i < entries.Count; i++) {
+                if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
+                    entries[i].Seen = true;
+                    if (senderButton.Foreground != Brushes.Red) {
+                        entries[i].Repeated++;
+                        entries[i].LastTimeWrong = false;
+                    } else {
+                        entries[i].LastTimeWrong = true;
+                        entries[i].Repeated = 0;
+                    }
+                    VocabularyEntry.WriteData(entry, entries);
+                }
+            }
             await new ExtraFunctions().Wait();
             _parentLearnView.getCounter();
         }

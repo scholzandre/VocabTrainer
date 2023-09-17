@@ -8,6 +8,7 @@ namespace VocabTrainer.Views {
     public partial class LearningModeOneView : UserControl {
         List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
         List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
+        public List<string> files = new List<string>();
         public int Counter { get; set; }
         private LearnView _parentLearnView;
         public LearningModeOneView(LearnView parentLearnView, int counter) {
@@ -15,6 +16,7 @@ namespace VocabTrainer.Views {
             Counter = counter;
             vocabulary = parentLearnView.allWordsList;
             languages = parentLearnView.langues;
+            files = parentLearnView.files;
             InitializeComponent();
             CheckEmptyLocal();
 
@@ -28,6 +30,17 @@ namespace VocabTrainer.Views {
         public LearningModeOneView() { }
         private void NextWord(object sender, RoutedEventArgs e) {
             if (Counter < vocabulary.Count()) {
+                VocabularyEntry entry = new VocabularyEntry();
+                entry.FilePath = $"./../../{files[Counter]}.json";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+
+                for (int i = 0; i < entries.Count; i++) {
+                    if (entries[i].German == germanWord.Text && entries[i].English == englishWord.Text) {
+                        entries[i].Seen = true;
+                        entries[i].Repeated += 1;
+                        VocabularyEntry.WriteData(entry, entries);
+                    }
+                }
                 _parentLearnView.getCounter();
             }
         }
