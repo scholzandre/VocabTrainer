@@ -7,6 +7,9 @@ namespace VocabTrainer.Views {
     public class VocabularyEntry {
         public string English { get; set; }
         public string German { get; set; }
+        public bool Seen { get; set; }
+        public bool LastTimeWrong { get; set; }
+        public int Repeated { get; set; }
         [JsonIgnore]
         public string WordList { get; set; }
         [JsonIgnore]
