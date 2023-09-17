@@ -39,8 +39,8 @@ namespace VocabTrainer {
             return (false, -1, -1, "");
         }
 
-        public (int, List<(VocabularyEntry, string, string)>) GetAllWords() {
-            List<(VocabularyEntry, string, string)> words = new List<(VocabularyEntry, string, string)>();
+        public (int, List<(VocabularyEntry, string, string, string)>) GetAllWords() {
+            List<(VocabularyEntry, string, string, string)> words = new List<(VocabularyEntry, string, string, string)>();
             List<WordlistsList> list = GetLists();
             int allWordsCounter = 0;
 
@@ -50,7 +50,7 @@ namespace VocabTrainer {
                 wordlist.FilePath = $"./../../{list[i].WordlistName}.json";
                 List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(wordlist);
                 foreach (VocabularyEntry entry in vocabulary) {
-                    words.Add((entry, list[i].FirstLanguage, list[i].SecondLanguage));
+                    words.Add((entry, list[i].FirstLanguage, list[i].SecondLanguage, list[i].WordlistName));
                 }
                 allWordsCounter += vocabulary.Count();
             }
