@@ -66,7 +66,7 @@ namespace VocabTrainer.Views {
                 if (!returnedTupel.isTrue) {
                     vocabulary.Add(new VocabularyEntry(germanWord, englishWord));
                     WriteData(entry, vocabulary);
-                    return (true, $"'{germanWord}'(german) and '{englishWord}'(english) were successfully added");
+                    return (true, $"'{germanWord}' and '{englishWord}' were successfully added");
                 } else {
                     if (returnedTupel.error == 1) {
                         return (false, $"Adding was not successful because '{returnedTupel.word}' already exists in the program");

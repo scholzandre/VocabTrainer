@@ -23,7 +23,7 @@ namespace VocabTrainer.Views {
             if (comboWordlists.Text != "") {
                 (bool isTrue, string returnText) returnedTuple = VocabularyEntry.CheckInput(comboWordlists.Text, germanWord.Text, englishWord.Text);
                 if (returnedTuple.isTrue) {
-                    addingSuccessful.Text = returnedTuple.returnText;
+                    addingSuccessful.Text = $"{germanWord.Text} ({firstLanguage.Text}) and {englishWord.Text} ({secondLanguage.Text}) have been successfully added";
                     germanWord.Text = String.Empty;
                     englishWord.Text = String.Empty;
                 } else {
