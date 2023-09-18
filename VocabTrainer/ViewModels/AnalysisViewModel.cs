@@ -21,31 +21,57 @@ namespace VocabTrainer.ViewModels {
         public int KnownWords{ get => _knownWords; set => _knownWords = value; }
         private int _notSeenWords;
         public int NotSeenWords { get => _notSeenWords; set => _notSeenWords = value; }
+        private string _wordlist = string.Empty;
+        public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public AnalysisViewModel(MainWindow parentWindow) {
             ParentWindow = parentWindow;
             GetPercentages();
-            CreateDiagram();
         }
 
-        private void GetPercentages() {
+        public void GetPercentages() {
+            KnownWords = 0;
+            NotSeenWords = 0;
+            SeenWords = 0;
+            LastTimeWrong = 0;
+            AllWords = new List<VocabularyEntry>();
             List<WordlistsList> wordlistsList = WordlistsList.GetWordlists();
 
-            for (int i = 0; i < wordlistsList.Count; i++) {
-                if (wordlistsList[i].WordlistName != "Marked") { 
-                    VocabularyEntry entry = new VocabularyEntry();
-                    entry.FilePath = $"./../../{wordlistsList[i].WordlistName}.json";
-                    List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
-                    foreach (VocabularyEntry word in words) { 
-                        AllWords.Add(word);
-                        if (word.Seen == true) { SeenWords++; } else { NotSeenWords++; }
-                        if (word.LastTimeWrong) {
-                            if (word.LastTimeWrong == true) { LastTimeWrong++; }
-                        } else { 
-                            if (word.Repeated > 3) KnownWords++;
+            if (Wordlist == string.Empty) {
+                for (int i = 0; i < wordlistsList.Count; i++) {
+                    if (wordlistsList[i].WordlistName != "Marked") {
+                        VocabularyEntry entry = new VocabularyEntry();
+                        entry.FilePath = $"./../../{wordlistsList[i].WordlistName}.json";
+                        List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
+                        foreach (VocabularyEntry word in words) {
+                            AllWords.Add(word);
+                            if (word.Repeated > 3) {
+                                KnownWords++;
+                            } else if (word.LastTimeWrong) {
+                                LastTimeWrong++;
+                            } else if (word.Seen == true) {
+                                SeenWords++;
+                            } else {
+                                NotSeenWords++;
+                            }
                         }
                     }
                 }
+            } else {
+                VocabularyEntry entry = new VocabularyEntry();
+                entry.FilePath = $"./../../{Wordlist}.json";
+                List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
+                foreach (VocabularyEntry word in words) {
+                    AllWords.Add(word);
+                    if (word.Repeated > 3) { 
+                        KnownWords++; 
+                    } else if (word.LastTimeWrong) { 
+                        LastTimeWrong++;
+                    } else if (word.Seen == true) { 
+                        SeenWords++; } else { NotSeenWords++; 
+                    }
+                }
             }
+            CreateDiagram();
         }
 
         public void CreateDiagram() {
@@ -55,24 +81,28 @@ namespace VocabTrainer.ViewModels {
                 {
                     Title = "Seen",
                     Values = new ChartValues<double> { SeenWords*100/AllWords.Count },
+                    Fill = System.Windows.Media.Brushes.LightYellow
                 },
                 new PieSeries
                 {
                     Title = "Not seen",
                     Values = new ChartValues<double> { NotSeenWords*100/AllWords.Count },
+                    Fill = System.Windows.Media.Brushes.CadetBlue
                 },
                 new PieSeries
                 {
                     Title = "Known",
                     Values = new ChartValues<double> { KnownWords*100/AllWords.Count },
+                    Fill = System.Windows.Media.Brushes.Green
                 },
                 new PieSeries
                 {
                     Title = "Last time wrong",
                     Values = new ChartValues<double> { LastTimeWrong*100/AllWords.Count },
+                    Fill = System.Windows.Media.Brushes.Red
                 }
             };
-            ParentWindow.DataContext = new AnalysisView(seriesCollection);
+            ParentWindow.DataContext = new AnalysisView(seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong) );
         }
     }
 }
