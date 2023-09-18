@@ -14,18 +14,18 @@
             <StackPanel Margin="10,0,0,10">
                 <StackPanel Margin="0,55,0,0">
                     <TextBlock Text="Name" Foreground="White" FontSize="24"/>
-                    <TextBox x:Name="wordListN" FontSize="24"/>
+                    <TextBox x:Name="wordListN" FontSize="24" Width="720" HorizontalAlignment="Left"/>
                 </StackPanel>
                 <StackPanel Margin="0,25,0,30">
                     <TextBlock  Text="First language" Foreground="White" FontSize="24"/>
-                    <TextBox x:Name="firstLan" FontSize="24"/>
+                    <TextBox x:Name="firstLan" FontSize="24" Width="720" HorizontalAlignment="Left"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,0,30">
                     <TextBlock Text="Second language" Foreground="White" FontSize="24"/>
-                    <TextBox x:Name="secondLan" FontSize="24"/>
+                    <TextBox x:Name="secondLan" FontSize="24" Width="720" HorizontalAlignment="Left"/>
                 </StackPanel>
-                <Button Content="add word list" Click="AddWordlist" IsDefault="True" FontSize="24"/>
-                <TextBlock x:Name="addingSuccessful" Foreground="White" FontSize="18" TextWrapping="Wrap"/>
+                <Button Content="add word list" Click="AddWordlist" IsDefault="True" FontSize="24"  Width="720" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="addingSuccessful" Foreground="White" FontSize="18" TextWrapping="Wrap"  Width="720" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>
     </Grid>
