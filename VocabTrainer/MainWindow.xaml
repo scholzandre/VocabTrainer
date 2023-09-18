@@ -35,19 +35,38 @@
         </Style>
 
         <Style x:Key="BorderStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="BorderThickness" Value="5"/>
             <Setter Property="BorderBrush" Value="#eff6e0"/>
             <Setter Property="Background" Value="#01161e"/>
         </Style>
+
+        <Style x:Key="BorderButton" TargetType="Border">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="CornerRadius" Value="50"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#598392"/>
+        </Style>
+
+        <ControlTemplate x:Key="NoHoverEffectTemplate" TargetType="Button">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False"/>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
     </Window.Resources>
     <Border Style="{StaticResource BorderStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150*"/>
                 <ColumnDefinition Width="150*"/>
-                <ColumnDefinition Width="502*"/>
-                <ColumnDefinition Width="37*"/>
+                <ColumnDefinition Width="509*"/>
+                <ColumnDefinition Width="31*"/>
                 <ColumnDefinition Width="37*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="13*"/>
@@ -61,7 +80,7 @@
                 <RowDefinition Height="73*"/>
                 <RowDefinition Height="23*"/>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Column="0" Grid.Row="1" Grid.RowSpan="5" Background="#124559" Opacity="0.85">
+            <DockPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Background="#124559">
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="2">
                         <StackPanel>
@@ -77,8 +96,12 @@
                 </StackPanel>
             </DockPanel>
             <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="5" Content="{Binding}"/>
-            <Button Style="{StaticResource ButtonStyle}" FontSize="10" Grid.Column="3" Content="-" Click="minimizeWindow" Background="#aec3b0"/>
-            <Button Style="{StaticResource ButtonStyle}" FontSize="10" Grid.Column="4" Content="x" Click="closeWindow" Background="#aec3b0"/>
+            <Border Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
+                <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Foreground="white" Template="{StaticResource NoHoverEffectTemplate}"/>
+            </Border>
+            <Border Grid.Column="4" Style="{StaticResource BorderButton}" Margin="8,1,9,1">
+                <Button Background="Transparent" FontSize="10"  Content="x" Click="closeWindow" BorderThickness="0" Foreground="white" Template="{StaticResource NoHoverEffectTemplate}"/>
+            </Border>
         </Grid>
     </Border>
 </Window>
