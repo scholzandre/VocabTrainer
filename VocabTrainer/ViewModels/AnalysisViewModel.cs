@@ -75,34 +75,37 @@ namespace VocabTrainer.ViewModels {
         }
 
         public void CreateDiagram() {
-            SeriesCollection seriesCollection = new SeriesCollection
-            {
-                new PieSeries
-                {
-                    Title = "Seen",
-                    Values = new ChartValues<double> { SeenWords*100/AllWords.Count },
-                    Fill = System.Windows.Media.Brushes.LightYellow
-                },
-                new PieSeries
-                {
-                    Title = "Not seen",
-                    Values = new ChartValues<double> { NotSeenWords*100/AllWords.Count },
-                    Fill = System.Windows.Media.Brushes.CadetBlue
-                },
-                new PieSeries
-                {
-                    Title = "Known",
-                    Values = new ChartValues<double> { KnownWords*100/AllWords.Count },
-                    Fill = System.Windows.Media.Brushes.Green
-                },
-                new PieSeries
-                {
-                    Title = "Last time wrong",
-                    Values = new ChartValues<double> { LastTimeWrong*100/AllWords.Count },
-                    Fill = System.Windows.Media.Brushes.Red
-                }
-            };
-            ParentWindow.DataContext = new AnalysisView(seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong) );
+            SeriesCollection seriesCollection = new SeriesCollection();
+            if (AllWords.Count != 0) {
+                seriesCollection = new SeriesCollection
+                    {
+                    new PieSeries
+                    {
+                        Title = "Seen",
+                        Values = new ChartValues<double> { SeenWords*100/AllWords.Count },
+                        Fill = System.Windows.Media.Brushes.LightYellow
+                    },
+                    new PieSeries
+                    {
+                        Title = "Not seen",
+                        Values = new ChartValues<double> { NotSeenWords*100/AllWords.Count },
+                        Fill = System.Windows.Media.Brushes.CadetBlue
+                    },
+                    new PieSeries
+                    {
+                        Title = "Known",
+                        Values = new ChartValues<double> { KnownWords*100/AllWords.Count },
+                        Fill = System.Windows.Media.Brushes.Green
+                    },
+                    new PieSeries
+                    {
+                        Title = "Last time wrong",
+                        Values = new ChartValues<double> { LastTimeWrong*100/AllWords.Count },
+                        Fill = System.Windows.Media.Brushes.Red
+                    }
+                };
+            }
+            ParentWindow.DataContext = new AnalysisView(seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
     }
 }
