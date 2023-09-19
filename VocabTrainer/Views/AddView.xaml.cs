@@ -38,11 +38,13 @@ namespace VocabTrainer.Views {
         }
 
         private void closed(object sender, EventArgs e) {
-            int indexKomma = comboWordlists.Text.IndexOf(',');
-            int indexBracketsOpen = comboWordlists.Text.IndexOf('(');
-            int indexBracketsClose = comboWordlists.Text.IndexOf(')');
-            firstLanguage.Text = comboWordlists.Text.Substring(indexBracketsOpen+1, indexKomma-1-indexBracketsOpen).Trim();
-            secondLanguage.Text = comboWordlists.Text.Substring(indexKomma+1, indexBracketsClose-1-indexKomma).Trim();
+            if (comboWordlists.Text != "") {
+                int indexKomma = comboWordlists.Text.IndexOf(',');
+                int indexBracketsOpen = comboWordlists.Text.IndexOf('(');
+                int indexBracketsClose = comboWordlists.Text.IndexOf(')');
+                firstLanguage.Text = comboWordlists.Text.Substring(indexBracketsOpen + 1, indexKomma - 1 - indexBracketsOpen).Trim();
+                secondLanguage.Text = comboWordlists.Text.Substring(indexKomma + 1, indexBracketsClose - 1 - indexKomma).Trim();
+            }
         }
     }
 }
