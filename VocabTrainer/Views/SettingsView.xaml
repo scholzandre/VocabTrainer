@@ -6,15 +6,17 @@
              xmlns:local="clr-namespace:VocabTrainer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Margin="5,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="infoTextManage"  Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Settings</TextBlock>
+        <TextBlock x:Name="infoTextManage" Foreground="white" FontSize="24" FontWeight="DemiBold">Settings</TextBlock>
         <ScrollViewer Grid.Row="1">
             <StackPanel>
-                <StackPanel x:Name="stackPanelGeneralSettings"/>
+                <TextBlock Text="General Settings" FontSize="20" Foreground="White" Margin="5,10,0,0"/>
+                <StackPanel x:Name="stackPanelGeneralSettings" Margin="0,0,0,20"/>
+                <TextBlock Text="Wordlists" FontSize="20" Foreground="White" Margin="5,0,0,0"/>
                 <StackPanel x:Name="stackPanelWordlistsSettings"/>
             </StackPanel>
         </ScrollViewer>

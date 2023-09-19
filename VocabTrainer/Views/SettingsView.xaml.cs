@@ -35,14 +35,16 @@ namespace VocabTrainer.Views {
         public void CreateGUI() {
             Grid mainGrid = new Grid();
 
+            ColumnDefinition colDef0 = new ColumnDefinition();
+            colDef0.Width = new GridLength(5, GridUnitType.Star);
             ColumnDefinition colDef1 = new ColumnDefinition();
-            colDef1.Width = new GridLength(0.25, GridUnitType.Star);
+            colDef1.Width = new GridLength(75, GridUnitType.Star);
             ColumnDefinition colDef2 = new ColumnDefinition();
-            ColumnDefinition colDef3 = new ColumnDefinition();
+            colDef2.Width = new GridLength(20, GridUnitType.Star);
 
+            mainGrid.ColumnDefinitions.Add(colDef0);
             mainGrid.ColumnDefinitions.Add(colDef1);
             mainGrid.ColumnDefinitions.Add(colDef2);
-            mainGrid.ColumnDefinitions.Add(colDef3);
 
             for (int i = 0; i < SettingsList.Count(); i++) {
                 RowDefinition rowDef = new RowDefinition();
@@ -67,8 +69,6 @@ namespace VocabTrainer.Views {
                 Grid.SetRow(checkBox, i);
                 mainGrid.Children.Add(checkBox);
             }
-            RowDefinition lastRow = new RowDefinition();
-            mainGrid.RowDefinitions.Add(lastRow);
             Grid.SetRow(mainGrid, 1);
             stackPanelGeneralSettings.Children.Clear();
             stackPanelGeneralSettings.Children.Add(mainGrid);
@@ -101,18 +101,22 @@ namespace VocabTrainer.Views {
         public void CreateGUIWordlists() {
             Grid mainGrid = new Grid();
 
+            ColumnDefinition colDef0 = new ColumnDefinition();
+            colDef0.Width = new GridLength(5, GridUnitType.Star);
             ColumnDefinition colDef1 = new ColumnDefinition();
-            colDef1.Width = new GridLength(0.25, GridUnitType.Star);
+            colDef1.Width = new GridLength(35, GridUnitType.Star);
             ColumnDefinition colDef2 = new ColumnDefinition();
+            colDef2.Width = new GridLength(20, GridUnitType.Star);
             ColumnDefinition colDef3 = new ColumnDefinition();
+            colDef3.Width = new GridLength(20, GridUnitType.Star);
             ColumnDefinition colDef4 = new ColumnDefinition();
-            ColumnDefinition colDef5 = new ColumnDefinition();
+            colDef4.Width = new GridLength(20, GridUnitType.Star);
 
+            mainGrid.ColumnDefinitions.Add(colDef0);
             mainGrid.ColumnDefinitions.Add(colDef1);
             mainGrid.ColumnDefinitions.Add(colDef2);
             mainGrid.ColumnDefinitions.Add(colDef3);
             mainGrid.ColumnDefinitions.Add(colDef4);
-            mainGrid.ColumnDefinitions.Add(colDef5);
 
             for (int i = 0; i < WordlistsSettings.Count(); i++) {
                 RowDefinition rowDef = new RowDefinition();
