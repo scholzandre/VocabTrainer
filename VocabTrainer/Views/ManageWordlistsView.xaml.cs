@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -109,13 +110,13 @@ namespace VocabTrainer.Views {
                         if (wordlists[index].WordlistName != nameTextBox.Text 
                             || wordlists[index].FirstLanguage != firstLanTextBox.Text 
                             || wordlists[index].SecondLanguage != secondLanTextbox.Text) {
+                            File.Move($"./../../{wordlists[index].WordlistName}.json", $"./../../{nameTextBox.Text}.json");
                             wordlists[index].WordlistName = nameTextBox.Text.Trim();
                             wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
                             wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
                             WordlistsList.WriteWordlistsList(wordlists);
                         }
                     }
-
                 }
             }
         }
@@ -136,6 +137,9 @@ namespace VocabTrainer.Views {
                     (bool isTrue, int index, int error, string word) returnedTuple = WordlistsList.alreadyThere(nameTextBox.Text, firstLanTextBox.Text, secondLanTextBox.Text);
                     if (returnedTuple.isTrue) {
                         wordlists.Remove(wordlists[returnedTuple.index]);
+                        if (File.Exists($"./../../{nameTextBox.Text}.json")) {
+                            File.Delete($"./../../{nameTextBox.Text}.json");
+                        }
                         WordlistsList.WriteWordlistsList(wordlists);
                         checkEmptyLocal();
                     }
