@@ -39,7 +39,7 @@ namespace VocabTrainer.Views {
         public void ShowDiagram(SeriesCollection seriesCollection) {
             pieChart.Series = seriesCollection;
 
-            name.Text = comboWordlists.Text;
+            name.Text = AnalysisViewModel.Wordlist;
             allWords.Text = "words: \t\t\t" + Values.allWords.ToString();
             seen.Text = "seen: \t\t\t" + Values.seen.ToString();
             notSeen.Text = "not seen: \t\t" + Values.notSeen.ToString();
@@ -50,12 +50,14 @@ namespace VocabTrainer.Views {
 
         public void FillComboBox() {
             comboWordlists.Items.Add($"All words");
-            comboWordlists.SelectedIndex = 0;
             List<WordlistsList> wordlists = WordlistsList.GetWordlists();
             for (int i = 0; i < wordlists.Count; i++) {
-                if (wordlists[i].WordlistName != "Marked") {
                     comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
-                }
+                    if (AnalysisViewModel.Wordlist == "") {
+                        comboWordlists.SelectedIndex = 0;
+                    } else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) {
+                       comboWordlists.SelectedIndex = i+1;
+                    }
             }
         }
 
