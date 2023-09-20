@@ -66,6 +66,7 @@
     </ApplicationDefinition>
     <Compile Include="AddWordlist.cs" />
     <Compile Include="ExtraFunctions.cs" />
+    <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\AddViewModel.cs" />
     <Compile Include="ViewModels\AddWordlistViewModel.cs" />
