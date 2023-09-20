@@ -30,6 +30,7 @@ namespace VocabTrainer.Views {
         public (int allWords, int seen, int notSeen, int repeated, int lastTimeWrong) Values { get => _values; set => _values = value; }
         public AnalysisView(SeriesCollection seriesCollection, AnalysisViewModel viewModel, (int, int, int, int, int) values) {
             InitializeComponent();
+            DataContext = viewModel;
             SeriesCollectionData = seriesCollection;
             AnalysisViewModel = viewModel;
             Values = values;

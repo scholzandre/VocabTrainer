@@ -55,7 +55,7 @@
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" x:Name="notSeen"/>
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" x:Name="repeated"/>
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="6" Grid.Column="1" x:Name="lastTimeWrong"/>
-            <Button Grid.Row="7" Grid.Column="1" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding testCommand}"/>
+            <Button Grid.Row="7" Grid.Column="1" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}"/>
         </Grid>
     </Grid>
 </UserControl>
