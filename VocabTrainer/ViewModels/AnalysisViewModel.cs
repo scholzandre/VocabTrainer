@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Diagnostics;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
+using System.Runtime.CompilerServices;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
@@ -32,14 +33,38 @@ namespace VocabTrainer.ViewModels {
             ParentWindow = parentWindow;
             GetPercentages();
         }
-        private bool CanExecuteTestCommand(object arg) {
+        private bool CanExecuteCommand(object arg) {
             return true;
         }
 
-        public ICommand TestCommand => new RelayCommand(TestingCommand, CanExecuteTestCommand);
+        public ICommand ResetCommand => new RelayCommand(Reset, CanExecuteCommand);
 
-        private void TestingCommand(object obj) {
-            Debug.WriteLine("Test");
+        private void Reset(object obj) {
+            VocabularyEntry entry = new VocabularyEntry();
+            if (Wordlist != "") {
+                entry.FilePath = $"./../../{Wordlist}.json";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+
+                for (int i = 0; i < entries.Count; i++) {
+                    entries[i].Seen = false;
+                    entries[i].LastTimeWrong = false;
+                    entries[i].Repeated = 0;
+                }
+                VocabularyEntry.WriteData(entry, entries);
+            } else {
+                List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+                for (int i = 0; i < wordlists.Count; i++) {
+                    entry.FilePath = $"./../../{wordlists[i].WordlistName}.json";
+                    List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(entry);
+                    for (int j = 0; j < vocabulary.Count; j++) {
+                        vocabulary[j].Seen = false;
+                        vocabulary[j].LastTimeWrong = false;
+                        vocabulary[j].Repeated = 0;
+                        VocabularyEntry.WriteData(entry, vocabulary);
+                    }
+                }
+            }
+            GetPercentages();
         }
 
 
