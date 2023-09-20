@@ -9,7 +9,7 @@ using System.Windows.Threading;
 namespace VocabTrainer.Views {
     public partial class ManageView : UserControl {
 
-        List<VocabularyEntry> vocabulary = VocabularyEntry.GetData();
+        List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
         string searchingWord = string.Empty;
         List<VocabularyEntry> searchResults = new List<VocabularyEntry>();
 
