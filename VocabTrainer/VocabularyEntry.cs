@@ -29,15 +29,6 @@ namespace VocabTrainer.Views {
             return vocabulary;
         }
 
-        public static List<VocabularyEntry> GetData() {
-            List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
-            VocabularyEntry entry = new VocabularyEntry();
-            if (File.Exists(entry.FilePath)) {
-                string jsonData = File.ReadAllText(entry.FilePath);
-                vocabulary = JsonConvert.DeserializeObject<List<VocabularyEntry>>(jsonData);
-            }
-            return vocabulary;
-        }
         public static void WriteData(VocabularyEntry entry, List<VocabularyEntry> vocabulary) {
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
             File.WriteAllText(entry.FilePath, json);
