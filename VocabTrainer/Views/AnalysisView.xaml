@@ -6,6 +6,9 @@
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:local="clr-namespace:VocabTrainer.Views"
              mc:Ignorable="d" 
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             xmlns:views="clr-namespace:VocabTrainer.Views"
+             d:DataContext="{d:DesignInstance Type=viewmodels:AnalysisViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style x:Key="TextBoxStyle" TargetType="TextBlock">
@@ -52,6 +55,7 @@
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" x:Name="notSeen"/>
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" x:Name="repeated"/>
             <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="6" Grid.Column="1" x:Name="lastTimeWrong"/>
+            <Button Grid.Row="7" Grid.Column="1" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding testCommand}"/>
         </Grid>
     </Grid>
 </UserControl>
