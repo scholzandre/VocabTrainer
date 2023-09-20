@@ -5,10 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Diagnostics;
+using VocabTrainer.Models;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
+
         private MainWindow _parentWindow;
         public MainWindow ParentWindow { get => _parentWindow; set => _parentWindow = value; }
         private List<VocabularyEntry> _allWords = new List<VocabularyEntry>();
@@ -18,15 +22,26 @@ namespace VocabTrainer.ViewModels {
         private int _lastTimeWrong;
         public int LastTimeWrong { get => _lastTimeWrong; set => _lastTimeWrong = value; }
         private int _knownWords;
-        public int KnownWords{ get => _knownWords; set => _knownWords = value; }
+        public int KnownWords { get => _knownWords; set => _knownWords = value; }
         private int _notSeenWords;
         public int NotSeenWords { get => _notSeenWords; set => _notSeenWords = value; }
         private string _wordlist = string.Empty;
         public string Wordlist { get => _wordlist; set => _wordlist = value; }
+        public event EventHandler CanExecuteChange;
         public AnalysisViewModel(MainWindow parentWindow) {
             ParentWindow = parentWindow;
             GetPercentages();
         }
+        private bool CanExecuteTestCommand(object arg) {
+            return true;
+        }
+
+        public ICommand TestCommand => new RelayCommand(TestingCommand, CanExecuteTestCommand);
+
+        private void TestingCommand(object obj) {
+            Debug.WriteLine("Test");
+        }
+
 
         public void GetPercentages() {
             KnownWords = 0;
@@ -62,12 +77,14 @@ namespace VocabTrainer.ViewModels {
                 List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
                 foreach (VocabularyEntry word in words) {
                     AllWords.Add(word);
-                    if (word.Repeated > 3) { 
-                        KnownWords++; 
-                    } else if (word.LastTimeWrong) { 
+                    if (word.Repeated > 3) {
+                        KnownWords++;
+                    } else if (word.LastTimeWrong) {
                         LastTimeWrong++;
-                    } else if (word.Seen == true) { 
-                        SeenWords++; } else { NotSeenWords++; 
+                    } else if (word.Seen == true) {
+                        SeenWords++;
+                    } else {
+                        NotSeenWords++;
                     }
                 }
             }
