@@ -31,7 +31,7 @@ namespace VocabTrainer.Views {
         private void NextWord(object sender, RoutedEventArgs e) {
             if (Counter < vocabulary.Count()) {
                 VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"./../../{files[Counter]}.json";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
                 for (int i = 0; i < entries.Count; i++) {
@@ -57,7 +57,7 @@ namespace VocabTrainer.Views {
         }
         private void SetStar() {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = germanWord.Text;
             marked.English = englishWord.Text;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
@@ -69,7 +69,7 @@ namespace VocabTrainer.Views {
         }
         private void StarWord(object sender, RoutedEventArgs e) {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = germanWord.Text;
             marked.English = englishWord.Text;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);

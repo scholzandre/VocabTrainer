@@ -12,7 +12,7 @@ namespace VocabTrainer {
         public string FirstLanguage { get; set; }
         public string SecondLanguage { get; set; }
         public bool IsTrue { get; set; }
-        private const string filePath = "./../../wordlists.json";
+        private static string filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
         public static List<WordlistsList> GetWordlists() { 
             List<WordlistsList> wordlists = new List<WordlistsList>();
             if (File.Exists(filePath)) {
@@ -47,7 +47,7 @@ namespace VocabTrainer {
             for (int i = 0; i < list.Count; i++) {
                 VocabularyEntry wordlist = new VocabularyEntry();
                 wordlist.WordList = list[i].WordlistName;
-                wordlist.FilePath = $"./../../{list[i].WordlistName}.json";
+                wordlist.FilePath = $"{VocabularyEntry.FirstPartFilePath}{list[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(wordlist);
                 foreach (VocabularyEntry entry in vocabulary) {
                     words.Add((entry, list[i].FirstLanguage, list[i].SecondLanguage, list[i].WordlistName));

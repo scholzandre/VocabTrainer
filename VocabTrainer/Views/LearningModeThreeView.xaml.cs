@@ -90,7 +90,7 @@ namespace VocabTrainer.Views {
         private async void checkAnswer(string answer, object sender) {
             Button senderButton = (Button)sender;
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"./../../{files[Counter]}.json";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
             if (Language == 2 && answer != vocabulary[Counter].German || Language == 1 && answer != vocabulary[Counter].English) {
@@ -125,7 +125,7 @@ namespace VocabTrainer.Views {
 
         private void SetStar() {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
@@ -137,7 +137,7 @@ namespace VocabTrainer.Views {
         }
         private void StarWord(object sender, RoutedEventArgs e) {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);

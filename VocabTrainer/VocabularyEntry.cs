@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
+using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public class VocabularyEntry {
@@ -14,6 +16,11 @@ namespace VocabTrainer.Views {
         public string WordList { get; set; }
         [JsonIgnore]
         public string FilePath { get; set; }
+
+        [JsonIgnore]
+        public static string FirstPartFilePath { get => "./../../"; }
+        [JsonIgnore]
+        public static string SecondPartFilePath { get => ".json"; }
         public VocabularyEntry() { }
         public VocabularyEntry(string german, string english) {
             German = german;
@@ -44,7 +51,7 @@ namespace VocabTrainer.Views {
             int index = wordlist.IndexOf("(");
             string fileName = wordlist.Substring(0, index - 1);
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"./../../{fileName}.json";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}";
             germanWord = germanWord.Trim();
             englishWord = englishWord.Trim();
 

@@ -165,7 +165,7 @@ namespace VocabTrainer.Views {
                 int index = input.IndexOf("(");
                 string wordListName = input.Substring(0, index - 1);
                 VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"./../../{wordListName}.json";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> vocabularyTemp = VocabularyEntry.GetData(entry);
                 vocabulary = vocabularyTemp;
                 infoTextManage.Text = "Manage words";

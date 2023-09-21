@@ -40,7 +40,7 @@ namespace VocabTrainer.Views {
                 bool atLeastOneCorrect = false;
                 bool toManyWords = false;
                 VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"./../../{files[Counter]}.json";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath} {files[Counter]} {VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
 
@@ -157,7 +157,7 @@ namespace VocabTrainer.Views {
 
         private void SetStar() {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath} {"Marked"} {VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
@@ -169,7 +169,7 @@ namespace VocabTrainer.Views {
         }
         private void StarWord(object sender, RoutedEventArgs e) {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"./../../{"Marked"}.json";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath} {"Marked"} {VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);

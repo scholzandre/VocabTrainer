@@ -104,7 +104,7 @@ namespace VocabTrainer.Views {
 
         private async void CheckAnswer() {
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"./../../{files[indexFirstChoice]}.json";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[indexFirstChoice]}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
 

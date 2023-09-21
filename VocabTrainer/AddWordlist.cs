@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
+using VocabTrainer.Views;
 
 namespace VocabTrainer {
     public class AddWordlist {
@@ -11,7 +12,7 @@ namespace VocabTrainer {
         public void CreateWordlists(string name) {
             string wordListName = Name;
             string jsonData = JsonConvert.SerializeObject("", Formatting.Indented);
-            string filePath = $"./../../{wordListName}.json";
+            string filePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}";
             File.WriteAllText(filePath, jsonData);
         }
 

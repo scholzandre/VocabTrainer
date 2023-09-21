@@ -10,7 +10,7 @@ namespace VocabTrainer {
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
         public bool IsLearningMode { get; set; }
-        private const string filePath = "./../../settings.json";
+        private static string filePath = $"{VocabularyEntry.FirstPartFilePath}settings{VocabularyEntry.SecondPartFilePath}";
         public static List<Settings> GetSettings() {
             List<Settings> settings = new List<Settings>();
             if (File.Exists(filePath)) {

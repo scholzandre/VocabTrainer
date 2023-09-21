@@ -42,7 +42,7 @@ namespace VocabTrainer.ViewModels {
         private void Reset(object obj) {
             VocabularyEntry entry = new VocabularyEntry();
             if (Wordlist != "") {
-                entry.FilePath = $"./../../{Wordlist}.json";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
                 for (int i = 0; i < entries.Count; i++) {
@@ -54,7 +54,7 @@ namespace VocabTrainer.ViewModels {
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlists();
                 for (int i = 0; i < wordlists.Count; i++) {
-                    entry.FilePath = $"./../../{wordlists[i].WordlistName}.json";
+                    entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
                     List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(entry);
                     for (int j = 0; j < vocabulary.Count; j++) {
                         vocabulary[j].Seen = false;
@@ -80,7 +80,7 @@ namespace VocabTrainer.ViewModels {
                 for (int i = 0; i < wordlistsList.Count; i++) {
                     if (wordlistsList[i].WordlistName != "Marked") {
                         VocabularyEntry entry = new VocabularyEntry();
-                        entry.FilePath = $"./../../{wordlistsList[i].WordlistName}.json";
+                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlistsList[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
                         List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
                         foreach (VocabularyEntry word in words) {
                             AllWords.Add(word);
@@ -98,7 +98,7 @@ namespace VocabTrainer.ViewModels {
                 }
             } else {
                 VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"./../../{Wordlist}.json";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> words = VocabularyEntry.GetData(entry);
                 foreach (VocabularyEntry word in words) {
                     AllWords.Add(word);
