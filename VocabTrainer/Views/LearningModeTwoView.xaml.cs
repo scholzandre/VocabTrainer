@@ -187,5 +187,35 @@ namespace VocabTrainer.Views {
             }
             VocabularyEntry.WriteData(marked, vocabulary);
         }
+
+        private void FirstLetter(object sender, RoutedEventArgs e) {
+            string word = string.Empty;
+            int wordLength = 0;
+            if (germanWordBox.IsReadOnly) {
+                word = englishWordBox.Text;
+                wordLength = word.Length;
+                if (wordLength < Vocabulary[Counter].English.Length) {
+                    if (word.Substring(0, wordLength) == Vocabulary[Counter].English.Substring(0, wordLength)) {
+                        englishWordBox.Text += Vocabulary[Counter].English[wordLength].ToString();
+                    } else {
+                        englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
+                    }
+                } else if (wordLength >= Vocabulary[Counter].English.Length && word != Vocabulary[Counter].English) {
+                    englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
+                } 
+            } else {
+                word = germanWordBox.Text;
+                wordLength = word.Length;
+                if (wordLength < Vocabulary[Counter].German.Length) {
+                    if (word.Substring(0, wordLength) == Vocabulary[Counter].German.Substring(0, wordLength)) {
+                        germanWordBox.Text += Vocabulary[Counter].German[wordLength].ToString();
+                    } else {
+                        germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
+                    }
+                } else if (wordLength >= Vocabulary[Counter].German.Length && word != Vocabulary[Counter].German) {
+                    germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
+                } 
+            }
+        }
     }
 }

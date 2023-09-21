@@ -24,6 +24,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18" Click="CheckAnswer" HorizontalAlignment="Left" IsDefault="True">check answer</Button>
                 <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right" Click="StarWord"/>
+                <Button x:Name="firstLetterButton" Margin="0,0, 15,0" Grid.Column="0" Content="Hint" Height="25" Width="30" HorizontalAlignment="Center" Click="FirstLetter"/>
             </Grid>
             <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
         </StackPanel>
