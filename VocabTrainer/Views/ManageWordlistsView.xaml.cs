@@ -10,9 +10,6 @@ using System.Windows.Threading;
 namespace VocabTrainer.Views {
     public partial class ManageWordlistsView : UserControl {
         List<WordlistsList> wordlists = WordlistsList.GetWordlists();
-#pragma warning disable CS0169 // The field 'ManageWordlistsView.searchTimer' is never used
-        private DispatcherTimer searchTimer;
-#pragma warning restore CS0169 // The field 'ManageWordlistsView.searchTimer' is never used
         string searchingWord = string.Empty;
         List<WordlistsList> searchResults = new List<WordlistsList>();
 
@@ -138,8 +135,8 @@ namespace VocabTrainer.Views {
                     (bool isTrue, int index, int error, string word) returnedTuple = WordlistsList.alreadyThere(nameTextBox.Text, firstLanTextBox.Text, secondLanTextBox.Text);
                     if (returnedTuple.isTrue) {
                         wordlists.Remove(wordlists[returnedTuple.index]);
-                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath} {nameTextBox.Text} {VocabularyEntry.SecondPartFilePath}")) {
-                            File.Delete($"{VocabularyEntry.FirstPartFilePath}   {nameTextBox.Text}   {VocabularyEntry.SecondPartFilePath}");
+                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}")) {
+                            File.Delete($"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}");
                         }
                         WordlistsList.WriteWordlistsList(wordlists);
                         checkEmptyLocal();
