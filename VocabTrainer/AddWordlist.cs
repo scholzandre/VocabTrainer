@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using VocabTrainer.Views;
+using System.Globalization;
+using System.Windows.Input;
 
 namespace VocabTrainer {
     public class AddWordlist {
@@ -28,8 +30,8 @@ namespace VocabTrainer {
 
         public string CheckInput(string name, string firstLanguage, string secondLanguage) {
             Name = name.Trim();
-            FirstLanguage = firstLanguage.Trim();
-            SecondLanguage = secondLanguage.Trim();
+            FirstLanguage = PascalCase(firstLanguage).Trim();
+            SecondLanguage = PascalCase(secondLanguage).Trim();
 
             if (Name == "" || FirstLanguage == "" || SecondLanguage == "") {
                 return $"Adding was not successful because one input box is empty";
@@ -41,6 +43,14 @@ namespace VocabTrainer {
                 }
                 WriteNewWordList();
                 return "Adding was successful.";
+            }
+        }
+
+        public string PascalCase(string input) {
+            if (!string.IsNullOrEmpty(input) && input.Length > 1) {
+                return input[0].ToString().ToUpper() + input.Substring(1).ToLower();
+            } else {
+                return input;
             }
         }
     }
