@@ -12,6 +12,7 @@ namespace VocabTrainer {
 
         public MainWindow() {
             InitializeComponent();
+            WordlistsList.CheckAvailabilityOfJSONFiles();
             Analysis_Clicked(new Button(), new RoutedEventArgs());
         }
 
