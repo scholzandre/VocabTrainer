@@ -7,13 +7,13 @@
   },
   {
     "Condition": "list order",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 0,
     "IsLearningMode": false
   },
   {
     "Condition": "Learning Mode One",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 1,
     "IsLearningMode": true
   },
