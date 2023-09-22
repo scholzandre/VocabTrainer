@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using VocabTrainer.Views;
-using System.Windows.Documents;
+using System.Linq.Expressions;
+using System.IO.Pipes;
+using System.Windows;
 
 namespace VocabTrainer {
     public class WordlistsList {
@@ -65,6 +67,46 @@ namespace VocabTrainer {
                 }
             }
             return list;
+        }
+
+        public static void CheckAvailabilityOfJSONFiles() {
+            List<WordlistsList> list = GetWordlists();
+            List<string> listNames = list.Select(values => values.WordlistName).ToList();
+            string temp = string.Empty;
+            string[] files = Directory.GetFiles(VocabularyEntry.FirstPartFilePath);
+            List<string> filesList = files.ToList();
+
+            for (int i = 0; i < filesList.Count; i++) {
+                temp = filesList[i].Substring(VocabularyEntry.FirstPartFilePath.Length, filesList[i].Length - VocabularyEntry.FirstPartFilePath.Length - 5).Trim();
+                if (temp == "settings" || temp == "wordlists"){
+                    continue;
+                } else if (!listNames.Contains(temp)) {
+                    MessageBoxResult result = MessageBox.Show($"Do you want to add {temp}.json to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes) {
+                        VocabularyEntry tempEntry = new VocabularyEntry();
+                        tempEntry.FilePath = VocabularyEntry.FirstPartFilePath+temp+VocabularyEntry.SecondPartFilePath;
+                        List<VocabularyEntry> testList = VocabularyEntry.GetData(tempEntry);
+
+                        WordlistsList newEntry = new WordlistsList();
+                        newEntry.WordlistName = temp;
+                        newEntry.FirstLanguage = DateTime.Now.ToString();
+                        newEntry.SecondLanguage = DateTime.Now.ToString();
+                        list.Add(newEntry);
+                    } else {
+                        File.Delete(filesList[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++) {
+                if (!File.Exists(VocabularyEntry.FirstPartFilePath+list[i].WordlistName+VocabularyEntry.SecondPartFilePath)) {
+                    list.Remove(list[i]);
+                    i--;
+                }
+            }
+
+            WriteWordlistsList(list);
         }
     }
 }
