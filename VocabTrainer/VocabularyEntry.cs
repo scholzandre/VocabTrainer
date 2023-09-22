@@ -18,7 +18,7 @@ namespace VocabTrainer.Views {
         public string FilePath { get; set; }
 
         [JsonIgnore]
-        public static string FirstPartFilePath { get => "./../../"; }
+        public static string FirstPartFilePath { get => Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length-9)+"jsons\\"; }
         [JsonIgnore]
         public static string SecondPartFilePath { get => ".json"; }
         public VocabularyEntry() { }
