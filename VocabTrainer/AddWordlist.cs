@@ -33,6 +33,8 @@ namespace VocabTrainer {
             FirstLanguage = PascalCase(firstLanguage).Trim();
             SecondLanguage = PascalCase(secondLanguage).Trim();
 
+            List<VocabularyEntry> entries = new List<VocabularyEntry>();
+
             if (Name == "" || FirstLanguage == "" || SecondLanguage == "") {
                 return $"Adding was not successful because one input box is empty";
             } else {
@@ -42,6 +44,7 @@ namespace VocabTrainer {
                         return "Adding was not successful because this wordlist already exists";
                 }
                 WriteNewWordList();
+                VocabularyEntry.WriteData(new VocabularyEntry { FilePath = $"{VocabularyEntry.FirstPartFilePath}{Name}{VocabularyEntry.SecondPartFilePath}" }, entries);
                 return "Adding was successful.";
             }
         }
