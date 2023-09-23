@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using VocabTrainer.Views;
-using System.Linq.Expressions;
-using System.IO.Pipes;
 using System.Windows;
 
 namespace VocabTrainer {
@@ -87,11 +85,15 @@ namespace VocabTrainer {
                         VocabularyEntry tempEntry = new VocabularyEntry();
                         tempEntry.FilePath = VocabularyEntry.FirstPartFilePath+temp+VocabularyEntry.SecondPartFilePath;
                         List<VocabularyEntry> testList = VocabularyEntry.GetData(tempEntry);
-
                         WordlistsList newEntry = new WordlistsList();
+                        Random random = new Random();
+                        string defaultValue = string.Empty;
+                        for (int j = 0; j < 8; j++) {
+                            defaultValue += random.Next(0, 9);
+                        }
                         newEntry.WordlistName = temp;
-                        newEntry.FirstLanguage = DateTime.Now.ToString();
-                        newEntry.SecondLanguage = DateTime.Now.ToString();
+                        newEntry.FirstLanguage = defaultValue;
+                        newEntry.SecondLanguage = defaultValue;
                         list.Add(newEntry);
                     } else {
                         File.Delete(filesList[i]);
