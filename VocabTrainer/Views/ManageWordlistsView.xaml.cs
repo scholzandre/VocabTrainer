@@ -119,8 +119,6 @@ namespace VocabTrainer.Views {
                                     WordlistsList.WriteWordlistsList(wordlists);
                                 } catch (Exception ex) {
                                     infoTextManage.Text = "Wordlist already exists";
-                                    wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
-                                    wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
                                     nameTextBox.Text = wordlists[index].WordlistName.Substring(0, wordlists[index].WordlistName.IndexOf('_'));
                                     firstLanTextBox.Text = wordlists[index].FirstLanguage;
                                     secondLanTextbox.Text = wordlists[index].SecondLanguage;
@@ -149,6 +147,8 @@ namespace VocabTrainer.Views {
                     }
                     if (wordlists[index].WordlistName.Contains('_')) {
                         returnedTuple = WordlistsList.alreadyThere($"{wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
+                    } else { 
+                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
                     }
                     if (returnedTuple.isTrue) {
                         if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
