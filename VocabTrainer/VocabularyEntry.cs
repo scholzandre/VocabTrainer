@@ -54,7 +54,10 @@ namespace VocabTrainer.Views {
             entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}";
             germanWord = germanWord.Trim();
             englishWord = englishWord.Trim();
-
+            List<VocabularyEntry> entries = new List<VocabularyEntry>();
+            entry.German = string.Empty;
+            entry.English = string.Empty;
+            entries.Add(entry);
 
             if (germanWord == "" || englishWord == "") {
                 return (false, $"Adding was not successful because one input box is empty");
