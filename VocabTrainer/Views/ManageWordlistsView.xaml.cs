@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -56,7 +57,7 @@ namespace VocabTrainer.Views {
         public TextBox CreateTextBox(string word, int column, Grid grid) {
             TextBox textBox = new TextBox();
             textBox.IsEnabled = false;
-            textBox.Text = word;
+            textBox.Text = (word.Contains('_'))? word.Substring(0, word.IndexOf('_')) : word;
             textBox.Background = new SolidColorBrush(Colors.DarkGray);
             textBox.Margin = new Thickness(10, 0, 0, 10);
             Grid.SetColumn(textBox, column);
@@ -107,12 +108,24 @@ namespace VocabTrainer.Views {
                         if (wordlists[index].WordlistName != nameTextBox.Text 
                             || wordlists[index].FirstLanguage != firstLanTextBox.Text 
                             || wordlists[index].SecondLanguage != secondLanTextbox.Text) {
-                            File.Move($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}", 
-                                $"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}");
-                            wordlists[index].WordlistName = nameTextBox.Text.Trim();
-                            wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
-                            wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
-                            WordlistsList.WriteWordlistsList(wordlists);
+                            if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
+                                //if (wordlists[index].WordlistName.Contains('_')) {
+                                try {
+                                    File.Move($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}",
+                                              $"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text.Trim()}_{firstLanTextBox.Text.Trim()}_{secondLanTextbox.Text.Trim()}{VocabularyEntry.SecondPartFilePath}");
+                                    wordlists[index].WordlistName = $"{nameTextBox.Text.Trim()}_{firstLanTextBox.Text.Trim()}_{secondLanTextbox.Text.Trim()}";
+                                    wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
+                                    wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
+                                    WordlistsList.WriteWordlistsList(wordlists);
+                                } catch (Exception ex) {
+                                    infoTextManage.Text = "Wordlist already exists";
+                                    wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
+                                    wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
+                                    nameTextBox.Text = wordlists[index].WordlistName.Substring(0, wordlists[index].WordlistName.IndexOf('_'));
+                                    firstLanTextBox.Text = wordlists[index].FirstLanguage;
+                                    secondLanTextbox.Text = wordlists[index].SecondLanguage;
+                                }
+                            }
                         }
                     }
                 }
@@ -128,11 +141,17 @@ namespace VocabTrainer.Views {
                     TextBox nameTextBox = nameTextBoxObj as TextBox;
                     TextBox firstLanTextBox = firstLanTextBoxObj as TextBox;
                     TextBox secondLanTextBox = secondLanTextBoxObj as TextBox;
+                    int index = (button.Name.Length <= 2) ? Int32.Parse(button.Name.Substring(button.Name.Length - 1)) : Int32.Parse(button.Name.Substring(1, button.Name.Length - 1));
+                    (bool isTrue, int index, int error, string word) returnedTuple = (false, 0, 0, "");
 
                     if (nameTextBox.Parent is Grid grid && grid.Parent is StackPanel stackPanel) {
                         stackPanel.Children.Remove(grid);
                     }
-                    (bool isTrue, int index, int error, string word) returnedTuple = WordlistsList.alreadyThere(nameTextBox.Text, firstLanTextBox.Text, secondLanTextBox.Text);
+                    if (wordlists[index].WordlistName.Contains('_')) {
+                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}_{firstLanTextBox.Text}_{secondLanTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
+                    } else { 
+                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
+                    }
                     if (returnedTuple.isTrue) {
                         wordlists.Remove(wordlists[returnedTuple.index]);
                         if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}")) {
