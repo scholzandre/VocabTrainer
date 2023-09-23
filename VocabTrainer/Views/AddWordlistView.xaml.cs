@@ -9,7 +9,7 @@ namespace VocabTrainer.Views {
 
         private void AddWordlist(object sender, RoutedEventArgs e) {
             AddWordlist addWordlist = new AddWordlist();
-            addingSuccessful.Text = addWordlist.CheckInput($"{wordListN.Text.Trim()}_{firstLan.Text.ToLower().Trim()}_{secondLan.Text.ToLower().Trim()}", firstLan.Text, secondLan.Text);
+            addingSuccessful.Text = addWordlist.CheckInput($"{wordListN.Text.Trim()}_{new AddWordlist().PascalCase(firstLan.Text.ToLower().Trim())}_{new AddWordlist().PascalCase(secondLan.Text.ToLower().Trim())}", firstLan.Text, secondLan.Text);
             if (addingSuccessful.Text == "Adding was successful.") {
                 wordListN.Text = "";
                 firstLan.Text = "";
