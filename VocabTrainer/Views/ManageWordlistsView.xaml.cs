@@ -148,15 +148,13 @@ namespace VocabTrainer.Views {
                         stackPanel.Children.Remove(grid);
                     }
                     if (wordlists[index].WordlistName.Contains('_')) {
-                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}_{firstLanTextBox.Text}_{secondLanTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
-                    } else { 
-                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
+                        returnedTuple = WordlistsList.alreadyThere($"{wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
                     }
                     if (returnedTuple.isTrue) {
-                        wordlists.Remove(wordlists[returnedTuple.index]);
-                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}")) {
-                            File.Delete($"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text}{VocabularyEntry.SecondPartFilePath}");
+                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
+                            File.Delete($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}");
                         }
+                        wordlists.Remove(wordlists[returnedTuple.index]);
                         WordlistsList.WriteWordlistsList(wordlists);
                         checkEmptyLocal();
                     }
