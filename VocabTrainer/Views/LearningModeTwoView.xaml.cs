@@ -40,7 +40,7 @@ namespace VocabTrainer.Views {
                 bool atLeastOneCorrect = false;
                 bool toManyWords = false;
                 VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath} {files[Counter]} {VocabularyEntry.SecondPartFilePath}";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
 
@@ -133,8 +133,8 @@ namespace VocabTrainer.Views {
             }
         }
         public void CreateQuestion() {
-            firstLanguage.Text = languages[Counter].firstLanguage;
-            secondLanguage.Text = languages[Counter].secondLanguage;
+            firstLanguage.Text = _parentLearnView.allWordsList[Counter].FirstLanguage;
+            secondLanguage.Text = _parentLearnView.allWordsList[Counter].SecondLanguage;
 
             answer.Text = string.Empty;
             checkButton.IsEnabled = true;
@@ -157,7 +157,7 @@ namespace VocabTrainer.Views {
 
         private void SetStar() {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath} {"Marked"} {VocabularyEntry.SecondPartFilePath}";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
@@ -169,9 +169,12 @@ namespace VocabTrainer.Views {
         }
         private void StarWord(object sender, RoutedEventArgs e) {
             VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath} {"Marked"} {VocabularyEntry.SecondPartFilePath}";
+            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
+            marked.WordList = files[Counter];
+            marked.FirstLanguage = languages[Counter].firstLanguage;
+            marked.SecondLanguage = languages[Counter].secondLanguage;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
 
             if (markedButton.Content.ToString() == "☆") {
