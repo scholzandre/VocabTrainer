@@ -12,8 +12,9 @@ namespace VocabTrainer.Views {
         public bool Seen { get; set; }
         public bool LastTimeWrong { get; set; }
         public int Repeated { get; set; }
-        [JsonIgnore]
         public string WordList { get; set; }
+        public string FirstLanguage { get; set; }
+        public string SecondLanguage { get; set; }
         [JsonIgnore]
         public string FilePath { get; set; }
 
@@ -37,6 +38,17 @@ namespace VocabTrainer.Views {
         }
 
         public static void WriteData(VocabularyEntry entry, List<VocabularyEntry> vocabulary) {
+            for (int i = 0; i < vocabulary.Count; i++) {
+                int index = entry.FilePath.LastIndexOf('\\');
+                string tempWordlist = entry.FilePath.Substring(index + 1, entry.FilePath.Count() - (index + 6)); 
+                string languages = tempWordlist.Substring(tempWordlist.IndexOf('_') + 1);
+
+                if (languages != "Marked") { 
+                    vocabulary[i].WordList = tempWordlist;
+                    vocabulary[i].FirstLanguage = languages.Substring(0, languages.IndexOf('_'));
+                    vocabulary[i].SecondLanguage = languages.Substring(languages.IndexOf('_')+1);
+                }
+            }
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
             File.WriteAllText(entry.FilePath, json);
         }
