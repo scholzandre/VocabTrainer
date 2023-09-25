@@ -104,7 +104,7 @@ namespace VocabTrainer.Views {
 
         private async void CheckAnswer() {
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[indexFirstChoice]}{VocabularyEntry.SecondPartFilePath}";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
 
 
