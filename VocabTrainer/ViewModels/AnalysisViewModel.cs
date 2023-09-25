@@ -78,7 +78,10 @@ namespace VocabTrainer.ViewModels {
 
             if (Wordlist == string.Empty) {
                 for (int i = 0; i < wordlistsList.Count; i++) {
-                    if (wordlistsList[i].WordlistName != "Marked") {
+                    if (wordlistsList[i].WordlistName != "Marked" &&
+                        wordlistsList[i].WordlistName != "Seen" &&
+                        wordlistsList[i].WordlistName != "NotSeen" &&
+                        wordlistsList[i].WordlistName != "LastTimeWrong") {
                         VocabularyEntry entry = new VocabularyEntry();
                         entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlistsList[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
                         List<VocabularyEntry> words = VocabularyEntry.GetData(entry);

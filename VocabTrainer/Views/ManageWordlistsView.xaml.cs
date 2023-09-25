@@ -66,7 +66,10 @@ namespace VocabTrainer.Views {
         }
         public void CreateButton(TextBox name, TextBox firstLanguage, TextBox secondLanguage, Grid grid, int i, string content) {
             Button button = new Button();
-            if (name.Text != "Marked") {
+            if (name.Text != "Marked" &&
+                name.Text != "Seen" &&
+                name.Text != "NotSeen" &&
+                name.Text != "LastTimeWrong") {
                 button.Content = content;
                 Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
                 buttonTagsR.Add("NameTextBox", name);

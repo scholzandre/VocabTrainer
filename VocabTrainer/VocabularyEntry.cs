@@ -43,7 +43,10 @@ namespace VocabTrainer.Views {
                 string tempWordlist = entry.FilePath.Substring(index + 1, entry.FilePath.Count() - (index + 6)); 
                 string languages = tempWordlist.Substring(tempWordlist.IndexOf('_') + 1);
 
-                if (languages != "Marked") { 
+                if (languages != "Marked" &&
+                    languages != "Seen" &&
+                    languages != "NotSeen" &&
+                    languages != "LastTimeWrong") { 
                     vocabulary[i].WordList = tempWordlist;
                     vocabulary[i].FirstLanguage = languages.Substring(0, languages.IndexOf('_'));
                     vocabulary[i].SecondLanguage = languages.Substring(languages.IndexOf('_')+1);
