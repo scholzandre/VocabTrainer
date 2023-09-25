@@ -21,7 +21,10 @@ namespace VocabTrainer.Views {
             InitializeComponent();
             CheckEmptyLocal();
 
-            if (files[counter] == "Marked") {
+            if (files[counter] == "Marked" ||
+                files[counter] == "Seen" ||
+                files[counter] == "NotSeen" ||
+                files[counter] == "LastTimeWrong") {
                 Entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[counter]}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(Entry);
                 Entry.FirstLanguage = _parentLearnView.allWordsList[Counter].FirstLanguage;
@@ -48,7 +51,10 @@ namespace VocabTrainer.Views {
 
                 for (int i = 0; i < entries.Count; i++) {
                     if (entries[i].German == germanWord.Text && entries[i].English == englishWord.Text) {
-                        if (files[Counter] != "Marked") {
+                        if (files[Counter] != "Marked" &&
+                            files[Counter] != "Seen" &&
+                            files[Counter] != "NotSeen" &&
+                            files[Counter] != "LastTimeWrong") {
                             entries[i].Seen = true;
                             entries[i].Repeated += 1;
                             VocabularyEntry.WriteData(entry, entries);
