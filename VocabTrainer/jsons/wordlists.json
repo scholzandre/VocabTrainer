@@ -1,9 +1,27 @@
 [
   {
-    "WordlistName": "Marked",
+    "WordlistName": "LastTimeWrong",
     "FirstLanguage": "-",
     "SecondLanguage": "-",
     "IsTrue": false
+  },
+  {
+    "WordlistName": "NotSeen",
+    "FirstLanguage": "-",
+    "SecondLanguage": "-",
+    "IsTrue": false
+  },
+  {
+    "WordlistName": "Seen",
+    "FirstLanguage": "-",
+    "SecondLanguage": "-",
+    "IsTrue": false
+  },
+  {
+    "WordlistName": "Marked",
+    "FirstLanguage": "-",
+    "SecondLanguage": "-",
+    "IsTrue": true
   },
   {
     "WordlistName": "words_German_English",
