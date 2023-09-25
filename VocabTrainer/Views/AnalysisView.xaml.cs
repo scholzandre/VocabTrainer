@@ -53,22 +53,28 @@ namespace VocabTrainer.Views {
             comboWordlists.Items.Add($"All words");
             List<WordlistsList> wordlists = WordlistsList.GetWordlists();
             for (int i = 0; i < wordlists.Count; i++) {
+                if (wordlists[i].WordlistName != "Seen" &&
+                    wordlists[i].WordlistName != "NotSeen" &&
+                    wordlists[i].WordlistName != "LastTimeWrong") {
                     comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
                     if (AnalysisViewModel.Wordlist == "") {
                         comboWordlists.SelectedIndex = 0;
                     } else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) {
-                       comboWordlists.SelectedIndex = i+1;
+                        comboWordlists.SelectedIndex = i + 1;
                     }
+                }
             }
         }
 
-        private void closed(object sender, EventArgs e) {
-            if (comboWordlists.Text == "All words") {
-                AnalysisViewModel.Wordlist = string.Empty;
-            } else {
-                AnalysisViewModel.Wordlist = comboWordlists.Text.Substring(0, (comboWordlists.Text.IndexOf('('))).Trim();
+        private void Closed(object sender, EventArgs e) {
+            if (!string.IsNullOrEmpty(comboWordlists.Text)) { 
+                if (comboWordlists.Text == "All words") {
+                    AnalysisViewModel.Wordlist = string.Empty;
+                } else {
+                    AnalysisViewModel.Wordlist = comboWordlists.Text.Substring(0, (comboWordlists.Text.IndexOf('('))).Trim();
+                }
+                AnalysisViewModel.GetPercentages();
             }
-            AnalysisViewModel.GetPercentages();
         }
     }
 }
