@@ -39,9 +39,10 @@ namespace VocabTrainer.Views {
                 bool isPartyCorrect = false;
                 bool atLeastOneCorrect = false;
                 bool toManyWords = false;
-                VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
+                VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+                VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}" };
+                List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
 
 
                 if (germanWordBox.IsReadOnly == true) {
@@ -81,13 +82,18 @@ namespace VocabTrainer.Views {
                         if (answer.Text == "correct") {
                             entries[i].Repeated++;
                             entries[i].LastTimeWrong = false;
+                            entrySpecialList[Counter].Repeated++;
+                            entrySpecialList[Counter].LastTimeWrong = false;
                         } else {
                             entries[i].Repeated = 0;
                             entries[i].LastTimeWrong = true;
+                            entrySpecialList[Counter].Repeated = 0;
+                            entrySpecialList[Counter].LastTimeWrong = true;
                         }
-                        VocabularyEntry.WriteData(entry, entries);
                     }
                 }
+                VocabularyEntry.WriteData(entry, entries);
+                VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
                 await new ExtraFunctions().Wait();
                 _parentLearnView.getCounter();
             }

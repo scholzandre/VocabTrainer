@@ -67,6 +67,10 @@ namespace VocabTrainer.Views {
                                 }
                             }
                             VocabularyEntry.WriteData(Entry, vocabulary);
+
+                            entries[i].Seen = true;
+                            entries[i].Repeated += 1;
+                            VocabularyEntry.WriteData(entry, entries);
                         }
                     }
                 }
