@@ -82,8 +82,7 @@ namespace VocabTrainer {
                     MessageBoxResult result = MessageBox.Show($"Do you want to add {temp}.json to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes) {
-                        VocabularyEntry tempEntry = new VocabularyEntry();
-                        tempEntry.FilePath = VocabularyEntry.FirstPartFilePath+temp+VocabularyEntry.SecondPartFilePath;
+                        VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + temp + VocabularyEntry.SecondPartFilePath } ;
                         List<VocabularyEntry> testList = VocabularyEntry.GetData(tempEntry);
                         WordlistsList newEntry = new WordlistsList();
                         Random random = new Random();
@@ -95,6 +94,11 @@ namespace VocabTrainer {
                         newEntry.FirstLanguage = defaultValue;
                         newEntry.SecondLanguage = defaultValue;
                         list.Add(newEntry);
+
+                        VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
+                        List<VocabularyEntry> notSeen = VocabularyEntry.GetData(entry);
+                        notSeen.AddRange(VocabularyEntry.GetData(tempEntry));
+                        VocabularyEntry.WriteData(entry, notSeen);
                     } else {
                         File.Delete(filesList[i]);
                     }
