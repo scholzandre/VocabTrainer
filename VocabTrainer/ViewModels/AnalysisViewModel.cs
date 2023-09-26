@@ -51,6 +51,12 @@ namespace VocabTrainer.ViewModels {
                     entries[i].Repeated = 0;
                 }
                 VocabularyEntry.WriteData(entry, entries);
+                VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
+                List <VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
+                for (int i = 0; i < entries.Count; i++) {
+                    if (!notSeen.Contains(entries[i])) notSeen.Add(entries[i]);
+                }
+                VocabularyEntry.WriteData(notSeenVar, notSeen);
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlists();
                 for (int i = 0; i < wordlists.Count; i++) {
@@ -60,7 +66,18 @@ namespace VocabTrainer.ViewModels {
                         vocabulary[j].Seen = false;
                         vocabulary[j].LastTimeWrong = false;
                         vocabulary[j].Repeated = 0;
-                        VocabularyEntry.WriteData(entry, vocabulary);
+                    }
+                    VocabularyEntry.WriteData(entry, vocabulary);
+                    if (wordlists[i].WordlistName != "Marked" &&
+                        wordlists[i].WordlistName != "Seen" &&
+                        wordlists[i].WordlistName != "NotSeen" &&
+                        wordlists[i].WordlistName != "LastTimeWrong") {
+                        VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
+                        List<VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
+                        for (int j = 0; j < vocabulary.Count; j++) {
+                            if (!notSeen.Contains(vocabulary[j])) notSeen.Add(vocabulary[j]);
+                        }
+                        VocabularyEntry.WriteData(notSeenVar, notSeen);
                     }
                 }
             }
