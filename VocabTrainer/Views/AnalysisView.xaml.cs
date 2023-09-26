@@ -60,7 +60,7 @@ namespace VocabTrainer.Views {
                     if (AnalysisViewModel.Wordlist == "") {
                         comboWordlists.SelectedIndex = 0;
                     } else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) {
-                        comboWordlists.SelectedIndex = i + 1;
+                        comboWordlists.SelectedIndex = i - 2;
                     }
                 }
             }
