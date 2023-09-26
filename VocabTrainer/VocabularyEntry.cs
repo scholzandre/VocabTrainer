@@ -67,21 +67,18 @@ namespace VocabTrainer.Views {
             string fileName = wordlist.Substring(0, index - 1);
             VocabularyEntry entry = new VocabularyEntry();
             entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}";
-            germanWord = germanWord.Trim();
-            englishWord = englishWord.Trim();
-            List<VocabularyEntry> entries = new List<VocabularyEntry>();
-            entry.German = string.Empty;
-            entry.English = string.Empty;
-            entries.Add(entry);
+            entry.German = germanWord.Trim();
+            entry.English = englishWord.Trim();
 
             if (germanWord == "" || englishWord == "") {
                 return (false, $"Adding was not successful because one input box is empty");
             } else {
                 List<VocabularyEntry> vocabulary = GetData(entry);
-                (bool isTrue, int index, int error, string word) returnedTupel = alreadyThere(vocabulary, germanWord, englishWord);
+                (bool isTrue, int index, int error, string word) returnedTupel = alreadyThere(vocabulary, entry.German, entry.English);
                 if (!returnedTupel.isTrue) {
-                    vocabulary.Add(new VocabularyEntry(germanWord, englishWord));
+                    vocabulary.Add(entry);
                     WriteData(entry, vocabulary);
+                    MoveWords("NotSeen", entry);
                     return (true, $"'{germanWord}' and '{englishWord}' were successfully added");
                 } else {
                     if (returnedTupel.error == 1) {
@@ -135,6 +132,33 @@ namespace VocabTrainer.Views {
                 return new List<string> { "Es sind keine Wörter verfügbar", "There are no words available" };
                 ;
             } else return new List<string> { string.Empty, string.Empty };
+        }
+
+        public static void MoveWords(string wordlist, VocabularyEntry words) {
+            VocabularyEntry entry = words;
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlist}{VocabularyEntry.SecondPartFilePath}";
+            List<VocabularyEntry> entries = GetData(entry);
+            entries.Add(entry);
+            WriteData(entry, entries);
+        }
+
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType()) {
+                return false;
+            }
+
+            VocabularyEntry otherEntry = (VocabularyEntry)obj;
+            return this.WordList == otherEntry.WordList &&
+                   this.German == otherEntry.German &&
+                   this.English == otherEntry.English;
+        }
+
+        public override int GetHashCode() {
+            int hash = 17;
+            hash = hash * 31 + WordList.GetHashCode();
+            hash = hash * 31 + (German ?? "").GetHashCode();
+            hash = hash * 31 + (English ?? "").GetHashCode();
+            return hash;
         }
     }
 }
