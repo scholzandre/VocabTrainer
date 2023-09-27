@@ -58,7 +58,7 @@ namespace VocabTrainer.ViewModels {
                 }
                 VocabularyEntry.WriteData(notSeenVar, notSeen);
             } else {
-                List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+                List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
                     entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
                     List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(entry);
@@ -91,7 +91,7 @@ namespace VocabTrainer.ViewModels {
             SeenWords = 0;
             LastTimeWrong = 0;
             AllWords = new List<VocabularyEntry>();
-            List<WordlistsList> wordlistsList = WordlistsList.GetWordlists();
+            List<WordlistsList> wordlistsList = WordlistsList.GetWordlistsList();
 
             if (Wordlist == string.Empty) {
                 for (int i = 0; i < wordlistsList.Count; i++) {

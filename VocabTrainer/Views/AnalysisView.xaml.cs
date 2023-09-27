@@ -51,7 +51,7 @@ namespace VocabTrainer.Views {
 
         public void FillComboBox() {
             comboWordlists.Items.Add($"All words");
-            List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+            List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
             for (int i = 0; i < wordlists.Count; i++) {
                 if (wordlists[i].WordlistName != "Seen" &&
                     wordlists[i].WordlistName != "NotSeen" &&

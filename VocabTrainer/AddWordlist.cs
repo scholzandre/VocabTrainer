@@ -19,7 +19,7 @@ namespace VocabTrainer {
         }
 
         public void WriteNewWordList() {
-            List<WordlistsList> wordlistlist = WordlistsList.GetWordlists();
+            List<WordlistsList> wordlistlist = WordlistsList.GetWordlistsList();
             WordlistsList entry = new WordlistsList();
             entry.WordlistName = Name;
             entry.FirstLanguage = FirstLanguage;
@@ -38,7 +38,7 @@ namespace VocabTrainer {
             if (Name == "" || FirstLanguage == "" || SecondLanguage == "") {
                 return $"Adding was not successful because one input box is empty";
             } else {
-                List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+                List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
                     if (wordlists[i].WordlistName == Name && wordlists[i].FirstLanguage == FirstLanguage && wordlists[i].SecondLanguage == SecondLanguage)
                         return "Adding was not successful because this wordlist already exists";

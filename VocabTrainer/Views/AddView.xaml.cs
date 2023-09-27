@@ -11,7 +11,7 @@ namespace VocabTrainer.Views {
         }
 
         public void FillComboBox() {
-            List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+            List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
             for (int i = 0; i < wordlists.Count; i++) {
                 if (wordlists[i].WordlistName != "Marked" &&
                     wordlists[i].WordlistName != "Seen" &&

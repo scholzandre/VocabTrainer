@@ -35,7 +35,7 @@ namespace VocabTrainer {
             DataContext = new AddWordlistView();
         }
         private void Settings_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new SettingsView(Settings.GetSettings(), WordlistsList.GetWordlists());
+            DataContext = new SettingsView(Settings.GetSettings(), WordlistsList.GetWordlistsList());
         }
 
         public void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
