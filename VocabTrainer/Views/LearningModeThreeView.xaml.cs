@@ -92,6 +92,8 @@ namespace VocabTrainer.Views {
             VocabularyEntry entry = new VocabularyEntry();
             entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+            VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}" };
+            List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
 
             if (Language == 2 && answer != vocabulary[Counter].German || Language == 1 && answer != vocabulary[Counter].English) {
                 senderButton.Foreground = Brushes.Red;
@@ -109,16 +111,22 @@ namespace VocabTrainer.Views {
             for (int i = 0; i < entries.Count; i++) {
                 if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
                     entries[i].Seen = true;
+                    entrySpecialList[Counter].Seen = true;
                     if (senderButton.Foreground != Brushes.Red) {
                         entries[i].Repeated++;
                         entries[i].LastTimeWrong = false;
+                        entrySpecialList[Counter].Repeated++;
+                        entrySpecialList[Counter].LastTimeWrong = false;
                     } else {
-                        entries[i].LastTimeWrong = true;
                         entries[i].Repeated = 0;
+                        entries[i].LastTimeWrong = true;
+                        entrySpecialList[Counter].Repeated = 0;
+                        entrySpecialList[Counter].LastTimeWrong = true;
                     }
-                    VocabularyEntry.WriteData(entry, entries);
                 }
             }
+            VocabularyEntry.WriteData(entry, entries);
+            VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
             await new ExtraFunctions().Wait();
             _parentLearnView.getCounter();
         }

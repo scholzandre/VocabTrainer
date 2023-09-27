@@ -79,6 +79,7 @@ namespace VocabTrainer.Views {
                 for (int i = 0; i < entries.Count; i++) {
                     if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
                         entries[i].Seen = true;
+                        entrySpecialList[Counter].Seen = true;
                         if (answer.Text == "correct") {
                             entries[i].Repeated++;
                             entries[i].LastTimeWrong = false;

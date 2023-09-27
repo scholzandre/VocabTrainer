@@ -106,7 +106,8 @@ namespace VocabTrainer.Views {
             VocabularyEntry entry = new VocabularyEntry();
             entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
-
+            VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter[counterVar]]}{VocabularyEntry.SecondPartFilePath}" };
+            List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
 
             if (vocabulary[indexFirstChoice].German == vocabulary[indexSecondChoice].German) {
                 senderQuestion.Foreground = Brushes.Green;
@@ -126,16 +127,22 @@ namespace VocabTrainer.Views {
             for (int i = 0; i < entries.Count; i++) {
                 if (entries[i].German == vocabulary[indexFirstChoice].German && entries[i].English == vocabulary[indexFirstChoice].English) {
                     entries[i].Seen = true;
+                    entrySpecialList[indexFirstChoice].Seen = true;
                     if (senderQuestion.Foreground == Brushes.Green) {
                         entries[i].Repeated++;
                         entries[i].LastTimeWrong = false;
+                        entrySpecialList[indexFirstChoice].Repeated++;
+                        entrySpecialList[indexFirstChoice].LastTimeWrong = false;
                     } else {
                         entries[i].Repeated = 0;
                         entries[i].LastTimeWrong = true;
+                        entrySpecialList[indexFirstChoice].Repeated = 0;
+                        entrySpecialList[indexFirstChoice].LastTimeWrong = true;
                     }
-                    VocabularyEntry.WriteData(entry, entries);
                 }
             }
+            VocabularyEntry.WriteData(entry, entries);
+            VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
             if (alreadyConnected >= 5) {
                 message.Text = "correct";
                 await new ExtraFunctions().Wait();
