@@ -13,7 +13,8 @@ namespace VocabTrainer {
         public string SecondLanguage { get; set; }
         public bool IsTrue { get; set; }
         private static string filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
-        public static List<WordlistsList> GetWordlists() { 
+
+        public static List<WordlistsList> GetWordlistsList() { 
             List<WordlistsList> wordlists = new List<WordlistsList>();
             if (File.Exists(filePath)) {
                 string jsonData = File.ReadAllText(filePath);
@@ -21,98 +22,90 @@ namespace VocabTrainer {
             }
             return wordlists;
         }
-
         public static void WriteWordlistsList(List<WordlistsList> wordlistsList) {
             string json = JsonConvert.SerializeObject(wordlistsList, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
-
-        public static (bool, int, int, string) alreadyThere(string name, string firstLanguage, string secondLanguage) {
-            List<WordlistsList> wordlistslist = GetWordlists();
-            for (int i = 0; i < wordlistslist.Count(); i++) {
-                if (wordlistslist[i].WordlistName.ToLower() == name.ToLower() &&
-                    wordlistslist[i].FirstLanguage.ToLower() == firstLanguage.ToLower() &&
-                    wordlistslist[i].SecondLanguage.ToLower() == secondLanguage.ToLower()) {
-                    return (true, i, 1, "");
+        public static (bool, int) AlreadyThere(string name, string firstLanguage, string secondLanguage) {
+            List<WordlistsList> wordlistsList = GetWordlistsList();
+            for (int i = 0; i < wordlistsList.Count(); i++) {
+                if (wordlistsList[i].WordlistName.ToLower() == name.ToLower() &&
+                    wordlistsList[i].FirstLanguage.ToLower() == firstLanguage.ToLower() &&
+                    wordlistsList[i].SecondLanguage.ToLower() == secondLanguage.ToLower()) {
+                    return (true, i);
                 } 
             }
-            return (false, -1, -1, "");
+            return (false, -1);
         }
-
         public (int, List<(VocabularyEntry, string, string, string)>) GetAllWords() {
             List<(VocabularyEntry, string, string, string)> words = new List<(VocabularyEntry, string, string, string)>();
-            List<WordlistsList> list = GetLists();
+            List<WordlistsList> checkedLists = GetCheckedLists();
             int allWordsCounter = 0;
 
-            for (int i = 0; i < list.Count; i++) {
-                VocabularyEntry wordlist = new VocabularyEntry();
-                wordlist.WordList = list[i].WordlistName;
-                wordlist.FilePath = $"{VocabularyEntry.FirstPartFilePath}{list[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
-                List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(wordlist);
+            for (int i = 0; i < checkedLists.Count; i++) {
+                VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}"};
+                List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(checkedList);
+
                 foreach (VocabularyEntry entry in vocabulary) {
-                    words.Add((entry, list[i].FirstLanguage, list[i].SecondLanguage, list[i].WordlistName));
+                    words.Add((entry, checkedLists[i].FirstLanguage, checkedLists[i].SecondLanguage, checkedLists[i].WordlistName));
                 }
                 allWordsCounter += vocabulary.Count();
             }
             return (allWordsCounter, words);
         }
 
-        public List<WordlistsList> GetLists() {
-            List<WordlistsList> list = GetWordlists();
-            for (int i = list.Count - 1; i >= 0; i--) { // Removes where wordlist is unchecked
-                if (!list[i].IsTrue) {
-                    list.Remove(list[i]);
-                }
+        public List<WordlistsList> GetCheckedLists() {
+            List<WordlistsList> list = GetWordlistsList();
+            for (int i = list.Count - 1; i >= 0; i--) {
+                if (!list[i].IsTrue) list.Remove(list[i]);
             }
             return list;
         }
 
         public static void CheckAvailabilityOfJSONFiles() {
-            List<WordlistsList> list = GetWordlists();
-            List<string> listNames = list.Select(values => values.WordlistName).ToList();
+            List<WordlistsList> allWordLists = GetWordlistsList();
+            List<string> namesList = allWordLists.Select(values => values.WordlistName).ToList();
+            List<string> filenameList = Directory.GetFiles(VocabularyEntry.FirstPartFilePath).ToList();
             string temp = string.Empty;
-            string[] files = Directory.GetFiles(VocabularyEntry.FirstPartFilePath);
-            List<string> filesList = files.ToList();
 
-            for (int i = 0; i < filesList.Count; i++) {
-                temp = filesList[i].Substring(VocabularyEntry.FirstPartFilePath.Length, filesList[i].Length - VocabularyEntry.FirstPartFilePath.Length - 5).Trim();
+            for (int i = 0; i < filenameList.Count; i++) {
+                temp = filenameList[i].Substring(VocabularyEntry.FirstPartFilePath.Length, filenameList[i].Length - VocabularyEntry.FirstPartFilePath.Length - VocabularyEntry.SecondPartFilePath.Length).Trim();
                 if (temp == "settings" || temp == "wordlists"){
                     continue;
-                } else if (!listNames.Contains(temp)) {
+                } else if (!namesList.Contains(temp)) {
                     MessageBoxResult result = MessageBox.Show($"Do you want to add {temp}.json to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes) {
-                        VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + temp + VocabularyEntry.SecondPartFilePath } ;
-                        List<VocabularyEntry> testList = VocabularyEntry.GetData(tempEntry);
-                        WordlistsList newEntry = new WordlistsList();
+                        VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + temp + VocabularyEntry.SecondPartFilePath };
+                        WordlistsList newWordlist = new WordlistsList();
                         Random random = new Random();
                         string defaultValue = string.Empty;
                         for (int j = 0; j < 8; j++) {
                             defaultValue += random.Next(0, 9);
                         }
-                        newEntry.WordlistName = temp;
-                        newEntry.FirstLanguage = defaultValue;
-                        newEntry.SecondLanguage = defaultValue;
-                        list.Add(newEntry);
+                        newWordlist.WordlistName = temp;
+                        newWordlist.FirstLanguage = defaultValue;
+                        newWordlist.SecondLanguage = defaultValue;
+                        allWordLists.Add(newWordlist);
 
                         VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
                         List<VocabularyEntry> notSeen = VocabularyEntry.GetData(entry);
                         notSeen.AddRange(VocabularyEntry.GetData(tempEntry));
                         VocabularyEntry.WriteData(entry, notSeen);
                     } else {
-                        File.Delete(filesList[i]);
+                        File.Delete(filenameList[i]);
                     }
                 }
             }
 
-            for (int i = 0; i < list.Count; i++) {
-                if (!File.Exists(VocabularyEntry.FirstPartFilePath+list[i].WordlistName+VocabularyEntry.SecondPartFilePath)) {
-                    list.Remove(list[i]);
+            for (int i = 0; i < allWordLists.Count; i++) {
+                if (!File.Exists(VocabularyEntry.FirstPartFilePath+ allWordLists[i].WordlistName+VocabularyEntry.SecondPartFilePath)) {
+                    allWordLists.Remove(allWordLists[i]);
                     i--;
                 }
             }
 
-            WriteWordlistsList(list);
+            WriteWordlistsList(allWordLists);
         }
     }
 }
