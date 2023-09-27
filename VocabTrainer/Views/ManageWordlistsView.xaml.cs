@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace VocabTrainer.Views {
     public partial class ManageWordlistsView : UserControl {
-        List<WordlistsList> wordlists = WordlistsList.GetWordlists();
+        List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
         string searchingWord = string.Empty;
         List<WordlistsList> searchResults = new List<WordlistsList>();
 
@@ -143,15 +143,15 @@ namespace VocabTrainer.Views {
                     TextBox firstLanTextBox = firstLanTextBoxObj as TextBox;
                     TextBox secondLanTextBox = secondLanTextBoxObj as TextBox;
                     int index = (button.Name.Length <= 2) ? Int32.Parse(button.Name.Substring(button.Name.Length - 1)) : Int32.Parse(button.Name.Substring(1, button.Name.Length - 1));
-                    (bool isTrue, int index, int error, string word) returnedTuple = (false, 0, 0, "");
+                    (bool isTrue, int index) returnedTuple = (false, 0);
 
                     if (nameTextBox.Parent is Grid grid && grid.Parent is StackPanel stackPanel) {
                         stackPanel.Children.Remove(grid);
                     }
                     if (wordlists[index].WordlistName.Contains('_')) {
-                        returnedTuple = WordlistsList.alreadyThere($"{wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
+                        returnedTuple = WordlistsList.AlreadyThere($"{wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
                     } else { 
-                        returnedTuple = WordlistsList.alreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
+                        returnedTuple = WordlistsList.AlreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
                     }
                     if (returnedTuple.isTrue) {
                         if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
@@ -165,7 +165,7 @@ namespace VocabTrainer.Views {
             }
         }
         public void checkEmptyLocal() {
-            int amount = WordlistsList.GetWordlists().Count();
+            int amount = WordlistsList.GetWordlistsList().Count();
             if (amount <= 0) {
                 infoTextManage.Text = "There are no word lists available";
             }
