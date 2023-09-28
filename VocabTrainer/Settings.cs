@@ -10,14 +10,13 @@ namespace VocabTrainer {
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
         public bool IsLearningMode { get; set; }
-        private static string filePath = $"{VocabularyEntry.FirstPartFilePath}settings{VocabularyEntry.SecondPartFilePath}";
+        private static string _filePath = $"{VocabularyEntry.FirstPartFilePath}settings{VocabularyEntry.SecondPartFilePath}";
         public static List<Settings> GetSettings() {
             List<Settings> settings = new List<Settings>();
-            if (File.Exists(filePath)) {
-                string jsonData = File.ReadAllText(filePath);
+            if (File.Exists(_filePath)) {
+                string jsonData = File.ReadAllText(_filePath);
                 settings = JsonConvert.DeserializeObject<List<Settings>>(jsonData);
             }
-            WriteSettings(settings);
             return settings;
         }
         public static void WriteSettings(List<Settings> settings) {
@@ -50,9 +49,8 @@ namespace VocabTrainer {
                 settings[4].IsTrue = false; // learning mode three
                 settings[5].IsTrue = false; // learning mode four
             }
-
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(_filePath, json);
         }
     }
 }
