@@ -13,7 +13,7 @@ namespace VocabTrainer {
         public MainWindow() {
             InitializeComponent();
             WordlistsList.CheckAvailabilityOfJSONFiles();
-            Analysis_Clicked(new Button(), new RoutedEventArgs());
+            new AnalysisViewModel(this);
         }
 
 
@@ -35,7 +35,7 @@ namespace VocabTrainer {
             DataContext = new AddWordlistView();
         }
         private void Settings_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new SettingsView(Settings.GetSettings(), WordlistsList.GetWordlistsList());
+            DataContext = new SettingsView();
         }
 
         public void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
