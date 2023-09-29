@@ -2,8 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using VocabTrainer.Views;
-using System.Globalization;
-using System.Windows.Input;
 
 namespace VocabTrainer {
     public class AddWordlist {
@@ -20,10 +18,11 @@ namespace VocabTrainer {
 
         public void WriteNewWordList() {
             List<WordlistsList> wordlistlist = WordlistsList.GetWordlistsList();
-            WordlistsList entry = new WordlistsList();
-            entry.WordlistName = Name;
-            entry.FirstLanguage = FirstLanguage;
-            entry.SecondLanguage = SecondLanguage;
+            WordlistsList entry = new WordlistsList() { 
+                WordlistName = Name,
+                FirstLanguage = FirstLanguage,
+                SecondLanguage = SecondLanguage,
+            };
             wordlistlist.Add(entry);
             WordlistsList.WriteWordlistsList(wordlistlist);
         }
@@ -32,8 +31,6 @@ namespace VocabTrainer {
             Name = name.Trim();
             FirstLanguage = PascalCase(firstLanguage).Trim();
             SecondLanguage = PascalCase(secondLanguage).Trim();
-
-            List<VocabularyEntry> entries = new List<VocabularyEntry>();
 
             if (Name == "" || FirstLanguage == "" || SecondLanguage == "") {
                 return $"Adding was not successful because one input box is empty";
@@ -44,7 +41,7 @@ namespace VocabTrainer {
                         return "Adding was not successful because this wordlist already exists";
                 }
                 WriteNewWordList();
-                VocabularyEntry.WriteData(new VocabularyEntry { FilePath = $"{VocabularyEntry.FirstPartFilePath}{Name}{VocabularyEntry.SecondPartFilePath}" }, entries);
+                VocabularyEntry.WriteData(new VocabularyEntry { FilePath = $"{VocabularyEntry.FirstPartFilePath}{Name}{VocabularyEntry.SecondPartFilePath}" }, new List<VocabularyEntry>());
                 return "Adding was successful.";
             }
         }
