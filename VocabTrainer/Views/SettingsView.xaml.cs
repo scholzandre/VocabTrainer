@@ -8,58 +8,58 @@ using System.Windows.Media;
 
 namespace VocabTrainer.Views {
     public partial class SettingsView : UserControl, INotifyPropertyChanged {
-        private List<Settings> settingsList;
+
+        #region Properties
+
+        private List<Settings> _settingsList;
         public List<Settings> SettingsList {
-            get { return settingsList; }
+            get { return _settingsList; }
             set {
-                settingsList = value;
+                _settingsList = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("settingsList"));
                 CreateGUI();
             }
         }
-        private bool updatingSettings = false;
-        private List<WordlistsList> wordlistsSettings;
+
+        private List<WordlistsList> _wordlistsSettings;
         public List<WordlistsList> WordlistsSettings {
-            get { return wordlistsSettings; }
+            get { return _wordlistsSettings; }
             set {
-                wordlistsSettings = value;
+                _wordlistsSettings = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("wordlistsSettings"));
                 CreateGUIWordlists();
             }
         }
-        public SettingsView(List<Settings> setting, List<WordlistsList> wordlists) {
+        private bool updatingSettings = false;
+
+        #endregion
+        public SettingsView() {
             InitializeComponent();
-            SettingsList = setting;
-            WordlistsSettings = wordlists;
+            SettingsList = Settings.GetSettings();
+            WordlistsSettings = WordlistsList.GetWordlistsList();
         }
         public void CreateGUI() {
             Grid mainGrid = new Grid();
 
-            ColumnDefinition colDef0 = new ColumnDefinition();
-            colDef0.Width = new GridLength(5, GridUnitType.Star);
-            ColumnDefinition colDef1 = new ColumnDefinition();
-            colDef1.Width = new GridLength(75, GridUnitType.Star);
-            ColumnDefinition colDef2 = new ColumnDefinition();
-            colDef2.Width = new GridLength(20, GridUnitType.Star);
-
+            ColumnDefinition colDef0 = new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) };
+            ColumnDefinition colDef1 = new ColumnDefinition() { Width = new GridLength(75, GridUnitType.Star) };
+            ColumnDefinition colDef2 = new ColumnDefinition() { Width = new GridLength(20, GridUnitType.Star) };
+            
             mainGrid.ColumnDefinitions.Add(colDef0);
             mainGrid.ColumnDefinitions.Add(colDef1);
             mainGrid.ColumnDefinitions.Add(colDef2);
 
             for (int i = 0; i < SettingsList.Count(); i++) {
-                RowDefinition rowDef = new RowDefinition();
-                rowDef.Height = new GridLength(0.1, GridUnitType.Star);
-                mainGrid.RowDefinitions.Add(rowDef);
+                RowDefinition rowDef = new RowDefinition() { Height = new GridLength(0.1, GridUnitType.Star) };
 
-                TextBlock textBlock = new TextBlock();
-                textBlock.Text = SettingsList[i].Condition;
-                textBlock.Foreground = Brushes.White;
+                TextBlock textBlock = new TextBlock() {
+                    Text = SettingsList[i].Condition,
+                    Foreground = Brushes.White
+                };
                 Grid.SetColumn(textBlock, 1);
                 Grid.SetRow(textBlock, i);
-                mainGrid.Children.Add(textBlock);
 
-                CheckBox checkBox = new CheckBox();
-                checkBox.Name = $"CB{i}";
+                CheckBox checkBox = new CheckBox() { Name = $"CB{i}" };
                 checkBox.Checked += (sender, e) => CheckBox_Checked_Settings(sender, e, checkBox.Name);
                 checkBox.Unchecked += (sender, e) => CheckBox_UnChecked_Settings(sender, e, checkBox.Name);
                 if (SettingsList[i].IsTrue == true) {
@@ -67,6 +67,9 @@ namespace VocabTrainer.Views {
                 }
                 Grid.SetColumn(checkBox, 2);
                 Grid.SetRow(checkBox, i);
+
+                mainGrid.RowDefinitions.Add(rowDef);
+                mainGrid.Children.Add(textBlock);
                 mainGrid.Children.Add(checkBox);
             }
             Grid.SetRow(mainGrid, 1);
