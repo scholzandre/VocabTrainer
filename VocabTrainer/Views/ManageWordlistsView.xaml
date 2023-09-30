@@ -15,6 +15,6 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel x:Name="stackPanel"/>
         </ScrollViewer>
-        <TextBox x:Name="searchWord" HorizontalAlignment="Left" Margin="583,0,0,0" TextWrapping="Wrap" Text="Search..." VerticalAlignment="Center" Width="137" Height="21" TextChanged="searchWord_TextChanged"/>
+        <TextBox x:Name="searchWord" HorizontalAlignment="Left" Margin="583,0,0,0" TextWrapping="Wrap" Text="Search..." VerticalAlignment="Center" Width="137" Height="21" TextChanged="SearchWord_TextChanged"/>
     </Grid>
 </UserControl>

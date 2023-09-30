@@ -14,7 +14,7 @@ namespace VocabTrainer.Views {
 
         public ManageView() {
             InitializeComponent();
-            checkEmptyLocal();
+            CheckEmptyLocal();
             FillComboBox();
 
         }
@@ -136,14 +136,14 @@ namespace VocabTrainer.Views {
                 }
             }
         }
-        public void checkEmptyLocal() {
+        public void CheckEmptyLocal() {
             List<string> messages = VocabularyEntry.checkEmpty(vocabulary);
             if (messages[1] != string.Empty) {
                 infoTextManage.Text = messages[1];
             }
         }
 
-        private void searchWord_TextChanged(object sender, TextChangedEventArgs e) {
+        private void SearchWord_TextChanged(object sender, TextChangedEventArgs e) {
             if (searchWord.Text == "" || searchWord.Text == "Search...") {
                 stackPanel.Children.Clear();
                 CreateGUI(vocabulary, new VocabularyEntry());
