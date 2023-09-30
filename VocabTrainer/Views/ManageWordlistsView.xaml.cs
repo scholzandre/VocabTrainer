@@ -8,26 +8,25 @@ using System.Windows.Media;
 
 namespace VocabTrainer.Views {
     public partial class ManageWordlistsView : UserControl {
-        List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
+        List<WordlistsList> _wordlists = WordlistsList.GetWordlistsList();
         string searchingWord = string.Empty;
         List<WordlistsList> searchResults = new List<WordlistsList>();
 
         public ManageWordlistsView() {
             InitializeComponent();
-            checkEmptyLocal();
+            CheckEmptyLocal();
         }
         private List<WordlistsList> SearchVocab(string searchingWord) {
             searchResults.Clear();
-            for (int i = 0; i < wordlists.Count(); i++) {
-                if (wordlists[i].FirstLanguage.ToLower().Contains(searchingWord) 
-                    || wordlists[i].SecondLanguage.ToLower().Contains(searchingWord)
-                    || wordlists[i].WordlistName.ToLower().Contains(searchingWord)) {
-                    searchResults.Add(wordlists[i]);
+            for (int i = 0; i < _wordlists.Count(); i++) {
+                if (_wordlists[i].FirstLanguage.ToLower().Contains(searchingWord) 
+                    || _wordlists[i].SecondLanguage.ToLower().Contains(searchingWord)
+                    || _wordlists[i].WordlistName.ToLower().Contains(searchingWord)) {
+                    searchResults.Add(_wordlists[i]);
                 }
             }
             return searchResults;
         }
-
         private void CreateGUI(List<WordlistsList> words) {
             for (int i = 0; i < words.Count(); i++) {
                 Grid grid = new Grid();
@@ -47,44 +46,44 @@ namespace VocabTrainer.Views {
             }
         }
         public void CreateColumn(Grid grid, int columnNumber) {
-            ColumnDefinition columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = (columnNumber < 3) ? new GridLength(20, GridUnitType.Star) : GridLength.Auto;
+            ColumnDefinition columnDefinition = new ColumnDefinition() { Width = (columnNumber < 3) ? new GridLength(20, GridUnitType.Star) : GridLength.Auto };
             grid.ColumnDefinitions.Add(columnDefinition);
         }
-
         public TextBox CreateTextBox(string word, int column, Grid grid) {
-            TextBox textBox = new TextBox();
-            textBox.IsEnabled = false;
-            textBox.Text = (word.Contains('_'))? word.Substring(0, word.IndexOf('_')) : word;
-            textBox.Background = new SolidColorBrush(Colors.DarkGray);
-            textBox.Margin = new Thickness(10, 0, 0, 10);
+            TextBox textBox = new TextBox() {
+                IsEnabled = false,
+                Text = (word.Contains('_')) ? word.Substring(0, word.IndexOf('_')) : word,
+                Background = new SolidColorBrush(Colors.DarkGray),
+                Margin = new Thickness(10, 0, 0, 10)
+            };
             Grid.SetColumn(textBox, column);
             grid.Children.Add(textBox);
             return textBox;
         }
         public void CreateButton(TextBox name, TextBox firstLanguage, TextBox secondLanguage, Grid grid, int i, string content) {
-            Button button = new Button();
+            Button button = new Button() {
+                Name = $"B{i}",
+                Margin = new Thickness(0, 0, 10, 10),
+                Width = 25,
+            };
             if (name.Text != "Marked" &&
                 name.Text != "Seen" &&
                 name.Text != "NotSeen" &&
                 name.Text != "LastTimeWrong") {
                 button.Content = content;
-                Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
-                buttonTagsR.Add("NameTextBox", name);
-                buttonTagsR.Add("FirstLanguageTextbox", firstLanguage);
-                buttonTagsR.Add("SecondLanguageTextbox", secondLanguage);
+                Dictionary<string, object> buttonTagsR = new Dictionary<string, object> {
+                    { "NameTextBox", name },
+                    { "FirstLanguageTextbox", firstLanguage },
+                    { "SecondLanguageTextbox", secondLanguage }
+                };
                 button.Tag = buttonTagsR;
                 button.Click += (content == "R") ? (RoutedEventHandler)Rename : Remove;
             } else {
                 button.Content = "/";
             }
-            button.Name = $"B{i}";
-            button.Margin = new Thickness(0, 0, 10, 10);
-            button.Width = 25;
             Grid.SetColumn(button, (content == "R") ? 3 : 4);
             grid.Children.Add(button);
         }
-
         private void Rename(object sender, RoutedEventArgs e) {
             if (sender is Button button && button.Tag is Dictionary<string, object> buttonTags) {
                 if (buttonTags.TryGetValue("NameTextBox", out object nameTextBoxObj) &&
@@ -106,23 +105,22 @@ namespace VocabTrainer.Views {
                         firstLanTextBox.IsEnabled = false;
                         secondLanTextbox.IsEnabled = false;
                         button.Content = "R";
-                        if (wordlists[index].WordlistName != nameTextBox.Text 
-                            || wordlists[index].FirstLanguage != firstLanTextBox.Text 
-                            || wordlists[index].SecondLanguage != secondLanTextbox.Text) {
-                            if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
-                                //if (wordlists[index].WordlistName.Contains('_')) {
+                        if (_wordlists[index].WordlistName != nameTextBox.Text 
+                            || _wordlists[index].FirstLanguage != firstLanTextBox.Text 
+                            || _wordlists[index].SecondLanguage != secondLanTextbox.Text) {
+                            if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{_wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
                                 try {
-                                    File.Move($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}",
+                                    File.Move($"{VocabularyEntry.FirstPartFilePath}{_wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}",
                                               $"{VocabularyEntry.FirstPartFilePath}{nameTextBox.Text.Trim()}_{firstLanTextBox.Text.Trim()}_{secondLanTextbox.Text.Trim()}{VocabularyEntry.SecondPartFilePath}");
-                                    wordlists[index].WordlistName = $"{nameTextBox.Text.Trim()}_{firstLanTextBox.Text.Trim()}_{secondLanTextbox.Text.Trim()}";
-                                    wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
-                                    wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
-                                    WordlistsList.WriteWordlistsList(wordlists);
+                                    _wordlists[index].WordlistName = $"{nameTextBox.Text.Trim()}_{firstLanTextBox.Text.Trim()}_{secondLanTextbox.Text.Trim()}";
+                                    _wordlists[index].FirstLanguage = firstLanTextBox.Text.Trim();
+                                    _wordlists[index].SecondLanguage = secondLanTextbox.Text.Trim();
+                                    WordlistsList.WriteWordlistsList(_wordlists);
                                 } catch (Exception ex) {
                                     infoTextManage.Text = "Wordlist already exists";
-                                    nameTextBox.Text = wordlists[index].WordlistName.Substring(0, wordlists[index].WordlistName.IndexOf('_'));
-                                    firstLanTextBox.Text = wordlists[index].FirstLanguage;
-                                    secondLanTextbox.Text = wordlists[index].SecondLanguage;
+                                    nameTextBox.Text = _wordlists[index].WordlistName.Substring(0, _wordlists[index].WordlistName.IndexOf('_'));
+                                    firstLanTextBox.Text = _wordlists[index].FirstLanguage;
+                                    secondLanTextbox.Text = _wordlists[index].SecondLanguage;
                                 }
                             }
                         }
@@ -130,7 +128,6 @@ namespace VocabTrainer.Views {
                 }
             }
         }
-
         private void Remove(object sender, RoutedEventArgs e) {
             if (sender is Button button && button.Tag is Dictionary<string, object> buttonTags) {
                 if (buttonTags.TryGetValue("NameTextBox", out object nameTextBoxObj) &&
@@ -146,33 +143,32 @@ namespace VocabTrainer.Views {
                     if (nameTextBox.Parent is Grid grid && grid.Parent is StackPanel stackPanel) {
                         stackPanel.Children.Remove(grid);
                     }
-                    if (wordlists[index].WordlistName.Contains('_')) {
-                        returnedTuple = WordlistsList.AlreadyThere($"{wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
+                    if (_wordlists[index].WordlistName.Contains('_')) {
+                        returnedTuple = WordlistsList.AlreadyThere($"{_wordlists[index].WordlistName}", firstLanTextBox.Text, secondLanTextBox.Text);
                     } else { 
                         returnedTuple = WordlistsList.AlreadyThere($"{nameTextBox.Text}", firstLanTextBox.Text, secondLanTextBox.Text);
                     }
                     if (returnedTuple.isTrue) {
-                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
-                            File.Delete($"{VocabularyEntry.FirstPartFilePath}{wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}");
+                        if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{_wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}")) {
+                            File.Delete($"{VocabularyEntry.FirstPartFilePath}{_wordlists[index].WordlistName}{VocabularyEntry.SecondPartFilePath}");
                         }
-                        wordlists.Remove(wordlists[returnedTuple.index]);
-                        WordlistsList.WriteWordlistsList(wordlists);
-                        checkEmptyLocal();
+                        _wordlists.Remove(_wordlists[returnedTuple.index]);
+                        WordlistsList.WriteWordlistsList(_wordlists);
+                        CheckEmptyLocal();
                     }
                 }
             }
         }
-        public void checkEmptyLocal() {
+        public void CheckEmptyLocal() {
             int amount = WordlistsList.GetWordlistsList().Count();
             if (amount <= 0) {
                 infoTextManage.Text = "There are no word lists available";
             }
         }
-
-        private void searchWord_TextChanged(object sender, TextChangedEventArgs e) {
+        private void SearchWord_TextChanged(object sender, TextChangedEventArgs e) {
             if (searchWord.Text == "" || searchWord.Text == "Search...") {
                 stackPanel.Children.Clear();
-                CreateGUI(wordlists);
+                CreateGUI(_wordlists);
             } else {
                 stackPanel.Children.Clear();
                 searchingWord = searchWord.Text.ToLower();
