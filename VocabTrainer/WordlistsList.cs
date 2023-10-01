@@ -37,10 +37,9 @@ namespace VocabTrainer {
             }
             return (false, -1);
         }
-        public (int, List<(VocabularyEntry, string, string, string)>) GetAllWords() {
+        public List<(VocabularyEntry, string, string, string)> GetAllWords() {
             List<(VocabularyEntry, string, string, string)> words = new List<(VocabularyEntry, string, string, string)>();
             List<WordlistsList> checkedLists = GetCheckedLists();
-            int allWordsCounter = 0;
 
             for (int i = 0; i < checkedLists.Count; i++) {
                 VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}"};
@@ -49,9 +48,8 @@ namespace VocabTrainer {
                 foreach (VocabularyEntry entry in vocabulary) {
                     words.Add((entry, checkedLists[i].FirstLanguage, checkedLists[i].SecondLanguage, checkedLists[i].WordlistName));
                 }
-                allWordsCounter += vocabulary.Count();
             }
-            return (allWordsCounter, words);
+            return (words);
         }
 
         public List<WordlistsList> GetCheckedLists() {
