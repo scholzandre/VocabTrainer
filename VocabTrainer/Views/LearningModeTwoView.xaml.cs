@@ -10,7 +10,6 @@ namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
         List<VocabularyEntry> vocabulary;
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
-        List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
 
         public List<string> files = new List<string>();
         public int Counter { get; set; }
@@ -176,8 +175,8 @@ namespace VocabTrainer.Views {
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             marked.WordList = files[Counter];
-            marked.FirstLanguage = languages[Counter].firstLanguage;
-            marked.SecondLanguage = languages[Counter].secondLanguage;
+            marked.FirstLanguage = Vocabulary[Counter].FirstLanguage;
+            marked.SecondLanguage = Vocabulary[Counter].SecondLanguage;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
 
             if (markedButton.Content.ToString() == "☆") {
