@@ -35,17 +35,17 @@ namespace VocabTrainer {
             }
             if (!learningModeAvailable) settings[2].IsTrue = true;
 
-            (int allWordsCounter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage, string file)> allWords) = new WordlistsList().GetAllWords();
-            if (allWordsCounter == 0) {
+            List<(VocabularyEntry entry, string firstLanguage, string secondLanguage, string file)> allWords = new WordlistsList().GetAllWords();
+            if (allWords.Count == 0) {
                 foreach (Settings setting in settings) { 
                     setting.IsTrue = false;
                 }
             }
-            if (allWordsCounter < 2) {
+            if (allWords.Count < 2) {
                 settings[0].IsTrue = false; // random mode
                 settings[4].IsTrue = false; // learning mode three
                 settings[5].IsTrue = false; // learning mode four
-            } else if (allWordsCounter < 5) {
+            } else if (allWords.Count < 5) {
                 settings[4].IsTrue = false; // learning mode three
                 settings[5].IsTrue = false; // learning mode four
             }
