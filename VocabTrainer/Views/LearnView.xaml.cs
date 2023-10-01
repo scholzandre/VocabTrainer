@@ -3,59 +3,67 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearnView : UserControl, INotifyPropertyChanged {
+        #region Properties
         private int _counter;
         public int Counter {
-            get { return _counter; }
+            get => _counter;
             set {
                 _counter = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Counter"));
                 UpdateDataContext();
             }
         }
-        List<int> alreadyLearned = new List<int>();
-        List<int> learningModes = new List<int>();
-        List<int> counters = new List<int>();
-        List<Settings> settings = Settings.GetSettings();
-        public List<VocabularyEntry> allWordsList = new List<VocabularyEntry>();
-        public List<(string, string)> langues = new List<(string, string)>();
-        public List<string> files = new List<string>();
+        private List<int> _alreadyLearned = new List<int>();
+        public List<int> AlreadyLearned { get => _alreadyLearned; set => _alreadyLearned = value; }
+        private List<int> _learningModes = new List<int>();
+        public List<int> LearningModes { get => _learningModes; set => _learningModes = value; }
+        private List<int> _counters = new List<int>();
+        public List<int> Counters { get => _counters; set => _counters = value; }
+
+        private List<VocabularyEntry> _allWordsList = new List<VocabularyEntry>();
+        public List<VocabularyEntry> AllWordsList { get => _allWordsList; set => _allWordsList = value; }
+        private List<string> _originPath = new List<string>();
+        public List<string> OriginPath { get => _originPath; set => _originPath = value; }
+
+        private List<Settings> settings = Settings.GetSettings();
         bool randomOrder, upCountingOrder = false;
         bool emptyList = true;
-        public int allWords = 0;
-        Random Random = new Random();
+        private readonly Random _random = new Random();
 
+        #endregion
         public LearnView() {
             InitializeComponent();
-            getLearningModes();
+            GetLearningModes();
             GetWordsAndCounter();
             UpdateDataContext();
         }
 
         private void UpdateDataContext() {
             settings = Settings.GetSettings();
-            getLearningModes();
+            GetLearningModes();
             if (emptyList && Counter == 0 && randomOrder == true) {
-                getCounter();
+                GetCounter();
                 emptyList = false;
             }
-            int random = Random.Next(0, learningModes.Count());
-            if (learningModes.Count() > 0 && allWords != 0) {
-                switch (learningModes[random]) {
+            int random = _random.Next(0, LearningModes.Count());
+            if (LearningModes.Count() > 0 && AllWordsList.Count != 0) {
+                switch (LearningModes[random]) {
                     case 1:
-                        DataContext = new LearningModeOneView(this, Counter);
+                        DataContext = new LearningModeOneView(this);
                         break;
                     case 2:
-                        DataContext = new LearningModeTwoView(this, Counter);
+                        DataContext = new LearningModeTwoView(this);
                         break;
                     case 3:
-                        DataContext = new LearningModeThreeView(this, Counter);
+                        DataContext = new LearningModeThreeView(this);
                         break;
                     case 4:
-                        setCounters();
-                        DataContext = new LearningModeFourView(this, counters);
+                        SetCounters();
+                        DataContext = new LearningModeFourView(this);
                         break;
                 }
             } else {
@@ -63,63 +71,52 @@ namespace VocabTrainer.Views {
                 header.Text = "No learning mode available - not enough words";
             }
         }
-        public void getCounter() {
+        public void GetCounter() {
             if (upCountingOrder) {
-                Counter = (Counter == allWords - 1) ? Counter = 0 : Counter += 1;
+                Counter = (Counter == AllWordsList.Count - 1) ? Counter = 0 : Counter += 1;
             } else if (randomOrder) {
                 while (true) {
-                    int index = Random.Next(0, allWords);
-                    if (alreadyLearned.Count() == allWords) {
-                        alreadyLearned.Clear();
-                    } else if (alreadyLearned.Contains(index)) {
-                        continue;
-                    } else {
-                        alreadyLearned.Add(index);
+                    int index = _random.Next(0, AllWordsList.Count);
+                    if (AlreadyLearned.Count() == AllWordsList.Count) AlreadyLearned.Clear();
+                    else if (AlreadyLearned.Contains(index)) continue;
+                    else {
+                        AlreadyLearned.Add(index);
                         Counter = index;
                         break;
                     }
                 }
             }
         }
-        public void getLearningModes() {
-            learningModes.Clear();
+        public void GetLearningModes() {
+            LearningModes.Clear();
             randomOrder = settings[0].IsTrue;
             upCountingOrder = settings[1].IsTrue;
             for (int i = 0; i < settings.Count(); i++) {
-                if (settings[i].LearningMode > 0 && settings[i].IsTrue == true)
-                    learningModes.Add(settings[i].LearningMode);
+                if (settings[i].LearningMode > 0 && settings[i].IsTrue == true) LearningModes.Add(settings[i].LearningMode);
             }
         }
-        public void setCounters() {
-            counters.Clear();
-            while (counters.Count() < 5) {
-                int index = Random.Next(0, allWords);
-                if (alreadyLearned.Count() == allWords) {
-                    alreadyLearned.Clear();
-                } else if (alreadyLearned.Contains(index) || counters.Contains(index)) {
-                    continue;
-                } else {
-                    alreadyLearned.Add(index);
-                    counters.Add(index);
+        public void SetCounters() {
+            Counters.Clear();
+            while (Counters.Count() < 5) {
+                int index = _random.Next(0, AllWordsList.Count);
+                if (AlreadyLearned.Count() == AllWordsList.Count) AlreadyLearned.Clear();
+                else if (AlreadyLearned.Contains(index) || Counters.Contains(index)) continue;
+                else {
+                    AlreadyLearned.Add(index);
+                    Counters.Add(index);
                 }
             }
         }
         public void GetWordsAndCounter() {
             WordlistsList wordlistsList = new WordlistsList();
-            (int counter, List<(VocabularyEntry entry, string firstLanguage, string secondLanguage, string file)> words) allWordsAndCounter = wordlistsList.GetAllWords();
-            allWords = allWordsAndCounter.counter;
-            allWordsList = allWordsAndCounter.words.Select(x => x.entry).ToList();
-            files = allWordsAndCounter.words.Select(x => x.file).ToList();
-            for (int i = 0; i < allWordsAndCounter.counter; i++) {
-                langues.Add((allWordsAndCounter.words[i].firstLanguage, allWordsAndCounter.words[i].secondLanguage));
-            }
+            List<(VocabularyEntry entry, string firstLanguage, string secondLanguage, string originPath)> words = wordlistsList.GetAllWords();
+            AllWordsList = words.Select(x => x.entry).ToList();
+            OriginPath = words.Select(x => x.originPath).ToList();
         }
-
         private void Windows_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             MainWindow mainWindow = new MainWindow();
             mainWindow.Windows_MouseDown(sender, e);
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
