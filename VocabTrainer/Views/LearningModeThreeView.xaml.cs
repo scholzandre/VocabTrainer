@@ -16,11 +16,11 @@ namespace VocabTrainer.Views {
 
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
         int correctAnswerOrder = 0;
-        public LearningModeThreeView(LearnView parentLearnView, int counter) {
+        public LearningModeThreeView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
-            Counter = counter;
-            vocabulary = parentLearnView.allWordsList;
-            files = parentLearnView.files;
+            Counter = parentLearnView.Counter;
+            vocabulary = parentLearnView.AllWordsList;
+            files = parentLearnView.OriginPath;
             InitializeComponent();
             SetStar();
             CreateQuestion();
@@ -89,7 +89,7 @@ namespace VocabTrainer.Views {
         private async void checkAnswer(string answer, object sender) {
             Button senderButton = (Button)sender;
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.AllWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}" };
             List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
@@ -127,7 +127,7 @@ namespace VocabTrainer.Views {
             VocabularyEntry.WriteData(entry, entries);
             VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
             await new ExtraFunctions().Wait();
-            _parentLearnView.getCounter();
+            _parentLearnView.GetCounter();
         }
 
         private void SetStar() {
@@ -148,8 +148,8 @@ namespace VocabTrainer.Views {
             marked.German = Vocabulary[Counter].German;
             marked.English = Vocabulary[Counter].English;
             marked.WordList = files[Counter];
-            marked.FirstLanguage = _parentLearnView.allWordsList[Counter].FirstLanguage;
-            marked.SecondLanguage = _parentLearnView.allWordsList[Counter].SecondLanguage;
+            marked.FirstLanguage = _parentLearnView.AllWordsList[Counter].FirstLanguage;
+            marked.SecondLanguage = _parentLearnView.AllWordsList[Counter].SecondLanguage;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
 
             if (markedButton.Content.ToString() == "☆") {

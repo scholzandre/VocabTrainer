@@ -21,11 +21,11 @@ namespace VocabTrainer.Views {
         Button senderAnswer = null;
         int counterVar = 0;
         Grid newGrid;
-        public LearningModeFourView(LearnView parentLearnView, List<int> counter) {
+        public LearningModeFourView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
-            Counter = counter;
-            vocabulary = parentLearnView.allWordsList;
-            files = parentLearnView.files;
+            Counter = parentLearnView.Counters;
+            vocabulary = parentLearnView.AllWordsList;
+            files = parentLearnView.OriginPath;
             InitializeComponent();
             newGrid = (Grid)grid;
             CreateQuestion();
@@ -104,7 +104,7 @@ namespace VocabTrainer.Views {
 
         private async void CheckAnswer() {
             VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}";
+            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.AllWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter[counterVar]]}{VocabularyEntry.SecondPartFilePath}" };
             List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
@@ -146,7 +146,7 @@ namespace VocabTrainer.Views {
             if (alreadyConnected >= 5) {
                 message.Text = "correct";
                 await new ExtraFunctions().Wait();
-                _parentLearnView.getCounter();
+                _parentLearnView.GetCounter();
             } 
         }
 

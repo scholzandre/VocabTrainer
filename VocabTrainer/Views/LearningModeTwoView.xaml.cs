@@ -18,12 +18,11 @@ namespace VocabTrainer.Views {
 
         public Action<object, PropertyChangedEventArgs> PropertyChanged { get; internal set; }
 
-        public LearningModeTwoView(LearnView parentLearnView, int counter) {
+        public LearningModeTwoView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
-            Counter = counter;
-            Vocabulary = parentLearnView.allWordsList;
-            languages = parentLearnView.langues;
-            files = parentLearnView.files;
+            Counter = parentLearnView.Counter;
+            Vocabulary = parentLearnView.AllWordsList;
+            files = parentLearnView.OriginPath;
             InitializeComponent();
             CreateQuestion();
             checkEmptyLocal();
@@ -32,13 +31,11 @@ namespace VocabTrainer.Views {
         public async void CheckAnswer(object sender, RoutedEventArgs e) {
             checkButton.IsEnabled = false;
             if (Counter < vocabulary.Count()) {
-                List<string> correctAnswer;
-                List<string> answers;
                 bool isCorrect = false;
                 bool isPartyCorrect = false;
                 bool atLeastOneCorrect = false;
                 bool toManyWords = false;
-                VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}" };
+                VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.AllWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
                 VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
@@ -95,7 +92,7 @@ namespace VocabTrainer.Views {
                 VocabularyEntry.WriteData(entry, entries);
                 VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
                 await new ExtraFunctions().Wait();
-                _parentLearnView.getCounter();
+                _parentLearnView.GetCounter();
             }
         }
 
@@ -139,8 +136,8 @@ namespace VocabTrainer.Views {
             }
         }
         public void CreateQuestion() {
-            firstLanguage.Text = _parentLearnView.allWordsList[Counter].FirstLanguage;
-            secondLanguage.Text = _parentLearnView.allWordsList[Counter].SecondLanguage;
+            firstLanguage.Text = Vocabulary[Counter].FirstLanguage;
+            secondLanguage.Text = Vocabulary[Counter].SecondLanguage;
 
             answer.Text = string.Empty;
             checkButton.IsEnabled = true;

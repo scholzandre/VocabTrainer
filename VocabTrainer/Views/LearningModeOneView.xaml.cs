@@ -5,45 +5,44 @@ using System.Windows.Controls;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeOneView : UserControl {
-        List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
-        List<(string firstLanguage, string secondLanguage)> languages = new List<(string, string)>();
+        private List<VocabularyEntry> _vocabulary = new List<VocabularyEntry>();
+        public List<VocabularyEntry> Vocabulary { get => _vocabulary; set => _vocabulary = value; }
         public List<string> files = new List<string>();
         public int Counter { get; set; }
         private LearnView _parentLearnView;
         public VocabularyEntry Entry = new VocabularyEntry();
-        public LearningModeOneView(LearnView parentLearnView, int counter) {
+        public LearningModeOneView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
-            Counter = counter;
-            vocabulary = parentLearnView.allWordsList;
-            languages = parentLearnView.langues;
-            files = parentLearnView.files;
+            Counter = parentLearnView.Counter;
+            Vocabulary = parentLearnView.AllWordsList;
+            files = parentLearnView.OriginPath;
             InitializeComponent();
             CheckEmptyLocal();
 
-            if (files[counter] == "Marked" ||
-                files[counter] == "Seen" ||
-                files[counter] == "NotSeen" ||
-                files[counter] == "LastTimeWrong") {
-                Entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[counter]}{VocabularyEntry.SecondPartFilePath}";
+            if (files[Counter] == "Marked" ||
+                files[Counter] == "Seen" ||
+                files[Counter] == "NotSeen" ||
+                files[Counter] == "LastTimeWrong") {
+                Entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(Entry);
-                Entry.FirstLanguage = _parentLearnView.allWordsList[Counter].FirstLanguage;
-                firstLanguage.Text = _parentLearnView.allWordsList[Counter].FirstLanguage;
-                secondLanguage.Text = _parentLearnView.allWordsList[Counter].SecondLanguage;
-                Entry.SecondLanguage = _parentLearnView.allWordsList[Counter].SecondLanguage;
-                Entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.allWordsList[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
+                Entry.FirstLanguage = Vocabulary[Counter].FirstLanguage;
+                firstLanguage.Text = Vocabulary[Counter].FirstLanguage;
+                secondLanguage.Text = Vocabulary[Counter].SecondLanguage;
+                Entry.SecondLanguage = Vocabulary[Counter].SecondLanguage;
+                Entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Vocabulary[Counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             } else { 
-                firstLanguage.Text = languages[Counter].firstLanguage;
-                secondLanguage.Text = languages[Counter].secondLanguage;
+                firstLanguage.Text = Vocabulary[Counter].FirstLanguage;
+                secondLanguage.Text = Vocabulary[Counter].SecondLanguage;
             }
 
-            germanWord.Text = vocabulary[Counter].German;
-            englishWord.Text = vocabulary[Counter].English;
+            germanWord.Text = Vocabulary[Counter].German;
+            englishWord.Text = Vocabulary[Counter].English;
             SetStar();
         }
 
         public LearningModeOneView() { }
         private void NextWord(object sender, RoutedEventArgs e) {
-            if (Counter < vocabulary.Count()) {
+            if (Counter < Vocabulary.Count()) {
                 VocabularyEntry entry = new VocabularyEntry();
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
@@ -73,12 +72,12 @@ namespace VocabTrainer.Views {
                         }
                     }
                 }
-                _parentLearnView.getCounter();
+                _parentLearnView.GetCounter();
             }
         }
 
         public bool CheckEmptyLocal() {
-            List<string> messages = VocabularyEntry.checkEmpty(vocabulary);
+            List<string> messages = VocabularyEntry.checkEmpty(Vocabulary);
             if (messages[1] == string.Empty) {
                 return false;
             } else {
@@ -105,8 +104,8 @@ namespace VocabTrainer.Views {
             marked.German = germanWord.Text;
             marked.English = englishWord.Text;
             marked.WordList = files[Counter];
-            marked.FirstLanguage = languages[Counter].firstLanguage;
-            marked.SecondLanguage = languages[Counter].secondLanguage;
+            marked.FirstLanguage = Vocabulary[Counter].FirstLanguage;
+            marked.SecondLanguage = Vocabulary[Counter].SecondLanguage;
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
 
             if (markedButton.Content.ToString() == "☆") {
