@@ -18,7 +18,7 @@
             <RowDefinition Height="413*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Add words</TextBlock>
-        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="comboWordlists" Height="24" Width="350" DropDownClosed="closed"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="comboWordlists" Height="24" Width="350" DropDownClosed="Closed"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Margin="10,0,10,0">
