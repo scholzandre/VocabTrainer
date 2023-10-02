@@ -9,38 +9,31 @@ namespace VocabTrainer.Views {
             InitializeComponent();
             FillComboBox();
         }
-
         public void FillComboBox() {
             List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
-            for (int i = 0; i < wordlists.Count; i++) {
+            for (int i = 0; i < wordlists.Count; i++)
                 if (wordlists[i].WordlistName != "Marked" &&
                     wordlists[i].WordlistName != "Seen" &&
                     wordlists[i].WordlistName != "NotSeen" &&
                     wordlists[i].WordlistName != "LastTimeWrong") { 
                     comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
                 }
-            }
         }
-
         public void AddWord(object sender, RoutedEventArgs e) {
             if (comboWordlists.Text != "") {
-                (bool isTrue, string returnText) returnedTuple = VocabularyEntry.CheckInput(comboWordlists.Text, germanWord.Text, englishWord.Text);
-                if (returnedTuple.isTrue) {
+                (bool isTrue, string returnText) = VocabularyEntry.CheckInput(comboWordlists.Text, germanWord.Text, englishWord.Text);
+                if (isTrue) {
                     addingSuccessful.Text = $"{germanWord.Text} ({firstLanguage.Text}) and {englishWord.Text} ({secondLanguage.Text}) have been successfully added";
                     germanWord.Text = String.Empty;
                     englishWord.Text = String.Empty;
-                } else {
-                    addingSuccessful.Text = returnedTuple.returnText;
-                }
+                } else addingSuccessful.Text = returnText;
             }
         }
-
         private void Windows_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             MainWindow mainWindow = new MainWindow();
             mainWindow.Windows_MouseDown(sender, e);
         }
-
-        private void closed(object sender, EventArgs e) {
+        private void Closed(object sender, EventArgs e) {
             if (comboWordlists.Text != "") {
                 int indexKomma = comboWordlists.Text.IndexOf(',');
                 int indexBracketsOpen = comboWordlists.Text.IndexOf('(');

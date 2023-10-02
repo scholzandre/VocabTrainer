@@ -23,7 +23,6 @@ namespace VocabTrainer.Views {
         }
         public void ShowDiagram(SeriesCollection seriesCollection) {
             pieChart.Series = seriesCollection;
-
             name.Text = AnalysisViewModel.Wordlist;
             allWords.Text = "words: \t\t\t" + Values.allWords.ToString();
             seen.Text = "seen: \t\t\t" + Values.seen.ToString();
@@ -32,31 +31,22 @@ namespace VocabTrainer.Views {
             lastTimeWrong.Text = "unknown words: \t\t" + Values.lastTimeWrong.ToString();
             pieChart.DataTooltip = null; // disables further information
         }
-
         public void FillComboBox() {
             comboWordlists.Items.Add($"All words");
             List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
-            for (int i = 0; i < wordlists.Count; i++) {
+            for (int i = 0; i < wordlists.Count; i++) 
                 if (wordlists[i].WordlistName != "Seen" &&
                     wordlists[i].WordlistName != "NotSeen" &&
                     wordlists[i].WordlistName != "LastTimeWrong") {
                     comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
-                    if (AnalysisViewModel.Wordlist == "") {
-                        comboWordlists.SelectedIndex = 0;
-                    } else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) {
-                        comboWordlists.SelectedIndex = i - 2;
-                    }
+                    if (AnalysisViewModel.Wordlist == "") comboWordlists.SelectedIndex = 0;
+                    else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) comboWordlists.SelectedIndex = i - 2;
                 }
-            }
         }
-
         private void Closed(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(comboWordlists.Text)) { 
-                if (comboWordlists.Text == "All words") {
-                    AnalysisViewModel.Wordlist = string.Empty;
-                } else {
-                    AnalysisViewModel.Wordlist = comboWordlists.Text.Substring(0, (comboWordlists.Text.IndexOf('('))).Trim();
-                }
+                if (comboWordlists.Text == "All words") AnalysisViewModel.Wordlist = string.Empty;
+                else AnalysisViewModel.Wordlist = comboWordlists.Text.Substring(0, (comboWordlists.Text.IndexOf('('))).Trim();
                 AnalysisViewModel.GetPercentages();
             }
         }

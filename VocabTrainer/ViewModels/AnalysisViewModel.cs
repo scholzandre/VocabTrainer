@@ -36,12 +36,11 @@ namespace VocabTrainer.ViewModels {
 
         private void Reset(object obj) {
             VocabularyEntry entry = new VocabularyEntry();
-            List<VocabularyEntry> entries = new List<VocabularyEntry>();
+            List<VocabularyEntry> entries;
 
             if (Wordlist != "") {
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
                 entries = VocabularyEntry.GetData(entry);
-
                 for (int i = 0; i < entries.Count; i++) {
                     entries[i].Seen = false;
                     entries[i].LastTimeWrong = false;
@@ -49,9 +48,7 @@ namespace VocabTrainer.ViewModels {
                 }
                 VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
                 List <VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
-                for (int i = 0; i < entries.Count; i++) {
-                    if (!notSeen.Contains(entries[i])) notSeen.Add(entries[i]);
-                }
+                for (int i = 0; i < entries.Count; i++) if (!notSeen.Contains(entries[i])) notSeen.Add(entries[i]);
                 VocabularyEntry.WriteData(entry, entries);
                 VocabularyEntry.WriteData(notSeenVar, notSeen);
             } else {
@@ -70,9 +67,7 @@ namespace VocabTrainer.ViewModels {
                         wordlists[i].WordlistName != "LastTimeWrong") {
                         VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
                         List<VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
-                        for (int j = 0; j < entries.Count; j++) {
-                            if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
-                        }
+                        for (int j = 0; j < entries.Count; j++) if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
                         VocabularyEntry.WriteData(notSeenVar, notSeen);
                     }
                     VocabularyEntry.WriteData(entry, entries);
@@ -87,7 +82,7 @@ namespace VocabTrainer.ViewModels {
             LastTimeWrong = 0;
             AllWords = new List<VocabularyEntry>();
             List<WordlistsList> wordlistsList = WordlistsList.GetWordlistsList();
-            List<VocabularyEntry> words = new List<VocabularyEntry>();
+            List<VocabularyEntry> words;
             VocabularyEntry entry = new VocabularyEntry();
 
             if (Wordlist == string.Empty) {
@@ -111,20 +106,15 @@ namespace VocabTrainer.ViewModels {
         public void AddCounters(List<VocabularyEntry> words) {
             foreach (VocabularyEntry word in words) {
                 AllWords.Add(word);
-                if (word.Repeated > 3) {
-                    KnownWords++;
-                } else if (word.LastTimeWrong) {
-                    LastTimeWrong++;
-                } else if (word.Seen == true) {
-                    SeenWords++;
-                } else {
-                    NotSeenWords++;
-                }
+                if (word.Repeated > 3) KnownWords++;
+                else if (word.LastTimeWrong) LastTimeWrong++;
+                else if (word.Seen == true) SeenWords++;
+                else NotSeenWords++;
             }
         }
         public void CreateDiagram() {
             SeriesCollection seriesCollection = new SeriesCollection();
-            if (AllWords.Count != 0) {
+            if (AllWords.Count != 0) 
                 seriesCollection = new SeriesCollection
                     {
                     new PieSeries {
@@ -144,7 +134,6 @@ namespace VocabTrainer.ViewModels {
                         Fill = System.Windows.Media.Brushes.Red
                     }
                 };
-            }
             ParentWindow.DataContext = new AnalysisView(seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
     }
