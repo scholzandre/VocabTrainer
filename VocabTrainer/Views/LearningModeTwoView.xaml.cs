@@ -5,16 +5,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
         List<VocabularyEntry> vocabulary;
         public List<VocabularyEntry> Vocabulary { get => vocabulary; set => vocabulary = value; }
-
         public List<string> files = new List<string>();
         public int Counter { get; set; }
-        private LearnView _parentLearnView;
-
+        private readonly LearnView _parentLearnView;
         public Action<object, PropertyChangedEventArgs> PropertyChanged { get; internal set; }
 
         public LearningModeTwoView(LearnView parentLearnView) {
@@ -24,7 +23,7 @@ namespace VocabTrainer.Views {
             files = parentLearnView.OriginPath;
             InitializeComponent();
             CreateQuestion();
-            checkEmptyLocal();
+            CheckEmptyLocal();
             SetStar();
         }
         public async void CheckAnswer(object sender, RoutedEventArgs e) {
@@ -39,14 +38,11 @@ namespace VocabTrainer.Views {
                 VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter]}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
 
-
                 if (germanWordBox.IsReadOnly == true) {
-
                     (bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) returnedBools = CheckInput(SplitAnswer(vocabulary[Counter].English.ToLower()), SplitAnswer(englishWordBox.Text.ToLower()), isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords); 
-
                     if (returnedBools.isPartyCorrect && !returnedBools.isCorrect && returnedBools.atLeastOneCorrect || returnedBools.isCorrect && returnedBools.atLeastOneCorrect && returnedBools.toManyWords) {
                         englishWordBox.Foreground = Brushes.Orange;
-                        answer.Text = "yeah";
+                        answer.Text = "partly correct";
                     } else if (!returnedBools.isCorrect) {
                         englishWordBox.Text = vocabulary[Counter].English;
                         englishWordBox.Foreground = Brushes.Red;
@@ -55,7 +51,6 @@ namespace VocabTrainer.Views {
                         englishWordBox.Foreground = Brushes.Green;
                         answer.Text = "correct";
                     }
-
                 } else if (englishWordBox.IsReadOnly == true) {
                     (bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) returnedBools = CheckInput(SplitAnswer(vocabulary[Counter].German.ToLower()), SplitAnswer(germanWordBox.Text.ToLower()), isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords);
 
@@ -94,7 +89,6 @@ namespace VocabTrainer.Views {
                 _parentLearnView.GetCounter();
             }
         }
-
         public List<string> SplitAnswer(string answerString) {
             string[] answers = answerString.Split(',');
             for (int i = 0; i < answers.Length; i++) {
@@ -102,7 +96,6 @@ namespace VocabTrainer.Views {
             }
             return new List<string>(answers);
         }
-
         public (bool, bool, bool, bool) CheckInput(List<string> correctAnswer, List<string> answers, bool isCorrect, bool isPartyCorrect, bool atLeastOneCorrect, bool toManyWords) {
             if (answers.Count > correctAnswer.Count) {
                 toManyWords = true;
@@ -123,12 +116,10 @@ namespace VocabTrainer.Views {
             }
             return (isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords);
         }
-
-        public bool checkEmptyLocal() {
+        public bool CheckEmptyLocal() {
             List<string> messages = VocabularyEntry.checkEmpty(vocabulary);
-            if (messages[1] == string.Empty) {
-                return false;
-            } else {
+            if (messages[1] == string.Empty) return false;
+            else {
                 germanWordBox.Text = messages[0];
                 englishWordBox.Text = messages[1];
                 return true;
@@ -140,28 +131,26 @@ namespace VocabTrainer.Views {
 
             answer.Text = string.Empty;
             checkButton.IsEnabled = true;
-            germanWordBox.Foreground = Brushes.Black;
-            englishWordBox.Foreground = Brushes.Black;
             Random random = new Random();
             int randomNumber = random.Next(1, 3);
             if (randomNumber == 1) {
-                germanWordBox.Text = vocabulary[Counter].German;
-                germanWordBox.IsReadOnly = true;
-                englishWordBox.Text = string.Empty;
-                englishWordBox.IsReadOnly = false;
+                SetText(vocabulary[Counter].German, string.Empty, true, false);
             } else {
-                englishWordBox.Text = vocabulary[Counter].English;
-                englishWordBox.IsReadOnly = true;
-                germanWordBox.Text = string.Empty;
-                germanWordBox.IsReadOnly = false;
+                SetText(string.Empty, vocabulary[Counter].English, false, true);
             }
         }
-
+        public void SetText(string textGerman, string textEnglish, bool germanWordBoxReadable, bool englishWordBoxReadable) {
+            germanWordBox.Text = textGerman;
+            germanWordBox.IsReadOnly = germanWordBoxReadable;
+            englishWordBox.Text = textEnglish;
+            englishWordBox.IsReadOnly = englishWordBoxReadable;
+        }
         private void SetStar() {
-            VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
-            marked.German = Vocabulary[Counter].German;
-            marked.English = Vocabulary[Counter].English;
+            VocabularyEntry marked = new VocabularyEntry() {
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}",
+                German = Vocabulary[Counter].German,
+                English = Vocabulary[Counter].English,
+            };
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
             for (int i = 0; i < vocabulary.Count; i++) {
                 if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
@@ -170,13 +159,14 @@ namespace VocabTrainer.Views {
             }
         }
         private void StarWord(object sender, RoutedEventArgs e) {
-            VocabularyEntry marked = new VocabularyEntry();
-            marked.FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}";
-            marked.German = Vocabulary[Counter].German;
-            marked.English = Vocabulary[Counter].English;
-            marked.WordList = files[Counter];
-            marked.FirstLanguage = Vocabulary[Counter].FirstLanguage;
-            marked.SecondLanguage = Vocabulary[Counter].SecondLanguage;
+            VocabularyEntry marked = new VocabularyEntry() { 
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}",
+                German = Vocabulary[Counter].German,
+                English = Vocabulary[Counter].English,
+                WordList = files[Counter],
+                FirstLanguage = Vocabulary[Counter].FirstLanguage,
+                SecondLanguage = Vocabulary[Counter].SecondLanguage,
+            };
             List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
 
             if (markedButton.Content.ToString() == "☆") {
@@ -192,34 +182,24 @@ namespace VocabTrainer.Views {
             }
             VocabularyEntry.WriteData(marked, vocabulary);
         }
-
         private void FirstLetter(object sender, RoutedEventArgs e) {
-            string word = string.Empty;
-            int wordLength = 0;
+            int wordLength;
+            string word;
             if (germanWordBox.IsReadOnly) {
                 word = englishWordBox.Text;
                 wordLength = word.Length;
                 if (wordLength < Vocabulary[Counter].English.Length) {
-                    if (word.Substring(0, wordLength) == Vocabulary[Counter].English.Substring(0, wordLength)) {
-                        englishWordBox.Text += Vocabulary[Counter].English[wordLength].ToString();
-                    } else {
-                        englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
-                    }
-                } else if (wordLength >= Vocabulary[Counter].English.Length && word != Vocabulary[Counter].English) {
-                    englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
-                } 
+                    if (word.Substring(0, wordLength) == Vocabulary[Counter].English.Substring(0, wordLength)) englishWordBox.Text += Vocabulary[Counter].English[wordLength].ToString();
+                    else englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
+                } else if (wordLength >= Vocabulary[Counter].English.Length && word != Vocabulary[Counter].English) englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
+                
             } else {
                 word = germanWordBox.Text;
                 wordLength = word.Length;
                 if (wordLength < Vocabulary[Counter].German.Length) {
-                    if (word.Substring(0, wordLength) == Vocabulary[Counter].German.Substring(0, wordLength)) {
-                        germanWordBox.Text += Vocabulary[Counter].German[wordLength].ToString();
-                    } else {
-                        germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
-                    }
-                } else if (wordLength >= Vocabulary[Counter].German.Length && word != Vocabulary[Counter].German) {
-                    germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
-                } 
+                    if (word.Substring(0, wordLength) == Vocabulary[Counter].German.Substring(0, wordLength)) germanWordBox.Text += Vocabulary[Counter].German[wordLength].ToString();
+                    else germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
+                } else if (wordLength >= Vocabulary[Counter].German.Length && word != Vocabulary[Counter].German) germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
             }
         }
     }

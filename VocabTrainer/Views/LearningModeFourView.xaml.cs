@@ -9,8 +9,8 @@ namespace VocabTrainer.Views {
         List<int> Counter { get; set; }
         new int Language { get; set; }
         private LearnView _parentLearnView;
-        List<int> ints = new List<int>();
-        List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
+        readonly List<int> ints = new List<int>();
+        readonly List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
         int indexFirstChoice;
         int indexSecondChoice;
         int alreadyConnected; 
@@ -20,7 +20,7 @@ namespace VocabTrainer.Views {
         Button senderQuestion = null;
         Button senderAnswer = null;
         int counterVar = 0;
-        Grid newGrid;
+        readonly Grid newGrid;
         public LearningModeFourView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
             Counter = parentLearnView.Counters;
@@ -34,7 +34,6 @@ namespace VocabTrainer.Views {
             CreateRandomOrder();
             SetValues();
         }
-
         private void CreateRandomOrder() {
             Random random = new Random();
             Language = random.Next(1, 3);
@@ -45,22 +44,16 @@ namespace VocabTrainer.Views {
                 if (ints.Contains(index)) {
                     i--;
                     continue;
-                } else {
-                    ints.Add(index);
-                }
+                } else ints.Add(index);
             }
         }
         private void SetValues() {
-            foreach (var element in newGrid.Children) {
+            foreach (var element in newGrid.Children) 
                 if (element is Button button) {
-                    if (button.Name.StartsWith("q")) {
-                        ApplyContentAndName(Language == 1 ? vocabulary[Counter[counterVar]].German : vocabulary[Counter[counterVar]].English, Counter[counterVar], button);
-                    } else if (button.Name.StartsWith("a")) {
-                        ApplyContentAndName(Language == 1 ? vocabulary[Counter[ints[counterVar]]].English : vocabulary[Counter[ints[counterVar]]].German, Counter[ints[counterVar]], button);
-                    }
+                    if (button.Name.StartsWith("q")) ApplyContentAndName(Language == 1 ? vocabulary[Counter[counterVar]].German : vocabulary[Counter[counterVar]].English, Counter[counterVar], button);
+                    else if (button.Name.StartsWith("a")) ApplyContentAndName(Language == 1 ? vocabulary[Counter[ints[counterVar]]].English : vocabulary[Counter[ints[counterVar]]].German, Counter[ints[counterVar]], button);
                     counterVar = (counterVar == 4) ? 0 : counterVar + 1;
                 }
-            }
         }
         void ApplyContentAndName(string content, int counterValue, object button) {
             Button newButton = (Button)button;
@@ -72,13 +65,11 @@ namespace VocabTrainer.Views {
             int index = Int32.Parse(button.Name.Substring(7));
             SetSecondChoice(sender, index);
         }
-
         private void QuestionButton(object sender, RoutedEventArgs e) {
             Button button = (Button) sender;
             int index = Int32.Parse(button.Name.Substring(9));
             SetFirstChoice(sender, index);
         }
-
         private void SetFirstChoice(object sender, int index) {
             Button question = (Button)sender;
             ChangeBackground();
@@ -86,9 +77,7 @@ namespace VocabTrainer.Views {
             indexFirstChoice = index;
             firstChoice = true;
             senderQuestion = question;
-            if (secondCoice) {
-                CheckAnswer();
-            }
+            if (secondCoice) CheckAnswer();
         }
         private void SetSecondChoice(object sender, int index) {
             Button answer = (Button)sender;
@@ -97,14 +86,12 @@ namespace VocabTrainer.Views {
             indexSecondChoice = index;
             secondCoice = true;
             senderAnswer = answer;
-            if (firstChoice) {
-                CheckAnswer();
-            }
+            if (firstChoice) CheckAnswer();
         }
-
         private async void CheckAnswer() {
-            VocabularyEntry entry = new VocabularyEntry();
-            entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.AllWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}";
+            VocabularyEntry entry = new VocabularyEntry() {
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parentLearnView.AllWordsList[indexFirstChoice].WordList}{VocabularyEntry.SecondPartFilePath}",
+            };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter[counterVar]]}{VocabularyEntry.SecondPartFilePath}" };
             List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
@@ -124,7 +111,7 @@ namespace VocabTrainer.Views {
                 await new ExtraFunctions().Wait();
                 ChangeBackground();
             }
-            for (int i = 0; i < entries.Count; i++) {
+            for (int i = 0; i < entries.Count; i++) 
                 if (entries[i].German == vocabulary[indexFirstChoice].German && entries[i].English == vocabulary[indexFirstChoice].English) {
                     entries[i].Seen = true;
                     entrySpecialList[indexFirstChoice].Seen = true;
@@ -140,7 +127,6 @@ namespace VocabTrainer.Views {
                         entrySpecialList[indexFirstChoice].LastTimeWrong = true;
                     }
                 }
-            }
             VocabularyEntry.WriteData(entry, entries);
             VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
             if (alreadyConnected >= 5) {
@@ -149,18 +135,15 @@ namespace VocabTrainer.Views {
                 _parentLearnView.GetCounter();
             } 
         }
-
         private void ChangeBackground() {
-            foreach (var element in newGrid.Children) {
+            foreach (var element in newGrid.Children) 
                 if (element is Button button) {
-                    if (!button.IsEnabled) {
-                        continue;
-                    } else if (button.Name.StartsWith("a") || button.Name.StartsWith("q")) {
+                    if (!button.IsEnabled) continue;
+                    else if (button.Name.StartsWith("a") || button.Name.StartsWith("q")) {
                         button.Background = Brushes.LightGray;
                         button.Foreground = Brushes.Black;
                     }
                 }
-            }
         }
         private void NotSet() {
             firstChoice = false;
