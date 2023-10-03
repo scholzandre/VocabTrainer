@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 
 namespace VocabTrainer.Views {
     public class VocabularyEntry {
@@ -19,7 +20,6 @@ namespace VocabTrainer.Views {
         public static string FirstPartFilePath { get => Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length-9)+"jsons\\"; }
         [JsonIgnore]
         public static string SecondPartFilePath { get => ".json"; }
-
         public VocabularyEntry() { }
         public static List<VocabularyEntry> GetData(VocabularyEntry entry) {
             List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
@@ -100,7 +100,7 @@ namespace VocabTrainer.Views {
             }
             return (false, -1, -1, "");
         }
-        public static List<string> checkEmpty(List<VocabularyEntry> vocabulary) {
+        public static List<string> CheckEmpty(List<VocabularyEntry> vocabulary) {
             if (vocabulary.Count == 0) {
                 return new List<string> { "Es sind keine Wörter verfügbar", "There are no words available" };
                 ;
@@ -129,6 +129,27 @@ namespace VocabTrainer.Views {
             hash = hash * 31 + (German ?? "").GetHashCode();
             hash = hash * 31 + (English ?? "").GetHashCode();
             return hash;
+        }
+        public string ChangeMarkedList(VocabularyEntry marked, string buttonContent, List<string> files, int Counter, LearnView _parentLearnView, List<VocabularyEntry> vocabularyParent) {
+            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
+
+            if (buttonContent == "☆") {
+                vocabulary.Add(marked);
+            } else if (buttonContent == "★") {
+                for (int i = 0; i < vocabulary.Count; i++) {
+                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
+                        vocabulary.Remove(vocabulary[i]);
+                        if (files[Counter] == "Marked") {
+                            _parentLearnView.Counter = (Counter <= 0) ? _parentLearnView.Counter = 0 : _parentLearnView.Counter -= 1;
+                            _parentLearnView.AllWordsList.Remove(vocabularyParent[Counter]);
+                            _parentLearnView.GetCounter();
+                        }
+                        break;
+                    }
+                }
+            }
+            VocabularyEntry.WriteData(marked, vocabulary);
+            return (buttonContent == "☆") ? "★" : "☆";
         }
     }
 }
