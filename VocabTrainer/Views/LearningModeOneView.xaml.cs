@@ -64,7 +64,7 @@ namespace VocabTrainer.Views {
             }
         }
         public bool CheckEmptyLocal() {
-            List<string> messages = VocabularyEntry.checkEmpty(Vocabulary);
+            List<string> messages = VocabularyEntry.CheckEmpty(Vocabulary);
             if (messages[1] == string.Empty) return false;
             else {
                 germanWord.Text = messages[0];
@@ -94,17 +94,7 @@ namespace VocabTrainer.Views {
                 FirstLanguage = Vocabulary[Counter].FirstLanguage,
                 SecondLanguage = Vocabulary[Counter].SecondLanguage,
             };
-            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
-            if (markedButton.Content.ToString() == "☆") {
-                markedButton.Content = "★";
-                vocabulary.Add(marked);
-            } else if (markedButton.Content.ToString() == "★") {
-                markedButton.Content = "☆";
-                for (int i = 0; i < vocabulary.Count; i++) {
-                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) vocabulary.Remove(vocabulary[i]);
-                }
-            }
-            VocabularyEntry.WriteData(marked, vocabulary);
+            markedButton.Content = marked.ChangeMarkedList(marked, markedButton.Content.ToString(), files, Counter, _parentLearnView, Vocabulary);
         }
     }
 }
