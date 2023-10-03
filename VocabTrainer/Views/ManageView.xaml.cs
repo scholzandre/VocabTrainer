@@ -137,7 +137,7 @@ namespace VocabTrainer.Views {
             }
         }
         public void CheckEmptyLocal() {
-            List<string> messages = VocabularyEntry.checkEmpty(vocabulary);
+            List<string> messages = VocabularyEntry.CheckEmpty(vocabulary);
             if (messages[1] != string.Empty) {
                 infoTextManage.Text = messages[1];
             }
