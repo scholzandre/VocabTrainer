@@ -15,7 +15,6 @@ namespace VocabTrainer.Views {
         public int Counter { get; set; }
         private readonly LearnView _parentLearnView;
         public Action<object, PropertyChangedEventArgs> PropertyChanged { get; internal set; }
-
         public LearningModeTwoView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
             Counter = parentLearnView.Counter;
@@ -69,22 +68,40 @@ namespace VocabTrainer.Views {
                 for (int i = 0; i < entries.Count; i++) {
                     if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
                         entries[i].Seen = true;
-                        entrySpecialList[Counter].Seen = true;
+                        if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                            entrySpecial.FilePath == "Seen" ||
+                            entrySpecial.FilePath == "NotSeen" ||
+                            entrySpecial.FilePath == "LastTimeWrong") 
+                                entrySpecialList[Counter].Seen = true;
                         if (answer.Text == "correct") {
                             entries[i].Repeated++;
                             entries[i].LastTimeWrong = false;
-                            entrySpecialList[Counter].Repeated++;
-                            entrySpecialList[Counter].LastTimeWrong = false;
+                            if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                                entrySpecial.FilePath == "Seen" ||
+                                entrySpecial.FilePath == "NotSeen" ||
+                                entrySpecial.FilePath == "LastTimeWrong") { 
+                                entrySpecialList[Counter].Repeated++;
+                                entrySpecialList[Counter].LastTimeWrong = false;
+                            }
                         } else {
                             entries[i].Repeated = 0;
                             entries[i].LastTimeWrong = true;
-                            entrySpecialList[Counter].Repeated = 0;
-                            entrySpecialList[Counter].LastTimeWrong = true;
+                            if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                                entrySpecial.FilePath == "Seen" ||
+                                entrySpecial.FilePath == "NotSeen" ||
+                                entrySpecial.FilePath == "LastTimeWrong") { 
+                                entrySpecialList[Counter].Repeated = 0;
+                                entrySpecialList[Counter].LastTimeWrong = true;
+                            }
                         }
                     }
                 }
                 VocabularyEntry.WriteData(entry, entries);
-                VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
+                if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                    entrySpecial.FilePath == "Seen" ||
+                    entrySpecial.FilePath == "NotSeen" ||
+                    entrySpecial.FilePath == "LastTimeWrong")
+                        VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
                 await new ExtraFunctions().Wait();
                 _parentLearnView.GetCounter();
             }
@@ -117,7 +134,7 @@ namespace VocabTrainer.Views {
             return (isCorrect, isPartyCorrect, atLeastOneCorrect, toManyWords);
         }
         public bool CheckEmptyLocal() {
-            List<string> messages = VocabularyEntry.checkEmpty(vocabulary);
+            List<string> messages = VocabularyEntry.CheckEmpty(vocabulary);
             if (messages[1] == string.Empty) return false;
             else {
                 germanWordBox.Text = messages[0];
@@ -167,21 +184,10 @@ namespace VocabTrainer.Views {
                 FirstLanguage = Vocabulary[Counter].FirstLanguage,
                 SecondLanguage = Vocabulary[Counter].SecondLanguage,
             };
-            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
-
-            if (markedButton.Content.ToString() == "☆") {
-                markedButton.Content = "★";
-                vocabulary.Add(marked);
-            } else if (markedButton.Content.ToString() == "★") {
-                markedButton.Content = "☆";
-                for (int i = 0; i < vocabulary.Count; i++) {
-                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
-                        vocabulary.Remove(vocabulary[i]);
-                    }
-                }
-            }
-            VocabularyEntry.WriteData(marked, vocabulary);
+            markedButton.Content = marked.ChangeMarkedList(marked, markedButton.Content.ToString(), files, Counter, _parentLearnView, Vocabulary);
         }
+
+        
         private void FirstLetter(object sender, RoutedEventArgs e) {
             int wordLength;
             string word;

@@ -85,22 +85,40 @@ namespace VocabTrainer.Views {
             for (int i = 0; i < entries.Count; i++) {
                 if (entries[i].German == vocabulary[Counter].German && entries[i].English == vocabulary[Counter].English) {
                     entries[i].Seen = true;
-                    entrySpecialList[Counter].Seen = true;
+                    if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                            entrySpecial.FilePath == "Seen" ||
+                            entrySpecial.FilePath == "NotSeen" ||
+                            entrySpecial.FilePath == "LastTimeWrong")
+                        entrySpecialList[Counter].Seen = true;
                     if (senderButton.Foreground != Brushes.Red) {
                         entries[i].Repeated++;
                         entries[i].LastTimeWrong = false;
-                        entrySpecialList[Counter].Repeated++;
-                        entrySpecialList[Counter].LastTimeWrong = false;
+                        if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                            entrySpecial.FilePath == "Seen" ||
+                            entrySpecial.FilePath == "NotSeen" ||
+                            entrySpecial.FilePath == "LastTimeWrong") {
+                            entrySpecialList[Counter].Repeated++;
+                            entrySpecialList[Counter].LastTimeWrong = false;
+                        }
                     } else {
                         entries[i].Repeated = 0;
                         entries[i].LastTimeWrong = true;
-                        entrySpecialList[Counter].Repeated = 0;
-                        entrySpecialList[Counter].LastTimeWrong = true;
+                        if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                            entrySpecial.FilePath == "Seen" ||
+                            entrySpecial.FilePath == "NotSeen" ||
+                            entrySpecial.FilePath == "LastTimeWrong") {
+                            entrySpecialList[Counter].Repeated = 0;
+                            entrySpecialList[Counter].LastTimeWrong = true;
+                        }
                     }
                 }
             }
             VocabularyEntry.WriteData(entry, entries);
-            VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
+            if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
+                entrySpecial.FilePath == "Seen" ||
+                entrySpecial.FilePath == "NotSeen" ||
+                entrySpecial.FilePath == "LastTimeWrong")
+                VocabularyEntry.WriteData(entrySpecial, entrySpecialList);
             await new ExtraFunctions().Wait();
             _parentLearnView.GetCounter();
         }
@@ -124,18 +142,7 @@ namespace VocabTrainer.Views {
                 FirstLanguage = _parentLearnView.AllWordsList[Counter].FirstLanguage,
                 SecondLanguage = _parentLearnView.AllWordsList[Counter].SecondLanguage,
             };
-            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
-
-            if (markedButton.Content.ToString() == "☆") {
-                markedButton.Content = "★";
-                vocabulary.Add(marked);
-            } else if (markedButton.Content.ToString() == "★") {
-                markedButton.Content = "☆";
-                for (int i = 0; i < vocabulary.Count; i++) {
-                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) vocabulary.Remove(vocabulary[i]);
-                }
-            }
-            VocabularyEntry.WriteData(marked, vocabulary);
+            markedButton.Content = marked.ChangeMarkedList(marked, markedButton.Content.ToString(), files, Counter, _parentLearnView, Vocabulary);
         }
     }
 }
