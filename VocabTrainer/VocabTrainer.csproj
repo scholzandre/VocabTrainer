@@ -79,6 +79,7 @@
     <Compile Include="ViewModels\ManageViewModel.cs" />
     <Compile Include="ViewModels\ManageWordlistsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\TranslatorViewModel.cs" />
     <Compile Include="Views\AddView.xaml.cs">
       <DependentUpon>AddView.xaml</DependentUpon>
     </Compile>
@@ -111,6 +112,9 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TranslatorView.xaml.cs">
+      <DependentUpon>TranslatorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VocabularyEntry.cs" />
     <Compile Include="WordlistsList.cs" />
@@ -169,6 +173,10 @@
     <Page Include="Views\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TranslatorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
