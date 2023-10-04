@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VocabTrainer"
         xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
         xmlns:views="clr-namespace:VocabTrainer.Views"
         ResizeMode="NoResize" 
@@ -91,6 +90,7 @@
                             <Button Style="{StaticResource ButtonStyle}" Content="Manage" Click="Manage_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Analysis" Click="Analysis_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Settings" Click="Settings_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Content="Translator" Click="Translator_Clicked"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
