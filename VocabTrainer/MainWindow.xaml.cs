@@ -53,5 +53,9 @@ namespace VocabTrainer {
         private void ManageWordlists_Clicked(object sender, RoutedEventArgs e) {
             DataContext = new ManageWordlistsView();
         }
+
+        private void Translator_Clicked(object sender, RoutedEventArgs e) {
+            new TranslatorViewModel(this);
+        }
     }
 }
