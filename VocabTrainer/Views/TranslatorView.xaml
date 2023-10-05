@@ -2,11 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:VocabTrainer.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Foreground="white">Test</TextBlock>
+        <StackPanel>
+            <StackPanel Margin="10,0,10,0">
+                <ComboBox x:Name="wordlists" Width="200" HorizontalAlignment="Right"/>
+                <ComboBox x:Name="firstLanguage" Width="150" HorizontalAlignment="Left"/>
+                <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0"/>
+            </StackPanel>
+            <StackPanel Margin="10,25,10,30">
+                <ComboBox x:Name="secondLanguage" Width="150" HorizontalAlignment="Left"/>
+                <TextBox IsReadOnly="True" x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0"/>
+            </StackPanel>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="311*"/>
+                    <ColumnDefinition Width="489*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18"  HorizontalAlignment="Left" IsDefault="True">translate</Button>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="Add" Height="25" Width="25" HorizontalAlignment="Right"/>
+            </Grid>
+            <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
+        </StackPanel>
     </Grid>
 </UserControl>
