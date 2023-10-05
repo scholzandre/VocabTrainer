@@ -89,8 +89,8 @@
                             <Button Style="{StaticResource ButtonStyle}" Content="Add words" Click="AddWords_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Manage" Click="Manage_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Analysis" Click="Analysis_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Settings" Click="Settings_Clicked"/>
                             <Button Style="{StaticResource ButtonStyle}" Content="Translator" Click="Translator_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Content="Settings" Click="Settings_Clicked"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
