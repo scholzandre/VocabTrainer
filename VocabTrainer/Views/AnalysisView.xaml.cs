@@ -1,7 +1,9 @@
 ﻿using LiveCharts;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using VocabTrainer.ViewModels;
 
 namespace VocabTrainer.Views {
@@ -19,6 +21,7 @@ namespace VocabTrainer.Views {
             AnalysisViewModel = viewModel;
             Values = values;
             FillComboBox();
+            FillWordTable();
             ShowDiagram(SeriesCollectionData);
         }
         public void ShowDiagram(SeriesCollection seriesCollection) {
@@ -42,6 +45,35 @@ namespace VocabTrainer.Views {
                     if (AnalysisViewModel.Wordlist == "") comboWordlists.SelectedIndex = 0;
                     else if (wordlists[i].WordlistName == AnalysisViewModel.Wordlist) comboWordlists.SelectedIndex = i - 2;
                 }
+        }
+        public void FillWordTable() {
+            for (int i = 0; i < AnalysisViewModel.AllWords.Count; i++) { 
+                RowDefinition newRow = new RowDefinition();
+                wordsTable.RowDefinitions.Add(newRow);
+                TextBlock firstWord = new TextBlock() { Text = AnalysisViewModel.AllWords[i].German, Foreground = Brushes.White };
+                TextBlock secondWord = new TextBlock() { Text = AnalysisViewModel.AllWords[i].English, Foreground = Brushes.White };
+                TextBlock repeated = new TextBlock() { Text = AnalysisViewModel.AllWords[i].Repeated.ToString(), Foreground = Brushes.White };
+                TextBlock seen = new TextBlock() { Text = AnalysisViewModel.AllWords[i].Seen.ToString(), Foreground = Brushes.White };
+                TextBlock lastTimeWrong = new TextBlock() { Text = AnalysisViewModel.AllWords[i].LastTimeWrong.ToString(), Foreground = Brushes.White };
+
+                Grid.SetColumn(firstWord, 0); 
+                Grid.SetColumn(secondWord, 1);   
+                Grid.SetColumn(repeated, 2); 
+                Grid.SetColumn(seen, 3);
+                Grid.SetColumn(lastTimeWrong, 4);
+
+                Grid.SetRow(firstWord, i+1);
+                Grid.SetRow(secondWord, i+1);
+                Grid.SetRow(repeated, i+1);
+                Grid.SetRow(seen, i+1);
+                Grid.SetRow(lastTimeWrong, i+1);
+
+                wordsTable.Children.Add(firstWord);
+                wordsTable.Children.Add(secondWord);
+                wordsTable.Children.Add(repeated);
+                wordsTable.Children.Add(seen);
+                wordsTable.Children.Add(lastTimeWrong);
+            }
         }
         private void Closed(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(comboWordlists.Text)) { 
