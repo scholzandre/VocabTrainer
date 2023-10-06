@@ -14,46 +14,66 @@
             <Setter Property="Foreground" Value="white"/>
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1.5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="17*"/>
-        </Grid.RowDefinitions>
-        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboWordlists" Height="24" DropDownClosed="Closed" Grid.ColumnSpan="2"/>
-        <lvc:PieChart Name="pieChart" Width="250" Height="250" Grid.Column="0" Grid.Row="1"/>
-
-        <Grid Grid.Column="1" Grid.Row="1">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <StackPanel>
+        <Grid Height="375" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="32*"/>
+                <RowDefinition/>
+                <RowDefinition Height="17*"/>
             </Grid.RowDefinitions>
+            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboWordlists" Height="24" DropDownClosed="Closed" Grid.ColumnSpan="2"/>
+            <lvc:PieChart Name="pieChart" Width="250" Height="250" Grid.Column="0" Grid.Row="1"/>
 
-            <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="3" Fill="LightYellow"></Rectangle>
-            <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="4" Fill="CadetBlue"></Rectangle>
-            <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="5" Fill="Green"></Rectangle>
-            <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="6" Fill="Red"></Rectangle>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="10*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="32*"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="1" Grid.Column="1" x:Name="name" />
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="2" Grid.Column="1" x:Name="allWords"/>
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="3" Grid.Column="1" x:Name="seen"/>
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" x:Name="notSeen"/>
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" x:Name="repeated"/>
-            <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="6" Grid.Column="1" x:Name="lastTimeWrong"/>
-            <Button Grid.Row="7" Grid.Column="1" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}"/>
+                <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="3" Fill="LightYellow"></Rectangle>
+                <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="4" Fill="CadetBlue"></Rectangle>
+                <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="5" Fill="Green"></Rectangle>
+                <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="6" Fill="Red"></Rectangle>
+
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="1" Grid.Column="1" x:Name="name" />
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="2" Grid.Column="1" x:Name="allWords"/>
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="3" Grid.Column="1" x:Name="seen"/>
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" x:Name="notSeen"/>
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" x:Name="repeated"/>
+                <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="6" Grid.Column="1" x:Name="lastTimeWrong"/>
+                <Button Grid.Row="7" Grid.Column="1" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}"/>
+            </Grid>
+
         </Grid>
-    </Grid>
+
+        <Grid x:Name="wordsTable">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="0" Text="first word" Padding="0,0,0,10"/>
+            <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="1" Text="second word"/>
+            <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="2" Text="repeated"/>
+            <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="3" Text="seen"/>
+            <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="4" Text="last time wrong"/>
+        </Grid>
+    </StackPanel>
+    </ScrollViewer>
 </UserControl>
