@@ -47,33 +47,24 @@ namespace VocabTrainer.Views {
                 }
         }
         public void FillWordTable() {
-            for (int i = 0; i < AnalysisViewModel.AllWords.Count; i++) { 
+            for (int i = 0; i <= AnalysisViewModel.AllWords.Count; i++) {
                 RowDefinition newRow = new RowDefinition();
                 wordsTable.RowDefinitions.Add(newRow);
-                TextBlock firstWord = new TextBlock() { Text = AnalysisViewModel.AllWords[i].German, Foreground = Brushes.White };
-                TextBlock secondWord = new TextBlock() { Text = AnalysisViewModel.AllWords[i].English, Foreground = Brushes.White };
-                TextBlock repeated = new TextBlock() { Text = AnalysisViewModel.AllWords[i].Repeated.ToString(), Foreground = Brushes.White };
-                TextBlock seen = new TextBlock() { Text = AnalysisViewModel.AllWords[i].Seen.ToString(), Foreground = Brushes.White };
-                TextBlock lastTimeWrong = new TextBlock() { Text = AnalysisViewModel.AllWords[i].LastTimeWrong.ToString(), Foreground = Brushes.White };
-
-                Grid.SetColumn(firstWord, 0); 
-                Grid.SetColumn(secondWord, 1);   
-                Grid.SetColumn(repeated, 2); 
-                Grid.SetColumn(seen, 3);
-                Grid.SetColumn(lastTimeWrong, 4);
-
-                Grid.SetRow(firstWord, i+1);
-                Grid.SetRow(secondWord, i+1);
-                Grid.SetRow(repeated, i+1);
-                Grid.SetRow(seen, i+1);
-                Grid.SetRow(lastTimeWrong, i+1);
-
-                wordsTable.Children.Add(firstWord);
-                wordsTable.Children.Add(secondWord);
-                wordsTable.Children.Add(repeated);
-                wordsTable.Children.Add(seen);
-                wordsTable.Children.Add(lastTimeWrong);
             }
+            for (int i = 0; i < AnalysisViewModel.AllWords.Count; i++) {
+                CreateTextBox(AnalysisViewModel.AllWords[i].German, 0, i + 1);
+                CreateTextBox(AnalysisViewModel.AllWords[i].English, 1, i + 1);
+                CreateTextBox(AnalysisViewModel.AllWords[i].Repeated.ToString(), 2, i + 1);
+                CreateTextBox(AnalysisViewModel.AllWords[i].Seen.ToString(), 3, i + 1);
+                CreateTextBox(AnalysisViewModel.AllWords[i].LastTimeWrong.ToString(), 4, i + 1);
+            }
+        }
+
+        private void CreateTextBox(string input, int column, int row) {
+            TextBlock textBox = new TextBlock() { Text = input, Foreground = Brushes.White };
+            Grid.SetColumn(textBox, column);
+            Grid.SetRow(textBox, row);
+            wordsTable.Children.Add(textBox);
         }
         private void Closed(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(comboWordlists.Text)) { 
