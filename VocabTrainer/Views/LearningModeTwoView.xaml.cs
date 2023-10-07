@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Navigation;
 
 namespace VocabTrainer.Views {
     public partial class LearningModeTwoView : UserControl {
@@ -14,6 +13,7 @@ namespace VocabTrainer.Views {
         public List<string> files = new List<string>();
         public int Counter { get; set; }
         private readonly LearnView _parentLearnView;
+        private int _allHints = 0;
         public Action<object, PropertyChangedEventArgs> PropertyChanged { get; internal set; }
         public LearningModeTwoView(LearnView parentLearnView) {
             _parentLearnView = parentLearnView;
@@ -80,7 +80,7 @@ namespace VocabTrainer.Views {
                                 entrySpecial.FilePath == "Seen" ||
                                 entrySpecial.FilePath == "NotSeen" ||
                                 entrySpecial.FilePath == "LastTimeWrong") { 
-                                entrySpecialList[Counter].Repeated++;
+                                if(_allHints <= 3) entrySpecialList[Counter].Repeated++;
                                 entrySpecialList[Counter].LastTimeWrong = false;
                             }
                         } else {
@@ -188,9 +188,10 @@ namespace VocabTrainer.Views {
         }
 
         
-        private void FirstLetter(object sender, RoutedEventArgs e) {
+        private void Hint(object sender, RoutedEventArgs e) {
             int wordLength;
             string word;
+            _allHints++;
             if (germanWordBox.IsReadOnly) {
                 word = englishWordBox.Text;
                 wordLength = word.Length;
