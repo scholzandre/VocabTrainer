@@ -192,21 +192,34 @@ namespace VocabTrainer.Views {
             int wordLength;
             string word;
             _allHints++;
-            if (germanWordBox.IsReadOnly) {
+            if (germanWordBox.IsReadOnly && englishWordBox.Text != Vocabulary[Counter].English) {
                 word = englishWordBox.Text;
                 wordLength = word.Length;
-                if (wordLength < Vocabulary[Counter].English.Length) {
+                try {
                     if (word.Substring(0, wordLength) == Vocabulary[Counter].English.Substring(0, wordLength)) englishWordBox.Text += Vocabulary[Counter].English[wordLength].ToString();
-                    else englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
-                } else if (wordLength >= Vocabulary[Counter].English.Length && word != Vocabulary[Counter].English) englishWordBox.Text = Vocabulary[Counter].English[0].ToString();
-                
-            } else {
+                    else
+                        for (int i = 0; i < wordLength; i++) {
+                            if (Vocabulary[Counter].English.Substring(0, i) == word.Substring(0, i)) englishWordBox.Text = word.Substring(0, i);
+                        }
+                } catch (Exception exception) {
+                    for (int i = 0; i <= Vocabulary[Counter].English.Length; i++) {
+                        if (Vocabulary[Counter].English.Substring(0, i) == word.Substring(0, i)) englishWordBox.Text = word.Substring(0, i);
+                    }
+                }
+            } else if (englishWordBox.IsReadOnly && germanWordBox.Text != Vocabulary[Counter].German) {
                 word = germanWordBox.Text;
                 wordLength = word.Length;
-                if (wordLength < Vocabulary[Counter].German.Length) {
+                try {
                     if (word.Substring(0, wordLength) == Vocabulary[Counter].German.Substring(0, wordLength)) germanWordBox.Text += Vocabulary[Counter].German[wordLength].ToString();
-                    else germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
-                } else if (wordLength >= Vocabulary[Counter].German.Length && word != Vocabulary[Counter].German) germanWordBox.Text = Vocabulary[Counter].German[0].ToString();
+                    else
+                        for (int i = 0; i < wordLength; i++) {
+                            if (Vocabulary[Counter].German.Substring(0, i) == word.Substring(0, i)) germanWordBox.Text = word.Substring(0, i);
+                        }
+                } catch (Exception exception) {
+                    for (int i = 0; i <= Vocabulary[Counter].German.Length; i++) {
+                        if (Vocabulary[Counter].German.Substring(0, i) == word.Substring(0, i)) germanWordBox.Text = word.Substring(0, i);
+                    }
+                }
             }
         }
     }
