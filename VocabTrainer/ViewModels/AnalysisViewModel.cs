@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
@@ -24,6 +27,17 @@ namespace VocabTrainer.ViewModels {
         private string _wordlist = string.Empty;
         public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public event EventHandler CanExecuteChange;
+
+        private string _selectedItem = "All words";
+        public string SelectedItem {
+            get => _selectedItem;
+            set {
+                _selectedItem = value;
+                if (SelectedItem == "All words") Wordlist = string.Empty;
+                else Wordlist = SelectedItem.Substring(0, (SelectedItem.IndexOf('('))).Trim();
+                GetPercentages();
+            }
+        }
         public AnalysisViewModel(MainWindow parentWindow) {
             ParentWindow = parentWindow;
             GetPercentages();
