@@ -66,12 +66,5 @@ namespace VocabTrainer.Views {
             Grid.SetRow(textBox, row);
             wordsTable.Children.Add(textBox);
         }
-        private void Closed(object sender, EventArgs e) {
-            if (!string.IsNullOrEmpty(comboWordlists.Text)) { 
-                if (comboWordlists.Text == "All words") AnalysisViewModel.Wordlist = string.Empty;
-                else AnalysisViewModel.Wordlist = comboWordlists.Text.Substring(0, (comboWordlists.Text.IndexOf('('))).Trim();
-                AnalysisViewModel.GetPercentages();
-            }
-        }
     }
 }
