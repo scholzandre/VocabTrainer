@@ -6,8 +6,6 @@ using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
@@ -27,6 +25,7 @@ namespace VocabTrainer.ViewModels {
         private string _wordlist = string.Empty;
         public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public event EventHandler CanExecuteChange;
+        private SeriesCollection _seriesCollection = new SeriesCollection();
 
         private string _selectedItem = "All words";
         public string SelectedItem {
@@ -36,11 +35,30 @@ namespace VocabTrainer.ViewModels {
                 if (SelectedItem == "All words") Wordlist = string.Empty;
                 else Wordlist = SelectedItem.Substring(0, (SelectedItem.IndexOf('('))).Trim();
                 GetPercentages();
+                OnPropertyChanged(nameof(SelectedItem));
             }
+        }
+
+        public List<VocabularyEntry> SearchingWords { get; set; } = new List<VocabularyEntry>();
+        private string _searchingWord = "Searching...";
+        public string SearchingWord { 
+            get => _searchingWord;
+            set {
+                _searchingWord = value;
+                GetPercentages();
+                SearchForWord();
+                OnPropertyChanged(nameof(SearchingWord));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
         public AnalysisViewModel(MainWindow parentWindow) {
             ParentWindow = parentWindow;
             GetPercentages();
+            CreateDiagram();
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -88,13 +106,16 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             GetPercentages();
+            CreateDiagram();
+            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
         public void GetPercentages() {
             KnownWords = 0;
             NotSeenWords = 0;
             SeenWords = 0;
             LastTimeWrong = 0;
-            AllWords = new List<VocabularyEntry>();
+            AllWords.Clear();
+            SearchingWords.Clear();
             List<WordlistsList> wordlistsList = WordlistsList.GetWordlistsList();
             List<VocabularyEntry> words;
             VocabularyEntry entry = new VocabularyEntry();
@@ -115,10 +136,10 @@ namespace VocabTrainer.ViewModels {
                 words = VocabularyEntry.GetData(entry);
                 AddCounters(words);
             }
-            CreateDiagram();
         }
         public void AddCounters(List<VocabularyEntry> words) {
             foreach (VocabularyEntry word in words) {
+                SearchingWords.Add(word);
                 AllWords.Add(word);
                 if (word.Repeated > 3) KnownWords++;
                 else if (word.LastTimeWrong) LastTimeWrong++;
@@ -127,9 +148,8 @@ namespace VocabTrainer.ViewModels {
             }
         }
         public void CreateDiagram() {
-            SeriesCollection seriesCollection = new SeriesCollection();
             if (AllWords.Count != 0) 
-                seriesCollection = new SeriesCollection
+                _seriesCollection = new SeriesCollection
                     {
                     new PieSeries {
                         Values = new ChartValues<double> { SeenWords*100/AllWords.Count },
@@ -148,7 +168,15 @@ namespace VocabTrainer.ViewModels {
                         Fill = System.Windows.Media.Brushes.Red
                     }
                 };
-            ParentWindow.DataContext = new AnalysisView(seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
+            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
+        }
+        private void SearchForWord() {
+            if (SearchingWord != "" && SearchingWord != "Searching...")
+                for (int i = 0; i < SearchingWords.Count; i++)
+                    if (!SearchingWords[i].German.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].English.ToLower().Contains(SearchingWord.ToLower())) {
+                        SearchingWords.Remove(SearchingWords[i]);
+                        i--;
+                    }
         }
     }
 }
