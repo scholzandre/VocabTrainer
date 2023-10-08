@@ -1,7 +1,5 @@
 ﻿using LiveCharts;
-using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VocabTrainer.ViewModels;
@@ -47,16 +45,16 @@ namespace VocabTrainer.Views {
                 }
         }
         public void FillWordTable() {
-            for (int i = 0; i <= AnalysisViewModel.AllWords.Count; i++) {
+            for (int i = 0; i <= AnalysisViewModel.SearchingWords.Count; i++) {
                 RowDefinition newRow = new RowDefinition();
                 wordsTable.RowDefinitions.Add(newRow);
             }
-            for (int i = 0; i < AnalysisViewModel.AllWords.Count; i++) {
-                CreateTextBox(AnalysisViewModel.AllWords[i].German, 0, i + 1);
-                CreateTextBox(AnalysisViewModel.AllWords[i].English, 1, i + 1);
-                CreateTextBox(AnalysisViewModel.AllWords[i].Repeated.ToString(), 2, i + 1);
-                CreateTextBox(AnalysisViewModel.AllWords[i].Seen.ToString(), 3, i + 1);
-                CreateTextBox(AnalysisViewModel.AllWords[i].LastTimeWrong.ToString(), 4, i + 1);
+            for (int i = 0; i < AnalysisViewModel.SearchingWords.Count; i++) {
+                CreateTextBox(AnalysisViewModel.SearchingWords[i].German, 0, i + 1);
+                CreateTextBox(AnalysisViewModel.SearchingWords[i].English, 1, i + 1);
+                CreateTextBox(AnalysisViewModel.SearchingWords[i].Repeated.ToString(), 2, i + 1);
+                CreateTextBox(AnalysisViewModel.SearchingWords[i].Seen.ToString(), 3, i + 1);
+                CreateTextBox(AnalysisViewModel.SearchingWords[i].LastTimeWrong.ToString(), 4, i + 1);
             }
         }
 
@@ -65,6 +63,11 @@ namespace VocabTrainer.Views {
             Grid.SetColumn(textBox, column);
             Grid.SetRow(textBox, row);
             wordsTable.Children.Add(textBox);
+        }
+
+        private void Loaded(object sender, System.Windows.RoutedEventArgs e) { // automatically jumps to the end of the TextBox
+            SearchingBox.CaretIndex = SearchingBox.Text.Length;
+            SearchingBox.Focus();
         }
     }
 }
