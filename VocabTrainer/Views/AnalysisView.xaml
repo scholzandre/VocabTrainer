@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Hidden">
         <StackPanel>
-            <Grid Height="375" VerticalAlignment="Top">
+            <Grid Height="310" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1.5*"/>
@@ -60,7 +60,7 @@
                 </Grid>
 
             </Grid>
-
+            <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right" Text="{Binding SearchingWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="Loaded"/>
             <Grid x:Name="wordsTable">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
