@@ -95,7 +95,7 @@
                     </Border>
                 </StackPanel>
             </DockPanel>
-            <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="5" Content="{Binding}"/>
+            <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding}"/>
             <Border Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
                 <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Foreground="white" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
