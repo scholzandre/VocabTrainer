@@ -84,8 +84,15 @@ namespace VocabTrainer.Views {
                                 entrySpecialList[Counter].LastTimeWrong = false;
                             }
                         } else {
-                            entries[i].Repeated = 0;
-                            entries[i].LastTimeWrong = true;
+                            if (!entrySpecialList[Counter].LastTimeWrong) {
+                                entries[i].Repeated = 0;
+                                entries[i].LastTimeWrong = true;
+                                VocabularyEntry wrongEntry = entrySpecialList[Counter];
+                                wrongEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}";
+                                List<VocabularyEntry> list = VocabularyEntry.GetData(wrongEntry);
+                                if (!list.Contains(wrongEntry)) list.Add(wrongEntry);
+                                VocabularyEntry.WriteData(wrongEntry, list);
+                            }
                             if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
                                 entrySpecial.FilePath == "Seen" ||
                                 entrySpecial.FilePath == "NotSeen" ||
