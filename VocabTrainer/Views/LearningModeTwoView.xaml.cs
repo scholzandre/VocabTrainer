@@ -84,10 +84,10 @@ namespace VocabTrainer.Views {
                                 entrySpecialList[Counter].LastTimeWrong = false;
                             }
                         } else {
-                            if (!entrySpecialList[Counter].LastTimeWrong) {
+                            if (!vocabulary[Counter].LastTimeWrong) {
                                 entries[i].Repeated = 0;
                                 entries[i].LastTimeWrong = true;
-                                VocabularyEntry wrongEntry = entrySpecialList[Counter];
+                                VocabularyEntry wrongEntry = vocabulary[Counter];
                                 wrongEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}";
                                 List<VocabularyEntry> list = VocabularyEntry.GetData(wrongEntry);
                                 if (!list.Contains(wrongEntry)) list.Add(wrongEntry);
