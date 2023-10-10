@@ -35,6 +35,7 @@ namespace VocabTrainer.ViewModels {
                 if (SelectedItem == "All words") Wordlist = string.Empty;
                 else Wordlist = SelectedItem.Substring(0, (SelectedItem.IndexOf('('))).Trim();
                 GetPercentages();
+                CreateDiagram();
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
