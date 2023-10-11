@@ -96,6 +96,10 @@ namespace VocabTrainer.Views {
             VocabularyEntry entrySpecial = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{files[Counter[counterVar]]}{VocabularyEntry.SecondPartFilePath}" };
             List<VocabularyEntry> entrySpecialList = VocabularyEntry.GetData(entrySpecial);
 
+            VocabularyEntry lastTimeWrongEntry = vocabulary[indexFirstChoice];
+            lastTimeWrongEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}";
+            List<VocabularyEntry> list = VocabularyEntry.GetData(lastTimeWrongEntry);
+
             if (vocabulary[indexFirstChoice].German == vocabulary[indexSecondChoice].German) {
                 senderQuestion.Foreground = Brushes.Green;
                 senderQuestion.IsEnabled = false;
@@ -122,6 +126,7 @@ namespace VocabTrainer.Views {
                     if (senderQuestion.Foreground == Brushes.Green) {
                         entries[i].Repeated++;
                         entries[i].LastTimeWrong = false;
+                        if (list.Contains(lastTimeWrongEntry)) list.Remove(lastTimeWrongEntry);
                         if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
                             entrySpecial.FilePath == "Seen" ||
                             entrySpecial.FilePath == "NotSeen" ||
@@ -133,11 +138,7 @@ namespace VocabTrainer.Views {
                         if (!vocabulary[indexFirstChoice].LastTimeWrong) {
                             entries[i].Repeated = 0;
                             entries[i].LastTimeWrong = true;
-                            VocabularyEntry wrongEntry = vocabulary[indexFirstChoice];
-                            wrongEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}";
-                            List<VocabularyEntry> list = VocabularyEntry.GetData(wrongEntry);
-                            if (!list.Contains(wrongEntry)) list.Add(wrongEntry);
-                            VocabularyEntry.WriteData(wrongEntry, list);
+                            if (!list.Contains(lastTimeWrongEntry)) list.Add(lastTimeWrongEntry);
                         }
                         if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
                             entrySpecial.FilePath == "Seen" ||
@@ -148,6 +149,7 @@ namespace VocabTrainer.Views {
                         }
                     }
                 }
+            VocabularyEntry.WriteData(lastTimeWrongEntry, list);
             VocabularyEntry.WriteData(entry, entries);
             if (entrySpecial.FilePath == $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" ||
                entrySpecial.FilePath == "Seen" ||
