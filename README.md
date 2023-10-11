@@ -4,4 +4,5 @@ Ideas:
 	- Text to speech?
 	- intelligent learning mode -> based on last time wrong etc.
 	- change color scheme in settings
-	- fill LastTimeWrong when input is wrong
+	- Manage words -> text when empty list
+	- Manage words -> no rename of special lists
