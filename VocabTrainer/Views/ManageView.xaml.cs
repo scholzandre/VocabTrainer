@@ -45,8 +45,14 @@ namespace VocabTrainer.Views {
                 TextBox textBoxGerman = CreateTextBox(words[i].German, 0, grid);
                 TextBox textBoxEnglish = CreateTextBox(words[i].English, 1, grid);
 
-                if (comboWordlists.Text != "Marked (-, -)") CreateButton(textBoxGerman, textBoxEnglish, grid, i, "R", entry);
-                CreateButton(textBoxGerman, textBoxEnglish, grid, i, "X", entry);
+                if (comboWordlists.Text != "Marked (-, -)" &&
+                    comboWordlists.Text != "LastTimeWrong (-, -)" &&
+                    comboWordlists.Text != "Seen (-, -)" &&
+                    comboWordlists.Text != "NotSeen (-, -)") CreateButton(textBoxGerman, textBoxEnglish, grid, i, "R", entry);
+
+                if (comboWordlists.Text != "LastTimeWrong (-, -)" &&
+                    comboWordlists.Text != "Seen (-, -)" &&
+                    comboWordlists.Text != "NotSeen (-, -)") CreateButton(textBoxGerman, textBoxEnglish, grid, i, "X", entry);
 
                 stackPanel.Children.Add(grid);
             }
