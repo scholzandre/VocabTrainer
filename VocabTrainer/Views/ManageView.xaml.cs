@@ -173,7 +173,8 @@ namespace VocabTrainer.Views {
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}";
                 List<VocabularyEntry> vocabularyTemp = VocabularyEntry.GetData(entry);
                 vocabulary = vocabularyTemp;
-                infoTextManage.Text = "Manage words";
+                if (vocabularyTemp.Count > 0) infoTextManage.Text = "Manage words";
+                else infoTextManage.Text = "There are no words available";
                 CreateGUI(vocabularyTemp, entry);
             }
         }
