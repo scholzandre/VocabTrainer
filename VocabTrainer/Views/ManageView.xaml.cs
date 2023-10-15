@@ -58,8 +58,9 @@ namespace VocabTrainer.Views {
             }
         }
         public void CreateColumn(Grid grid, int columnNumber) {
-            ColumnDefinition columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = (columnNumber < 2) ? new GridLength(25, GridUnitType.Star) : GridLength.Auto;
+            ColumnDefinition columnDefinition = new ColumnDefinition() { 
+                Width = (columnNumber < 2) ? new GridLength(25, GridUnitType.Star) : GridLength.Auto
+            };
             grid.ColumnDefinitions.Add(columnDefinition);
         }
 
@@ -74,8 +75,9 @@ namespace VocabTrainer.Views {
             return textBox;
         }
         public void CreateButton(TextBox textBoxGerman, TextBox textBoxEnglish, Grid grid, int i, string content, VocabularyEntry entry) {
-            Button button = new Button();
-            button.Content = content;
+            Button button = new Button() { 
+                Content = content
+            };
             Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
             buttonTagsR.Add("GermanTextBox", textBoxGerman);
             buttonTagsR.Add("EnglishTextBox", textBoxEnglish);
