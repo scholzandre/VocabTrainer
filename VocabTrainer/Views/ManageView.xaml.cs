@@ -65,28 +65,30 @@ namespace VocabTrainer.Views {
         }
 
         public TextBox CreateTextBox(string word, int column, Grid grid) {
-            TextBox textBox = new TextBox();
-            textBox.IsEnabled = false;
-            textBox.Text = word;
-            textBox.Background = new SolidColorBrush(Colors.DarkGray);
-            textBox.Margin = new Thickness(10, 0, 0, 10);
+            TextBox textBox = new TextBox() {
+                IsEnabled = false,
+                Text = word,
+                Background = new SolidColorBrush(Colors.DarkGray),
+                Margin = new Thickness(10, 0, 0, 10),
+            };
             Grid.SetColumn(textBox, column);
             grid.Children.Add(textBox);
             return textBox;
         }
         public void CreateButton(TextBox textBoxGerman, TextBox textBoxEnglish, Grid grid, int i, string content, VocabularyEntry entry) {
-            Button button = new Button() { 
-                Content = content
+            Dictionary<string, object> buttonTagsR = new Dictionary<string, object> {
+                { "GermanTextBox", textBoxGerman },
+                { "EnglishTextBox", textBoxEnglish },
+                { "EObject", entry }
             };
-            Dictionary<string, object> buttonTagsR = new Dictionary<string, object>();
-            buttonTagsR.Add("GermanTextBox", textBoxGerman);
-            buttonTagsR.Add("EnglishTextBox", textBoxEnglish);
-            buttonTagsR.Add("EObject", entry);
-            button.Tag = buttonTagsR;
+            Button button = new Button() { 
+                Content = content,
+                Tag = buttonTagsR,
+                Name = $"B{i}",
+                Margin = new Thickness(0, 0, 10, 10),
+                Width = 25,
+            };
             button.Click += (content == "R") ? (RoutedEventHandler)Rename : Remove;
-            button.Name = $"B{i}";
-            button.Margin = new Thickness(0, 0, 10, 10);
-            button.Width = 25;
             Grid.SetColumn(button, (content == "R") ? 2 : 3);
             grid.Children.Add(button);
         }
@@ -171,8 +173,9 @@ namespace VocabTrainer.Views {
                 string input = comboBox.Text;
                 int index = input.IndexOf("(");
                 string wordListName = input.Substring(0, index - 1);
-                VocabularyEntry entry = new VocabularyEntry();
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}";
+                VocabularyEntry entry = new VocabularyEntry() { 
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}"
+                };
                 List<VocabularyEntry> vocabularyTemp = VocabularyEntry.GetData(entry);
                 vocabulary = vocabularyTemp;
                 if (vocabularyTemp.Count > 0) infoTextManage.Text = "Manage words";
