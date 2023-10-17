@@ -76,6 +76,7 @@
     <Compile Include="ViewModels\LearningModeThreeViewModel.cs" />
     <Compile Include="ViewModels\LearningModeTwoViewModel.cs" />
     <Compile Include="ViewModels\LearnViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel.cs" />
     <Compile Include="ViewModels\ManageWordlistsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
