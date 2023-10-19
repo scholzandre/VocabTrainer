@@ -7,7 +7,7 @@
   },
   {
     "Condition": "list order",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 0,
     "IsLearningMode": false
   },
@@ -31,8 +31,20 @@
   },
   {
     "Condition": "Learning Mode Four",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 4,
     "IsLearningMode": true
+  },
+  {
+    "Buttons_Foreground" = "White" 
+  },
+  {
+    "Buttons_Background" = "#598392" 
+  },
+  {
+    "BorderBrush" = "#eff6e0" 
+  },
+  {
+    "BorderBackground" = "#01161e" 
   }
 ]
