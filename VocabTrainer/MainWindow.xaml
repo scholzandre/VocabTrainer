@@ -45,6 +45,7 @@
             <Setter Property="Height" Value="20"/>
             <Setter Property="CornerRadius" Value="50"/>
             <Setter Property="BorderThickness" Value="1"/>
+            
             <Setter Property="Background" Value="#598392"/>
         </Style>
 
@@ -97,10 +98,10 @@
             </DockPanel>
             <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding}"/>
             <Border Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
-                <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Foreground="white" Template="{StaticResource NoHoverEffectTemplate}"/>
+                <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
             <Border Grid.Column="4" Style="{StaticResource BorderButton}" Margin="8,1,9,1">
-                <Button Background="Transparent" FontSize="10"  Content="x" Click="closeWindow" BorderThickness="0" Foreground="white" Template="{StaticResource NoHoverEffectTemplate}"/>
+                <Button Background="Transparent" FontSize="10"  Content="x" Click="closeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
         </Grid>
     </Border>
