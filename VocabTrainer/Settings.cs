@@ -6,6 +6,10 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer {
     public class Settings {
+        string Buttons_Foreground { get; set; }
+        string Buttons_Background { get; set; }
+        string BorderBrush { get; set; }
+        string BorderBackground { get; set; }
         public string Condition { get; set; }
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
