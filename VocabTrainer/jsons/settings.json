@@ -36,15 +36,15 @@
     "IsLearningMode": true
   },
   {
-    "Buttons_Foreground" = "White" 
+    "Buttons_Foreground": "White" 
   },
   {
-    "Buttons_Background" = "#598392" 
+    "Buttons_Background": "#598392" 
   },
   {
-    "BorderBrush" = "#eff6e0" 
+    "BorderBrush": "#eff6e0" 
   },
   {
-    "BorderBackground" = "#01161e" 
+    "BorderBackground": "#01161e" 
   }
 ]
