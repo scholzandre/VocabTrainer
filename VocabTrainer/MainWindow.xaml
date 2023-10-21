@@ -27,8 +27,6 @@
         </DataTemplate>
 
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#598392"/>
             <Setter Property="Padding" Value="0,2.5,0,2.5"/>
             <Setter Property="FontSize" Value="20"/>
         </Style>
@@ -36,8 +34,6 @@
         <Style x:Key="BorderStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="BorderThickness" Value="5"/>
-            <Setter Property="BorderBrush" Value="#eff6e0"/>
-            <Setter Property="Background" Value="#01161e"/>
         </Style>
 
         <Style x:Key="BorderButton" TargetType="Border">
@@ -45,8 +41,6 @@
             <Setter Property="Height" Value="20"/>
             <Setter Property="CornerRadius" Value="50"/>
             <Setter Property="BorderThickness" Value="1"/>
-            
-            <Setter Property="Background" Value="#598392"/>
         </Style>
 
         <ControlTemplate x:Key="NoHoverEffectTemplate" TargetType="Button">
@@ -60,8 +54,8 @@
         </ControlTemplate>
         
     </Window.Resources>
-    <Border Style="{StaticResource BorderStyle}">
-        <Grid>
+    <Border x:Name="outerBorder" Style="{StaticResource BorderStyle}">
+        <Grid x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150*"/>
                 <ColumnDefinition Width="150*"/>
@@ -97,10 +91,10 @@
                 </StackPanel>
             </DockPanel>
             <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding}"/>
-            <Border Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
+            <Border x:Name="minimizeButton" Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
                 <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
-            <Border Grid.Column="4" Style="{StaticResource BorderButton}" Margin="8,1,9,1">
+            <Border x:Name="closeButton" Grid.Column="4" Style="{StaticResource BorderButton}" Margin="8,1,9,1">
                 <Button Background="Transparent" FontSize="10"  Content="x" Click="closeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
         </Grid>
