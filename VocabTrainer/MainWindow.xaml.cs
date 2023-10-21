@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using VocabTrainer.ViewModels;
+using System.Windows.Media;
 using System.Windows.Controls;
-using System;
 
 namespace VocabTrainer {
     public partial class MainWindow : Window {
@@ -12,11 +12,20 @@ namespace VocabTrainer {
 
         public MainWindow() {
             InitializeComponent();
+            List<Settings> settings = Settings.GetSettings();
+            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFrom(settings[6].BorderBrush);
+            outerBorder.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].BorderBackground);
+            closeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
+            minimizeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
+            foreach (object child in mainGrid.Children) {
+                if (child is Button temp) { 
+                    temp.Foreground = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Foreground);
+                    temp.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
+                }
+            }
             WordlistsList.CheckAvailabilityOfJSONFiles();
             new AnalysisViewModel(this);
         }
-
-
         private void Analysis_Clicked(object sender, RoutedEventArgs e) { 
             new AnalysisViewModel(this);
         }
