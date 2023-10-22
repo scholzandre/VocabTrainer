@@ -74,7 +74,7 @@
                 <RowDefinition Height="73*"/>
                 <RowDefinition Height="23*"/>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Background="#124559">
+            <DockPanel x:Name="navBar" Grid.Column="0" Grid.Row="0" Grid.RowSpan="7">
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="2">
                         <StackPanel>
