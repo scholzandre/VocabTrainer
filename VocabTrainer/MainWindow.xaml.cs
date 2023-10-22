@@ -13,10 +13,11 @@ namespace VocabTrainer {
         public MainWindow() {
             InitializeComponent();
             List<Settings> settings = Settings.GetSettings();
-            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFrom(settings[6].BorderBrush);
-            outerBorder.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].BorderBackground);
-            closeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
-            minimizeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
+            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFrom(settings[8].BorderBrush);
+            outerBorder.Background = (Brush)new BrushConverter().ConvertFrom(settings[9].BorderBackground);
+            closeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[7].Buttons_Background);
+            minimizeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[7].Buttons_Background);
+            navBar.Background = (Brush)new BrushConverter().ConvertFrom(settings[10].NavBarBackground);
             foreach (object child in mainGrid.Children) {
                 if (child is Button temp) { 
                     temp.Foreground = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Foreground);
