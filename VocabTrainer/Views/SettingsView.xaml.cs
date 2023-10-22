@@ -59,18 +59,25 @@ namespace VocabTrainer.Views {
                 Grid.SetColumn(textBlock, 1);
                 Grid.SetRow(textBlock, i);
 
-                CheckBox checkBox = new CheckBox() { Name = $"CB{i}" };
-                checkBox.Checked += (sender, e) => CheckBox_Checked_Settings(sender, e, checkBox.Name);
-                checkBox.Unchecked += (sender, e) => CheckBox_UnChecked_Settings(sender, e, checkBox.Name);
-                if (SettingsList[i].IsTrue == true) {
-                    checkBox.IsChecked = true;
-                }
-                Grid.SetColumn(checkBox, 2);
-                Grid.SetRow(checkBox, i);
-
                 mainGrid.RowDefinitions.Add(rowDef);
+
+                if (SettingsList[i].BorderBackground == null &&
+                    SettingsList[i].BorderBrush == null &&
+                    SettingsList[i].Buttons_Foreground == null &&
+                    SettingsList[i].Buttons_Background == null &&
+                    SettingsList[i].NavBarBackground == null) { 
+
+                    CheckBox checkBox = new CheckBox() { Name = $"CB{i}" };
+                    checkBox.Checked += (sender, e) => CheckBox_Checked_Settings(sender, e, checkBox.Name);
+                    checkBox.Unchecked += (sender, e) => CheckBox_UnChecked_Settings(sender, e, checkBox.Name);
+                    if (SettingsList[i].IsTrue == true) {
+                        checkBox.IsChecked = true;
+                    }
+                    Grid.SetColumn(checkBox, 2);
+                    Grid.SetRow(checkBox, i);
+                    mainGrid.Children.Add(checkBox);
+                }
                 mainGrid.Children.Add(textBlock);
-                mainGrid.Children.Add(checkBox);
             }
             Grid.SetRow(mainGrid, 1);
             stackPanelGeneralSettings.Children.Clear();
