@@ -10,6 +10,7 @@ namespace VocabTrainer {
         public string Buttons_Background { get; set; }
         public string BorderBrush { get; set; }
         public string BorderBackground { get; set; }
+        public string NavBarBackground { get; set; }
         public string Condition { get; set; }
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
