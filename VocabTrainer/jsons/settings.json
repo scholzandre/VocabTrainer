@@ -1,44 +1,123 @@
 [
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "random order",
     "IsTrue": false,
     "LearningMode": 0,
     "IsLearningMode": false
   },
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "list order",
     "IsTrue": true,
     "LearningMode": 0,
     "IsLearningMode": false
   },
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "Learning Mode One",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 1,
     "IsLearningMode": true
   },
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "Learning Mode Two",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 2,
     "IsLearningMode": true
   },
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "Learning Mode Three",
     "IsTrue": false,
     "LearningMode": 3,
     "IsLearningMode": true
   },
   {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
     "Condition": "Learning Mode Four",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 4,
     "IsLearningMode": true
   },
   {
     "Buttons_Foreground": "#FFFFFF",
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
+    "Condition": "Buttons foreground",
+    "IsTrue": false,
+    "LearningMode": 0,
+    "IsLearningMode": false
+  },
+  {
+    "Buttons_Foreground": null,
     "Buttons_Background": "#598392",
-    "BorderBrush": "#eff6e0",  
-    "BorderBackground": "#01161e" 
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": null,
+    "Condition": "Buttons background",
+    "IsTrue": false,
+    "LearningMode": 0,
+    "IsLearningMode": false
+  },
+  {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": "#eff6e0",
+    "BorderBackground": null,
+    "NavBarBackground": null,
+    "Condition": "Border color",
+    "IsTrue": false,
+    "LearningMode": 0,
+    "IsLearningMode": false
+  },
+  {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": "#01161e",
+    "NavBarBackground": null,
+    "Condition": "Background",
+    "IsTrue": false,
+    "LearningMode": 0,
+    "IsLearningMode": false
+  },
+  {
+    "Buttons_Foreground": null,
+    "Buttons_Background": null,
+    "BorderBrush": null,
+    "BorderBackground": null,
+    "NavBarBackground": "#124559",
+    "Condition": "Navigationbar Background",
+    "IsTrue": false,
+    "LearningMode": 0,
+    "IsLearningMode": false
   }
 ]
