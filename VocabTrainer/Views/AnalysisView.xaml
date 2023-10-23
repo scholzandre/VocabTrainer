@@ -56,7 +56,7 @@
                     <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" x:Name="notSeen" Grid.ColumnSpan="3" Margin="31,0,0,0"/>
                     <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" x:Name="repeated" Grid.ColumnSpan="3" Margin="31,32,0,0" Grid.RowSpan="2"/>
                     <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" x:Name="lastTimeWrong" Grid.ColumnSpan="3" Margin="31,33,0,0" Grid.RowSpan="2"/>
-                    <Button Grid.Row="6" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}" Grid.ColumnSpan="2" Margin="31,33,0,0" Grid.RowSpan="2"/>
+                    <Button x:Name="resetButton" Grid.Row="6" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}" Grid.ColumnSpan="2" Margin="31,33,0,0" Grid.RowSpan="2"/>
                 </Grid>
 
             </Grid>
