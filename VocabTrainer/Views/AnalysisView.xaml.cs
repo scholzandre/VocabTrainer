@@ -21,6 +21,9 @@ namespace VocabTrainer.Views {
             FillComboBox();
             FillWordTable();
             ShowDiagram(SeriesCollectionData);
+            if (Values.seen == 0 &&
+                Values.repeated == 0 &&
+                Values.lastTimeWrong == 0) resetButton.IsEnabled = false;
         }
         public void ShowDiagram(SeriesCollection seriesCollection) {
             pieChart.Series = seriesCollection;
