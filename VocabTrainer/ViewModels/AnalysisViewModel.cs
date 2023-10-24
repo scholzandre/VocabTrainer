@@ -46,9 +46,6 @@ namespace VocabTrainer.ViewModels {
             get => _searchingWord;
             set {
                 _searchingWord = value;
-                GetPercentages();
-                SearchForWord();
-                OnPropertyChanged(nameof(SearchingWord));
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -64,7 +61,12 @@ namespace VocabTrainer.ViewModels {
         private bool CanExecuteCommand(object arg) {
             return true;
         }
-
+        public ICommand SearchCommand => new RelayCommand(Search, CanExecuteCommand);
+        private void Search(object obj) {
+            GetPercentages();
+            SearchForWord();
+            OnPropertyChanged(nameof(SearchingWord));
+        }
         public ICommand ResetCommand => new RelayCommand(Reset, CanExecuteCommand);
 
         private void Reset(object obj) {
