@@ -60,7 +60,10 @@
                 </Grid>
 
             </Grid>
-            <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right" Text="{Binding SearchingWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="Loaded"/>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right"  Text="{Binding SearchingWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="Loaded"/>
+                <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}"/>
+            </StackPanel>
             <Grid x:Name="wordsTable">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
