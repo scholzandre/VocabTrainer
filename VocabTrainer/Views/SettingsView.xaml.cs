@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VocabTrainer.Views {
     public partial class SettingsView : UserControl, INotifyPropertyChanged {
@@ -43,7 +45,7 @@ namespace VocabTrainer.Views {
 
             ColumnDefinition colDef0 = new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) };
             ColumnDefinition colDef1 = new ColumnDefinition() { Width = new GridLength(75, GridUnitType.Star) };
-            ColumnDefinition colDef2 = new ColumnDefinition() { Width = new GridLength(20, GridUnitType.Star) };
+            ColumnDefinition colDef2 = new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) };
             
             mainGrid.ColumnDefinitions.Add(colDef0);
             mainGrid.ColumnDefinitions.Add(colDef1);
@@ -65,7 +67,7 @@ namespace VocabTrainer.Views {
                     SettingsList[i].BorderBrush == null &&
                     SettingsList[i].Buttons_Foreground == null &&
                     SettingsList[i].Buttons_Background == null &&
-                    SettingsList[i].NavBarBackground == null) { 
+                    SettingsList[i].NavBarBackground == null) {
 
                     CheckBox checkBox = new CheckBox() { Name = $"CB{i}" };
                     checkBox.Checked += (sender, e) => CheckBox_Checked_Settings(sender, e, checkBox.Name);
@@ -76,7 +78,40 @@ namespace VocabTrainer.Views {
                     Grid.SetColumn(checkBox, 2);
                     Grid.SetRow(checkBox, i);
                     mainGrid.Children.Add(checkBox);
-                }
+                } else {
+                    ColumnDefinition colDef3 = new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) };
+                    mainGrid.ColumnDefinitions.Add(colDef3);
+
+                    TextBox textBox = new TextBox() {
+                        Name = $"TB{i}"
+                    };
+                    if (SettingsList[i].BorderBackground != null) {
+                        textBox.Text = SettingsList[i].BorderBackground;
+                    } else if (SettingsList[i].BorderBrush != null) {
+                        textBox.Text = SettingsList[i].BorderBrush;
+                    } else if (SettingsList[i].Buttons_Foreground != null) {
+                        textBox.Text = SettingsList[i].Buttons_Foreground;
+                    } else if (SettingsList[i].Buttons_Background != null) {
+                        textBox.Text = SettingsList[i].Buttons_Background;
+                    } else if (SettingsList[i].NavBarBackground != null) {
+                        textBox.Text = SettingsList[i].NavBarBackground;
+                    }
+                    Button button = new Button() {
+                        Background = Brushes.Transparent,
+                        BorderBrush = Brushes.Transparent,
+                        Foreground = Brushes.White,
+                        Content = "💾",
+                        Width = 20
+                    };
+
+                    Grid.SetColumn(textBox, 2);
+                    Grid.SetRow(textBox, i);
+                    Grid.SetColumn(button, 3);
+                    Grid.SetRow(button, i);
+
+                    mainGrid.Children.Add(textBox);
+                    mainGrid.Children.Add(button);
+                } 
                 mainGrid.Children.Add(textBlock);
             }
             Grid.SetRow(mainGrid, 1);
