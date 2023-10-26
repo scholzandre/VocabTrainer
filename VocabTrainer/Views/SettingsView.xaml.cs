@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
+using System.Xml.Linq;
+using VocabTrainer.ViewModels;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VocabTrainer.Views {
@@ -33,9 +36,10 @@ namespace VocabTrainer.Views {
             }
         }
         private bool updatingSettings = false;
-
+        private MainWindow _parent;
         #endregion
-        public SettingsView() {
+        public SettingsView(MainWindow parent) {
+            _parent = parent;
             InitializeComponent();
             SettingsList = Settings.GetSettings();
             WordlistsSettings = WordlistsList.GetWordlistsList();
@@ -97,12 +101,14 @@ namespace VocabTrainer.Views {
                         textBox.Text = SettingsList[i].NavBarBackground;
                     }
                     Button button = new Button() {
+                        Name = $"B{i}",
                         Background = Brushes.Transparent,
                         BorderBrush = Brushes.Transparent,
                         Foreground = Brushes.White,
                         Content = "💾",
                         Width = 20
                     };
+                    button.Click += SaveSettings;
 
                     Grid.SetColumn(textBox, 2);
                     Grid.SetRow(textBox, i);
@@ -118,6 +124,31 @@ namespace VocabTrainer.Views {
             stackPanelGeneralSettings.Children.Clear();
             stackPanelGeneralSettings.Children.Add(mainGrid);
         }
+
+        private void SaveSettings(object sender, RoutedEventArgs e) {
+            Button button = sender as Button;
+            try { 
+                foreach (var element in stackPanelGeneralSettings.Children) {
+                    if (element is Grid grid) 
+                        foreach (var item in grid.Children) {
+                            if (item is TextBox textBox && textBox.Name.Substring(2) == button.Name.Substring(1)) {
+                                if (textBox.Text.Length == 7) { 
+                                    int index = Int32.Parse(textBox.Name.Substring(2));
+                                    if (SettingsList[index].BorderBackground != null) SettingsList[index].BorderBackground = textBox.Text;
+                                    else if (SettingsList[index].Buttons_Background != null) SettingsList[index].Buttons_Background = textBox.Text;
+                                    else if (SettingsList[index].Buttons_Foreground != null) SettingsList[index].Buttons_Foreground = textBox.Text;
+                                    else if (SettingsList[index].BorderBrush != null) SettingsList[index].BorderBrush = textBox.Text;
+                                    else if (SettingsList[index].NavBarBackground != null) SettingsList[index].NavBarBackground = textBox.Text;
+                                    break;
+                                }
+                            }
+                        }
+                    Settings.WriteSettings(SettingsList);
+                    _parent.SetColors();
+                }
+            } catch (Exception ex) { }
+        }
+
         private void CheckBox_Checked_Settings(object sender, RoutedEventArgs e, string name) {
             if (!updatingSettings) {
                 int number = getIndex(name);
