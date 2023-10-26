@@ -5,6 +5,7 @@ using System.Windows.Input;
 using VocabTrainer.ViewModels;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System;
 
 namespace VocabTrainer {
     public partial class MainWindow : Window {
@@ -12,6 +13,12 @@ namespace VocabTrainer {
 
         public MainWindow() {
             InitializeComponent();
+            SetColors();
+            WordlistsList.CheckAvailabilityOfJSONFiles();
+            new AnalysisViewModel(this);
+        }
+
+        public void SetColors() {
             List<Settings> settings = Settings.GetSettings();
             outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFrom(settings[8].BorderBrush);
             outerBorder.Background = (Brush)new BrushConverter().ConvertFrom(settings[9].BorderBackground);
@@ -19,14 +26,13 @@ namespace VocabTrainer {
             minimizeButton.Background = (Brush)new BrushConverter().ConvertFrom(settings[7].Buttons_Background);
             navBar.Background = (Brush)new BrushConverter().ConvertFrom(settings[10].NavBarBackground);
             foreach (object child in mainGrid.Children) {
-                if (child is Button temp) { 
+                if (child is Button temp) {
                     temp.Foreground = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Foreground);
                     temp.Background = (Brush)new BrushConverter().ConvertFrom(settings[6].Buttons_Background);
                 }
             }
-            WordlistsList.CheckAvailabilityOfJSONFiles();
-            new AnalysisViewModel(this);
         }
+
         private void Analysis_Clicked(object sender, RoutedEventArgs e) { 
             new AnalysisViewModel(this);
         }
@@ -45,7 +51,7 @@ namespace VocabTrainer {
             DataContext = new AddWordlistView();
         }
         private void Settings_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new SettingsView();
+            DataContext = new SettingsView(this);
         }
 
         public void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
