@@ -35,7 +35,8 @@ namespace VocabTrainer.Views {
         }
 
         private void CreateGUI(List<VocabularyEntry> words, VocabularyEntry entry) {
-            for (int i = 0; i < words.Count(); i++) {
+            int shownWords = (words.Count > 100) ? 100 : words.Count;
+            for (int i = 0; i < shownWords; i++) {
                 Grid grid = new Grid();
 
                 for (int j = 0; j < 4; j++) {

@@ -52,7 +52,8 @@ namespace VocabTrainer.Views {
                 RowDefinition newRow = new RowDefinition();
                 wordsTable.RowDefinitions.Add(newRow);
             }
-            for (int i = 0; i < AnalysisViewModel.SearchingWords.Count; i++) {
+            int shownWords = (AnalysisViewModel.SearchingWords.Count > 100) ? 100 : AnalysisViewModel.SearchingWords.Count;
+            for (int i = 0; i < shownWords; i++) {
                 CreateTextBox(AnalysisViewModel.SearchingWords[i].German, 0, i + 1);
                 CreateTextBox(AnalysisViewModel.SearchingWords[i].English, 1, i + 1);
                 CreateTextBox(AnalysisViewModel.SearchingWords[i].Repeated.ToString(), 2, i + 1);
