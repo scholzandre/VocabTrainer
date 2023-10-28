@@ -6,6 +6,8 @@ using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 using System.ComponentModel;
+using System.Security.Policy;
+using Newtonsoft.Json.Linq;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
@@ -23,9 +25,14 @@ namespace VocabTrainer.ViewModels {
         private int _notSeenWords;
         public int NotSeenWords { get => _notSeenWords; set => _notSeenWords = value; }
         private string _wordlist = string.Empty;
+        public string AllWordsString { get; set; }
+        public string SeenWordsString { get; set; }
+        public string NotSeenWordsString { get; set; }
+        public string LastTimeWrongString { get; set; }
+        public string KnownWordsString { get; set; }
         public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public event EventHandler CanExecuteChange;
-        private SeriesCollection _seriesCollection = new SeriesCollection();
+        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
 
         private string _selectedItem = "All words";
         public string SelectedItem {
@@ -36,8 +43,17 @@ namespace VocabTrainer.ViewModels {
                 else Wordlist = SelectedItem.Substring(0, (SelectedItem.IndexOf('('))).Trim();
                 GetPercentages();
                 CreateDiagram();
+                SetStrings();
                 OnPropertyChanged(nameof(SelectedItem));
             }
+        }
+
+        private void SetStrings() {
+            AllWordsString = $"words:\t\t\t{AllWords.Count}";
+            SeenWordsString = $"seen:\t\t\t{SeenWords}";
+            NotSeenWordsString = $"not seen:\t\t{NotSeenWords}";
+            KnownWordsString = $"known words:\t\t{KnownWords}";
+            LastTimeWrongString = $"unknwon words:\t\t{LastTimeWrong}";
         }
 
         public List<VocabularyEntry> SearchingWords { get; set; } = new List<VocabularyEntry>();
@@ -51,12 +67,12 @@ namespace VocabTrainer.ViewModels {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
         public AnalysisViewModel(MainWindow parentWindow) {
             ParentWindow = parentWindow;
             GetPercentages();
             CreateDiagram();
+            SetStrings();
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -110,7 +126,6 @@ namespace VocabTrainer.ViewModels {
             }
             GetPercentages();
             CreateDiagram();
-            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
         public void GetPercentages() {
             KnownWords = 0;
@@ -152,7 +167,7 @@ namespace VocabTrainer.ViewModels {
         }
         public void CreateDiagram() {
             if (AllWords.Count != 0) 
-                _seriesCollection = new SeriesCollection
+                SeriesCollection = new SeriesCollection
                     {
                     new PieSeries {
                         Values = new ChartValues<double> { SeenWords*100/AllWords.Count },
@@ -171,7 +186,6 @@ namespace VocabTrainer.ViewModels {
                         Fill = System.Windows.Media.Brushes.Red
                     }
                 };
-            ParentWindow.DataContext = new AnalysisView(_seriesCollection, this, (AllWords.Count, SeenWords, NotSeenWords, KnownWords, LastTimeWrong));
         }
         private void SearchForWord() {
             if (SearchingWord != "" && SearchingWord != "Searching...")
