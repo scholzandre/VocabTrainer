@@ -15,7 +15,7 @@ namespace VocabTrainer {
             InitializeComponent();
             SetColors();
             WordlistsList.CheckAvailabilityOfJSONFiles();
-            new AnalysisViewModel(this);
+            Analysis_Clicked(new object(), new RoutedEventArgs());
         }
 
         public void SetColors() {
@@ -34,26 +34,57 @@ namespace VocabTrainer {
         }
 
         private void Analysis_Clicked(object sender, RoutedEventArgs e) { 
-            new AnalysisViewModel(this);
+            Type viewType = typeof(AnalysisView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType);
+            view.DataContext = new AnalysisViewModel(this);
+            viewControl.Content = view;
         }
         private void Learn_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new LearnView();
+            Type viewType = typeof(LearnView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType);
+            view.DataContext = new LearnViewModel();
+            viewControl.Content = view;
         }
 
         private void Manage_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new ManageView();
+            Type viewType = typeof(ManageView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType);
+            view.DataContext = new ManageViewModel();
+            viewControl.Content = view;
         }
 
         private void AddWords_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new AddView();
+            Type viewType = typeof(AddView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType);
+            view.DataContext = new AddViewModel();
+            viewControl.Content = view;
         }
         private void AddWordlists_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new AddWordlistView();
+            Type viewType = typeof(AddWordlistView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType);
+            view.DataContext = new AddWordlistViewModel();
+            viewControl.Content = view;
         }
         private void Settings_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new SettingsView(this);
+            Type viewType = typeof(SettingsView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType); 
+            view.DataContext = new SettingsView(this); 
+            viewControl.Content = view;
         }
 
+        private void ManageWordlists_Clicked(object sender, RoutedEventArgs e) {
+            Type viewType = typeof(ManageWordlistsView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType); 
+            view.DataContext = new ManageWordlistsViewModel(); 
+            viewControl.Content = view;
+        }
+
+        private void Translator_Clicked(object sender, RoutedEventArgs e) {
+            Type viewType = typeof(TranslatorView);
+            UserControl view = (UserControl)Activator.CreateInstance(viewType); // sets the View
+            view.DataContext = new TranslatorViewModel(); // sets the corresponding ViewModel
+            viewControl.Content = view;
+        }
         public void Windows_MouseDown(object sender, MouseButtonEventArgs e) {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
@@ -64,14 +95,6 @@ namespace VocabTrainer {
 
         private void closeWindow(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
-        }
-
-        private void ManageWordlists_Clicked(object sender, RoutedEventArgs e) {
-            DataContext = new ManageWordlistsView();
-        }
-
-        private void Translator_Clicked(object sender, RoutedEventArgs e) {
-            new TranslatorViewModel(this);
         }
     }
 }
