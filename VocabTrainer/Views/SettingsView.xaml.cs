@@ -44,6 +44,11 @@ namespace VocabTrainer.Views {
             SettingsList = Settings.GetSettings();
             WordlistsSettings = WordlistsList.GetWordlistsList();
         }
+        public SettingsView() {
+            InitializeComponent();
+            SettingsList = Settings.GetSettings();
+            WordlistsSettings = WordlistsList.GetWordlistsList();
+        }
         public void CreateGUI() {
             Grid mainGrid = new Grid();
 
