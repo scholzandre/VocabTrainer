@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TranslatorViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,10,0">
                 <ComboBox x:Name="wordlists" Width="200" HorizontalAlignment="Right"/>
-                <ComboBox x:Name="firstLanguage" Width="150" HorizontalAlignment="Left"/>
-                <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0"/>
+                <ComboBox x:Name="firstLanguage" Width="150" HorizontalAlignment="Left" ItemsSource="{Binding OriginalLanguages}" SelectedItem="{Binding SelectedItemFirstLanguage}"/>
+                <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstLanguageWord, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Margin="10,25,10,30">
-                <ComboBox x:Name="secondLanguage" Width="150" HorizontalAlignment="Left"/>
-                <TextBox IsReadOnly="True" x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0"/>
+                <ComboBox x:Name="secondLanguage" Width="150" HorizontalAlignment="Left" ItemsSource="{Binding ReducedLanguages}" SelectedItem="{Binding SelectedItemSecondLanguage}"/>
+                <TextBox IsReadOnly="True" x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0" Text="{Binding SecondLanguageWord, Mode=TwoWay}"/>
             </StackPanel>
 
             <Grid>
@@ -22,8 +24,8 @@
                     <ColumnDefinition Width="311*"/>
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18"  HorizontalAlignment="Left" IsDefault="True">translate</Button>
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="Add" Height="25" Width="25" HorizontalAlignment="Right"/>
+                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18"  HorizontalAlignment="Left" IsDefault="True" Command="{Binding TranslateCommand}" Content="translate"/>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="➕" Height="25" Width="25" HorizontalAlignment="Right" Command="{Binding AddWordCommand}"/>
             </Grid>
             <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
         </StackPanel>
