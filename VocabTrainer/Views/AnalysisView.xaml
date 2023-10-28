@@ -26,7 +26,7 @@
                     <RowDefinition Height="17*"/>
                 </Grid.RowDefinitions>
                 <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboWordlists" Height="24" SelectedItem="{Binding SelectedItem}" Grid.ColumnSpan="2"/>
-                <lvc:PieChart Name="pieChart" Width="250" Height="250" Grid.Column="0" Grid.Row="1"/>
+                <lvc:PieChart Name="pieChart" Width="250" Height="250" Grid.Column="0" Grid.Row="1" Series="{Binding SeriesCollection}"/>
 
                 <Grid Grid.Column="1" Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -50,34 +50,27 @@
                     <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="5" Fill="Green" Margin="9,11,9,10"></Rectangle>
                     <Rectangle Width="12.5" Height="12.5" Grid.Column="0" Grid.Row="6" Fill="Red" Margin="9,11,9,10"></Rectangle>
 
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="1" x:Name="name" Grid.ColumnSpan="3" Margin="31,0,0,33" Grid.RowSpan="2" />
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="2" x:Name="allWords" Grid.ColumnSpan="3" Margin="31,0,0,33" Grid.RowSpan="2"/>
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="3" x:Name="seen" Grid.ColumnSpan="3" Margin="31,0,0,32" Grid.RowSpan="2"/>
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" x:Name="notSeen" Grid.ColumnSpan="3" Margin="31,0,0,0"/>
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="4" x:Name="repeated" Grid.ColumnSpan="3" Margin="31,32,0,0" Grid.RowSpan="2"/>
-                    <TextBlock Style="{StaticResource TextBoxStyle}" Grid.Row="5" x:Name="lastTimeWrong" Grid.ColumnSpan="3" Margin="31,33,0,0" Grid.RowSpan="2"/>
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedItem}" Grid.Row="1" x:Name="name" Grid.ColumnSpan="3" Margin="31,0,0,33" Grid.RowSpan="2" />
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding AllWordsString}" Grid.Row="2" x:Name="allWords" Grid.ColumnSpan="3" Margin="31,0,0,33" Grid.RowSpan="2"/>
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding SeenWordsString}" Grid.Row="3" x:Name="seen" Grid.ColumnSpan="3" Margin="31,0,0,32" Grid.RowSpan="2"/>
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding NotSeenWordsString}" Grid.Row="4" x:Name="notSeen" Grid.ColumnSpan="3" Margin="31,0,0,0"/>
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding KnownWordsString}" Grid.Row="4" x:Name="repeated" Grid.ColumnSpan="3" Margin="31,32,0,0" Grid.RowSpan="2"/>
+                    <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding LastTimeWrongString}" Grid.Row="5" x:Name="lastTimeWrong" Grid.ColumnSpan="3" Margin="31,33,0,0" Grid.RowSpan="2"/>
                     <Button x:Name="resetButton" Grid.Row="6" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}" Grid.ColumnSpan="2" Margin="31,33,0,0" Grid.RowSpan="2"/>
                 </Grid>
 
             </Grid>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right"  Text="{Binding SearchingWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="Loaded"/>
-                <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}"/>
+                <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right" Text="{Binding SearchingWord, Mode=TwoWay}"/>
+                <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
             </StackPanel>
-            <Grid x:Name="wordsTable">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="0" Text="first word" Padding="0,0,0,10"/>
-                <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="1" Text="second word"/>
-                <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="2" Text="repeated"/>
-                <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="3" Text="seen"/>
-                <TextBlock FontWeight="Bold" Foreground="White" Grid.Column="4" Text="last time wrong"/>
-            </Grid>
+            <DataGrid ItemsSource="{Binding AllWords}" AutoGenerateColumns="True" ScrollViewer.CanContentScroll="True" MaxHeight="300">
+                    <DataGrid.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/> <!-- loads element only if in sight -->
+                        </ItemsPanelTemplate>
+                    </DataGrid.ItemsPanel>
+                </DataGrid>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
