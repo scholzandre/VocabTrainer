@@ -1,17 +1,124 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Threading.Tasks;
-using VocabTrainer.Views;
+using System.Windows.Input;
+using VocabTrainer.Models;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace VocabTrainer.ViewModels {
-    internal class TranslatorViewModel {
+    public class TranslatorViewModel : INotifyPropertyChanged {
+        public event EventHandler CanExecuteChange;
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-        public MainWindow ParentWindow { get; }
-        public TranslatorViewModel(MainWindow parentWindow) {
-            ParentWindow = parentWindow;
-            ParentWindow.DataContext = new TranslatorView();
+        private string _firstLanguageWord = string.Empty;
+        public string FirstLanguageWord {
+            get => _firstLanguageWord;
+            set {
+                _firstLanguageWord = value;
+                OnPropertyChanged(nameof(FirstLanguageWord));
+            }
+        }
+        private string _secondLanguageWord = string.Empty;
+        public string SecondLanguageWord {
+            get => _secondLanguageWord;
+            set {
+                _secondLanguageWord = value;
+                OnPropertyChanged(nameof(SecondLanguageWord));
+            }
+        }
+
+        public List<string> OriginalLanguages { get; set; }
+        private List<string> _reducedLanguages;
+        public List<string> ReducedLanguages { 
+            get => _reducedLanguages;
+            set { 
+                _reducedLanguages = value;
+                _reducedLanguages.Remove(SelectedItemFirstLanguage);
+                OnPropertyChanged(nameof(ReducedLanguages));
+            } 
+        }
+
+        private string _selectedItemFirstLanguage;
+        public string SelectedItemFirstLanguage {
+            get => _selectedItemFirstLanguage;
+            set {
+                _selectedItemFirstLanguage = value;
+                ReducedLanguages = new List<string>(OriginalLanguages); // creates a copy
+                SelectedItemSecondLanguage = ReducedLanguages[0];
+                OnPropertyChanged(nameof(SelectedItemFirstLanguage));
+            }
+        }
+        private string _selectedItemSecondLanguage;
+        public string SelectedItemSecondLanguage {
+            get => _selectedItemSecondLanguage;
+            set {
+                _selectedItemSecondLanguage = value;
+                OnPropertyChanged(nameof(SelectedItemSecondLanguage));
+            }
+        }
+        private readonly Dictionary<string, string> _languageAbbreviation = new Dictionary<string, string>() {
+            { "German", "de" },
+            { "English", "en" },
+            { "French", "fr" },
+            { "Japanese", "ja" },
+            { "Spanish", "es" },
+            { "Italian", "it" },
+            { "Russian", "ru" }
+        };
+        public TranslatorViewModel() {
+            OriginalLanguages = new List<string>() {
+                "German",
+                "English",
+                "French",
+                "Japanese",
+                "Spanish",
+                "Italian",
+                "Russian"
+            };
+            SelectedItemFirstLanguage = OriginalLanguages[0];
+        }
+        private bool CanExecuteCommand(object arg) {
+            return true;
+        }
+        public ICommand TranslateCommand => new RelayCommand(Translate, CanExecuteCommand);
+        private async void Translate(object arg) {
+            if (FirstLanguageWord != string.Empty) SecondLanguageWord = await TranslateText("", FirstLanguageWord, _languageAbbreviation[SelectedItemFirstLanguage], _languageAbbreviation[SelectedItemSecondLanguage]);
+        }
+
+        public ICommand AddWordCommand => new RelayCommand(AddWord, CanExecuteCommand);
+
+        private void AddWord(object obj) {
+            Debug.WriteLine("Hello World");
+        }
+
+        static async Task<string> TranslateText(string apiKey, string text, string originLanguage, string targetLanguage) {
+            using (HttpClient client = new HttpClient()) {
+                string apiUrl = $"https://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair={originLanguage}|{targetLanguage}&key={apiKey}";
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+                if (response.IsSuccessStatusCode) {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<MyMemoryApiResponse>(responseContent);
+                    if (result != null && result.ResponseData != null) {
+                        return result.ResponseData.TranslatedText;
+                    } else {
+                        return "You're out of tokens";
+                    }
+                } else {
+                    return "";
+                }
+            }
+        }
+        public class MyMemoryApiResponse {
+            public ResponseData ResponseData { get; set; }
+        }
+        public class ResponseData {
+            public string TranslatedText { get; set; }
         }
     }
 }
