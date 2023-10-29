@@ -6,8 +6,8 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer {
     public class Settings {
-        public string Buttons_Foreground { get; set; }
-        public string Buttons_Background { get; set; }
+        public string ButtonsForeground { get; set; }
+        public string ButtonsBackground { get; set; }
         public string BorderBrush { get; set; }
         public string BorderBackground { get; set; }
         public string NavBarBackground { get; set; }
@@ -15,6 +15,7 @@ namespace VocabTrainer {
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
         public bool IsLearningMode { get; set; }
+        public string APIKey { get; set; }
         private static string _filePath = $"{VocabularyEntry.FirstPartFilePath}settings{VocabularyEntry.SecondPartFilePath}";
         public static List<Settings> GetSettings() {
             List<Settings> settings = new List<Settings>();
