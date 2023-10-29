@@ -11,9 +11,6 @@ using Newtonsoft.Json.Linq;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel {
-
-        private MainWindow _parentWindow;
-        public MainWindow ParentWindow { get => _parentWindow; set => _parentWindow = value; }
         private List<VocabularyEntry> _allWords = new List<VocabularyEntry>();
         public List<VocabularyEntry> AllWords { get => _allWords; set => _allWords = value; }
         private int _seenWords;
@@ -68,8 +65,7 @@ namespace VocabTrainer.ViewModels {
         protected void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public AnalysisViewModel(MainWindow parentWindow) {
-            ParentWindow = parentWindow;
+        public AnalysisViewModel() {
             GetPercentages();
             CreateDiagram();
             SetStrings();
