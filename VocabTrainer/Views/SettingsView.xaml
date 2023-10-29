@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="5,0,0,0">
@@ -14,7 +16,16 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel>
                 <TextBlock Text="General Settings" FontSize="20" Foreground="White" Margin="5,10,0,0"/>
-                <StackPanel x:Name="stackPanelGeneralSettings" Margin="0,0,0,20"/>
+                <ListBox ItemsSource="{Binding ListEntries}" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <VirtualizingStackPanel>
+                                    <UserControl Content="{Binding}"/>
+                            </VirtualizingStackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
                 <TextBlock Text="Wordlists" FontSize="20" Foreground="White" Margin="5,0,0,0"/>
                 <StackPanel x:Name="stackPanelWordlistsSettings"/>
             </StackPanel>
