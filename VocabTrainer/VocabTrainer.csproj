@@ -71,6 +71,7 @@
     <Compile Include="ViewModels\AddViewModel.cs" />
     <Compile Include="ViewModels\AddWordlistViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LearningModeFourViewModel.cs" />
     <Compile Include="ViewModels\LearningModeOneViewModel.cs" />
     <Compile Include="ViewModels\LearningModeThreeViewModel.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="ViewModels\ManageEntryViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel.cs" />
     <Compile Include="ViewModels\ManageWordlistsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsEntryTextViewModel.cs" />
+    <Compile Include="ViewModels\SettingsEntryTrueFalseViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\TranslatorViewModel.cs" />
     <Compile Include="Views\AddView.xaml.cs">
@@ -114,6 +117,12 @@
     </Compile>
     <Compile Include="Views\ManageWordlistsView.xaml.cs">
       <DependentUpon>ManageWordlistsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsEntryTextView.xaml.cs">
+      <DependentUpon>SettingsEntryTextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsEntryTrueFalseView.xaml.cs">
+      <DependentUpon>SettingsEntryTrueFalseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -176,6 +185,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ManageWordlistsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsEntryTextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsEntryTrueFalseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
