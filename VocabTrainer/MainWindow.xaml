@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
-        xmlns:views="clr-namespace:VocabTrainer.Views"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         ResizeMode="NoResize" 
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="900"
@@ -13,22 +13,16 @@
         Background="Transparent"
         AllowsTransparency="True"
         MouseDown="Windows_MouseDown">
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+    
     <Window.Resources>
-        <DataTemplate x:Name="LearnViewTemplate" DataType="{x:Type viewmodels:LearnViewModel}">
-            <views:LearnView DataContext="{Binding}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Name="ManageViewTemplate" DataType="{x:Type viewmodels:ManageViewModel}">
-            <views:ManageView DataContext="{Binding}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Name="AddViewTemplate" DataType="{x:Type viewmodels:AddViewModel}">
-            <views:AddView DataContext="{Binding}"/>
-        </DataTemplate>
-
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="0,2.5,0,2.5"/>
             <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{Binding ButtonForeground}"/>
+            <Setter Property="Background" Value="{Binding ButtonBackground}"/>
         </Style>
 
         <Style x:Key="BorderStyle" TargetType="Border">
@@ -41,6 +35,7 @@
             <Setter Property="Height" Value="20"/>
             <Setter Property="CornerRadius" Value="50"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="{Binding ButtonBackground}"/>
         </Style>
 
         <ControlTemplate x:Key="NoHoverEffectTemplate" TargetType="Button">
@@ -54,7 +49,7 @@
         </ControlTemplate>
         
     </Window.Resources>
-    <Border x:Name="outerBorder" Style="{StaticResource BorderStyle}">
+    <Border x:Name="outerBorder" Style="{StaticResource BorderStyle}" BorderBrush="{Binding OuterBorderBrush}" Background="{Binding OuterBorderBackground}">
         <Grid x:Name="mainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150*"/>
@@ -74,28 +69,28 @@
                 <RowDefinition Height="73*"/>
                 <RowDefinition Height="23*"/>
             </Grid.RowDefinitions>
-            <DockPanel x:Name="navBar" Grid.Column="0" Grid.Row="0" Grid.RowSpan="7">
+            <DockPanel x:Name="navBar" Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Background="{Binding NavBarBackground}">
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="2">
                         <StackPanel>
-                            <Button Style="{StaticResource ButtonStyle}" x:Name="Learn" Content="Learn" Click="Learn_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Add wordlist" Click="AddWordlists_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Manage lists" Click="ManageWordlists_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Add words" Click="AddWords_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Manage" Click="Manage_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Analysis" Click="Analysis_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Translator" Click="Translator_Clicked"/>
-                            <Button Style="{StaticResource ButtonStyle}" Content="Settings" Click="Settings_Clicked"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenLearnViewCommand}" Content="Learn"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenAddWordlistViewCommand}" Content="Add wordlist"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenManageWordlistsViewCommand}" Content="Manage lists"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenAddWordsViewCommand}" Content="Add words"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenManageWordsViewCommand}" Content="Manage"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenAnalysisViewCommand}" Content="Analysis"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenTranslatorViewCommand}" Content="Translator"/>
+                            <Button Style="{StaticResource ButtonStyle}" Command="{Binding OpenSettingsViewCommand}" Content="Settings"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </DockPanel>
-            <ContentControl x:Name="viewControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding}"/>
+            <ContentControl x:Name="viewControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding UserControl}"/>
             <Border x:Name="minimizeButton" Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
-                <Button Background="Transparent" FontSize="10"  Content="-" Click="minimizeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
+                <Button Background="Transparent" FontSize="10"  Content="-" Click="MinimizeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
             <Border x:Name="closeButton" Grid.Column="4" Style="{StaticResource BorderButton}" Margin="8,1,9,1">
-                <Button Background="Transparent" FontSize="10"  Content="x" Click="closeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
+                <Button Background="Transparent" FontSize="10" Content="x" Click="CloseWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
             </Border>
         </Grid>
     </Border>
