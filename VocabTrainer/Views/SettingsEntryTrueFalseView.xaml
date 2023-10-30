@@ -13,6 +13,6 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Foreground="White" Text="{Binding Condition}" Grid.Column="0" Width="662"/>
-        <CheckBox Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding IsTrue}"/>
+        <CheckBox Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding IsTrue}" Command="{Binding ChangeSettingCommand}"/>
     </Grid>
 </UserControl>
