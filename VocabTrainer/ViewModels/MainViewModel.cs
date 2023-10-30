@@ -65,7 +65,15 @@ namespace VocabTrainer.ViewModels {
                 _settingsList = value;
                 OnPropertyChanged(nameof(SettingsList));
             } 
-        } 
+        }
+        private List<WordlistsList> _listWordlist;
+        public List<WordlistsList> ListWordlist {
+            get => _listWordlist;
+            set {
+                _listWordlist = value;
+                OnPropertyChanged(nameof(ListWordlist));
+            }
+        }
         public MainViewModel() {
             SetColors();
             OpenAnalysisView(new object());
@@ -73,6 +81,7 @@ namespace VocabTrainer.ViewModels {
 
         public void SetColors() {
             SettingsList = Settings.GetSettings();
+            ListWordlist = WordlistsList.GetWordlistsList();
             ButtonForeground = (Brush)new BrushConverter().ConvertFrom(SettingsList[6].ButtonsForeground);
             ButtonBackground = (Brush)new BrushConverter().ConvertFrom(SettingsList[7].ButtonsBackground);
             OuterBorderBrush = (Brush)new BrushConverter().ConvertFrom(SettingsList[8].BorderBrush);
