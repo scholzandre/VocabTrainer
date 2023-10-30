@@ -16,18 +16,25 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel>
                 <TextBlock Text="General Settings" FontSize="20" Foreground="White" Margin="5,10,0,0"/>
-                <ListBox ItemsSource="{Binding ListEntries}" Background="Transparent">
+                <ListBox ItemsSource="{Binding ListGeneralSettings}" Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <VirtualizingStackPanel>
-                                    <UserControl Content="{Binding}"/>
+                                <UserControl Content="{Binding}"/>
                             </VirtualizingStackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                
                 <TextBlock Text="Wordlists" FontSize="20" Foreground="White" Margin="5,0,0,0"/>
-                <StackPanel x:Name="stackPanelWordlistsSettings"/>
+                <ListBox ItemsSource="{Binding ListWordlists}" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <VirtualizingStackPanel>
+                                <UserControl Content="{Binding}"/>
+                            </VirtualizingStackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </StackPanel>
         </ScrollViewer>
     </Grid>
