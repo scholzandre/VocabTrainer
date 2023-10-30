@@ -15,14 +15,7 @@ namespace VocabTrainer.Views {
         public ManageView() {
             InitializeComponent();
             CheckEmptyLocal();
-            FillComboBox();
 
-        }
-        public void FillComboBox() {
-            List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
-            for (int i = 0; i < wordlists.Count; i++) {
-                comboWordlists.Items.Add($"{wordlists[i].WordlistName} ({wordlists[i].FirstLanguage}, {wordlists[i].SecondLanguage})");
-            }
         }
         private List<VocabularyEntry> SearchVocab(string searchingWord) {
             searchResults.Clear();
@@ -32,66 +25,6 @@ namespace VocabTrainer.Views {
                 }
             }
             return searchResults;
-        }
-
-        private void CreateGUI(List<VocabularyEntry> words, VocabularyEntry entry) {
-            int shownWords = (words.Count > 100) ? 100 : words.Count;
-            for (int i = 0; i < shownWords; i++) {
-                Grid grid = new Grid();
-
-                for (int j = 0; j < 4; j++) {
-                    CreateColumn(grid, j);
-                }
-
-                TextBox textBoxGerman = CreateTextBox(words[i].German, 0, grid);
-                TextBox textBoxEnglish = CreateTextBox(words[i].English, 1, grid);
-
-                if (comboWordlists.Text != "Marked (-, -)" &&
-                    comboWordlists.Text != "LastTimeWrong (-, -)" &&
-                    comboWordlists.Text != "Seen (-, -)" &&
-                    comboWordlists.Text != "NotSeen (-, -)") CreateButton(textBoxGerman, textBoxEnglish, grid, i, "R", entry);
-
-                if (comboWordlists.Text != "LastTimeWrong (-, -)" &&
-                    comboWordlists.Text != "Seen (-, -)" &&
-                    comboWordlists.Text != "NotSeen (-, -)") CreateButton(textBoxGerman, textBoxEnglish, grid, i, "X", entry);
-
-                stackPanel.Children.Add(grid);
-            }
-        }
-        public void CreateColumn(Grid grid, int columnNumber) {
-            ColumnDefinition columnDefinition = new ColumnDefinition() { 
-                Width = (columnNumber < 2) ? new GridLength(25, GridUnitType.Star) : GridLength.Auto
-            };
-            grid.ColumnDefinitions.Add(columnDefinition);
-        }
-
-        public TextBox CreateTextBox(string word, int column, Grid grid) {
-            TextBox textBox = new TextBox() {
-                IsEnabled = false,
-                Text = word,
-                Background = new SolidColorBrush(Colors.DarkGray),
-                Margin = new Thickness(10, 0, 0, 10),
-            };
-            Grid.SetColumn(textBox, column);
-            grid.Children.Add(textBox);
-            return textBox;
-        }
-        public void CreateButton(TextBox textBoxGerman, TextBox textBoxEnglish, Grid grid, int i, string content, VocabularyEntry entry) {
-            Dictionary<string, object> buttonTagsR = new Dictionary<string, object> {
-                { "GermanTextBox", textBoxGerman },
-                { "EnglishTextBox", textBoxEnglish },
-                { "EObject", entry }
-            };
-            Button button = new Button() { 
-                Content = content,
-                Tag = buttonTagsR,
-                Name = $"B{i}",
-                Margin = new Thickness(0, 0, 10, 10),
-                Width = 25,
-            };
-            button.Click += (content == "R") ? (RoutedEventHandler)Rename : Remove;
-            Grid.SetColumn(button, (content == "R") ? 2 : 3);
-            grid.Children.Add(button);
         }
 
         private void Rename(object sender, RoutedEventArgs e) {
@@ -156,32 +89,13 @@ namespace VocabTrainer.Views {
 
         private void SearchWord_TextChanged(object sender, TextChangedEventArgs e) {
             if (searchWord.Text == "" || searchWord.Text == "Search...") {
-                stackPanel.Children.Clear();
-                CreateGUI(vocabulary, new VocabularyEntry());
+                //stackPanel.Children.Clear();
+                //CreateGUI(vocabulary, new VocabularyEntry());
             } else {
-                stackPanel.Children.Clear();
+                //stackPanel.Children.Clear();
                 searchingWord = searchWord.Text.ToLower();
                 searchResults = SearchVocab(searchingWord);
-                CreateGUI(searchResults, new VocabularyEntry());
-            }
-        }
-
-
-        private void ComboBox_DropDownClosed(object sender, EventArgs e) {
-            if (comboWordlists.Text != "") {
-                stackPanel.Children.Clear();
-                ComboBox comboBox = sender as ComboBox;
-                string input = comboBox.Text;
-                int index = input.IndexOf("(");
-                string wordListName = input.Substring(0, index - 1);
-                VocabularyEntry entry = new VocabularyEntry() { 
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordListName}{VocabularyEntry.SecondPartFilePath}"
-                };
-                List<VocabularyEntry> vocabularyTemp = VocabularyEntry.GetData(entry);
-                vocabulary = vocabularyTemp;
-                if (vocabularyTemp.Count > 0) infoTextManage.Text = "Manage words";
-                else infoTextManage.Text = "There are no words available";
-                CreateGUI(vocabularyTemp, entry);
+                //CreateGUI(searchResults, new VocabularyEntry());
             }
         }
     }
