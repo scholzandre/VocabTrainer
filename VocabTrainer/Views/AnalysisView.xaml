@@ -25,7 +25,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="17*"/>
                 </Grid.RowDefinitions>
-                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboWordlists" Height="24" SelectedItem="{Binding SelectedItem}" Grid.ColumnSpan="2"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboWordlists" Height="24" ItemsSource="{Binding ComboBoxEntries}" DisplayMemberPath="WordlistName" SelectedItem="{Binding SelectedItem}" Grid.ColumnSpan="2"/>
                 <lvc:PieChart Name="pieChart" Width="250" Height="250" Grid.Column="0" Grid.Row="1" Series="{Binding SeriesCollection}"/>
 
                 <Grid Grid.Column="1" Grid.Row="1">
@@ -60,17 +60,22 @@
                 </Grid>
 
             </Grid>
-            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Left" Text="Ltw = Last time wrong" Foreground="white" Width="520" FontSize="10" VerticalAlignment="Bottom"/>
                 <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right" Text="{Binding SearchingWord, Mode=TwoWay}"/>
                 <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
             </StackPanel>
-            <DataGrid ItemsSource="{Binding AllWords}" AutoGenerateColumns="True" ScrollViewer.CanContentScroll="True" MaxHeight="300">
-                    <DataGrid.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel/> <!-- loads element only if in sight -->
-                        </ItemsPanelTemplate>
-                    </DataGrid.ItemsPanel>
-                </DataGrid>
+            <DataGrid ItemsSource="{Binding AllWords}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" MaxHeight="300">
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="German" Binding="{Binding German}" MinWidth="221"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="English" Binding="{Binding English}" MinWidth="221"/>
+                    <DataGridCheckBoxColumn IsReadOnly="True" Header="Seen" Binding="{Binding Seen}"/>
+                    <DataGridCheckBoxColumn IsReadOnly="True" Header="Ltw" Binding="{Binding LastTimeWrong}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Repeated" Binding="{Binding Repeated}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="1. Language" Binding="{Binding FirstLanguage}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="2. Language" Binding="{Binding SecondLanguage}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
