@@ -51,7 +51,7 @@ namespace VocabTrainer.ViewModels
             foreach (VocabularyEntry tempEntry in entries) { 
                 Type viewType = typeof(ManageEntryView);
                 UserControl tempControl = (UserControl)Activator.CreateInstance(viewType);
-                tempControl.DataContext = new ManageEntryViewModel(tempEntry.German, tempEntry.English, tempEntry.FilePath);
+                tempControl.DataContext = new ManageEntryViewModel(Entries, tempEntry);
                 Entries.Add(tempControl);
             }
         }
