@@ -14,8 +14,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" IsEnabled="{Binding FirstWordWritable}" Width="325" Text="{Binding FirstWord}"/>
-        <TextBox Grid.Column="1" IsEnabled="{Binding SecondWordWritable}" Width="325" Margin="5,0,0,0" Text="{Binding SecondWord}"/>
+        <TextBox Grid.Column="0" IsEnabled="{Binding FirstWordWritable}" Width="325" Text="{Binding FirstWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" IsEnabled="{Binding SecondWordWritable}" Width="325" Margin="5,0,0,0" Text="{Binding SecondWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Grid.Column="2" Content="{Binding EditButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding ChangeTextCommand}"/>
         <Button Grid.Column="3" Content="{Binding DeleteButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding DeleteEntryCommand}"/>
     </Grid>
