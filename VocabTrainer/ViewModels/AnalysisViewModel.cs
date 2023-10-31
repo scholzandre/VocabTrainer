@@ -8,36 +8,100 @@ using VocabTrainer.Views;
 using System.ComponentModel;
 using System.Security.Policy;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Media.Animation;
 
 namespace VocabTrainer.ViewModels {
-    public class AnalysisViewModel {
+    public class AnalysisViewModel : BaseViewModel {
         private List<VocabularyEntry> _allWords = new List<VocabularyEntry>();
-        public List<VocabularyEntry> AllWords { get => _allWords; set => _allWords = value; }
+        public List<VocabularyEntry> AllWords { 
+            get => _allWords;
+            set => _allWords = value;
+        }
         private int _seenWords;
-        public int SeenWords { get => _seenWords; set => _seenWords = value; }
+        public int SeenWords { 
+            get => _seenWords;
+            set => _seenWords = value;
+             
+        }
+
         private int _lastTimeWrong;
-        public int LastTimeWrong { get => _lastTimeWrong; set => _lastTimeWrong = value; }
+        public int LastTimeWrong { 
+            get => _lastTimeWrong;
+            set => _lastTimeWrong = value;
+        }
         private int _knownWords;
-        public int KnownWords { get => _knownWords; set => _knownWords = value; }
+        public int KnownWords { 
+            get => _knownWords;
+            set => _knownWords = value;
+        }
         private int _notSeenWords;
-        public int NotSeenWords { get => _notSeenWords; set => _notSeenWords = value; }
+        public int NotSeenWords { 
+            get => _notSeenWords; 
+            set => _notSeenWords = value;
+        }
         private string _wordlist = string.Empty;
-        public string AllWordsString { get; set; }
-        public string SeenWordsString { get; set; }
-        public string NotSeenWordsString { get; set; }
-        public string LastTimeWrongString { get; set; }
-        public string KnownWordsString { get; set; }
+        private string _allWordsString = string.Empty;
+        public string AllWordsString { 
+            get => _allWordsString;
+            set {
+                _allWordsString = value;
+                OnPropertyChanged(nameof(AllWordsString));
+            }
+        }
+        private string _seenWordsString = string.Empty;
+        public string SeenWordsString { 
+            get => _seenWordsString;
+            set {
+                _seenWordsString = value;
+                OnPropertyChanged(nameof(SeenWordsString));
+            }
+        }
+        private string _notSeenWordsString = string.Empty;
+        public string NotSeenWordsString { 
+            get => _notSeenWordsString;
+            set {
+                _notSeenWordsString = value;
+                OnPropertyChanged(nameof(NotSeenWordsString));
+            }
+        }
+        private string _lastTimeWrongString = string.Empty;
+        public string LastTimeWrongString { 
+            get => _lastTimeWrongString;
+            set {
+                _lastTimeWrongString = value;
+                OnPropertyChanged(nameof(LastTimeWrongString));
+            }
+        }
+        private string _knownWordsString = string.Empty;
+        public string KnownWordsString { 
+            get => _knownWordsString;
+            set {
+                _knownWordsString = value;
+                OnPropertyChanged(nameof(KnownWordsString));
+            }
+        }
         public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public event EventHandler CanExecuteChange;
-        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
+        private SeriesCollection _seriesCollection;
+        public SeriesCollection SeriesCollection { 
+            get => _seriesCollection;
+            set {
+                _seriesCollection = value;
+                OnPropertyChanged(nameof(SeriesCollection));
+            } 
+        } 
 
-        private string _selectedItem = "All words";
-        public string SelectedItem {
+        private WordlistsList _selectedItem = new WordlistsList() {
+            WordlistName = "All words"
+        };
+        public WordlistsList SelectedItem {
             get => _selectedItem;
             set {
                 _selectedItem = value;
-                if (SelectedItem == "All words") Wordlist = string.Empty;
-                else Wordlist = SelectedItem.Substring(0, (SelectedItem.IndexOf('('))).Trim();
+                if (SelectedItem.WordlistName == "All words") Wordlist = string.Empty;
+                else Wordlist = SelectedItem.WordlistName;
                 GetPercentages();
                 CreateDiagram();
                 SetStrings();
@@ -61,14 +125,22 @@ namespace VocabTrainer.ViewModels {
                 _searchingWord = value;
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private ObservableCollection<WordlistsList> _comboBoxEntries;
+        public ObservableCollection<WordlistsList> ComboBoxEntries {
+            get => _comboBoxEntries;
+            set {
+                _comboBoxEntries = value;
+                OnPropertyChanged(nameof(ComboBoxEntries));
+            }
         }
+
         public AnalysisViewModel() {
-            GetPercentages();
-            CreateDiagram();
-            SetStrings();
+            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Marked" &&
+                                                                                                                  x.WordlistName != "Seen" &&
+                                                                                                                  x.WordlistName != "NotSeen" &&
+                                                                                                                  x.WordlistName != "LastTimeWrong"));
+            ComboBoxEntries.Add(new WordlistsList() { WordlistName = "All words" });
+            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count-1] : null;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -79,12 +151,15 @@ namespace VocabTrainer.ViewModels {
             SearchForWord();
             OnPropertyChanged(nameof(SearchingWord));
         }
-        public ICommand ResetCommand => new RelayCommand(Reset, CanExecuteCommand);
+        private bool CanExecuteResetCommand(object arg) {
+            if ((SeenWords != 0 || SeenWords != 0 || KnownWords != 0 || LastTimeWrong != 0) && AllWords.Count != 0) return true;
+            else return false;
+        }
+        public ICommand ResetCommand => new RelayCommand(Reset, CanExecuteResetCommand);
 
         private void Reset(object obj) {
             VocabularyEntry entry = new VocabularyEntry();
             List<VocabularyEntry> entries;
-
             if (Wordlist != "") {
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
                 entries = VocabularyEntry.GetData(entry);
@@ -122,6 +197,7 @@ namespace VocabTrainer.ViewModels {
             }
             GetPercentages();
             CreateDiagram();
+            SetStrings();
         }
         public void GetPercentages() {
             KnownWords = 0;
