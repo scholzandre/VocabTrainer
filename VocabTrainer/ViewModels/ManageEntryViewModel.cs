@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,22 @@ namespace VocabTrainer.ViewModels {
     public class ManageEntryViewModel : BaseViewModel {
         public string FirstWord { get; set; }
         public string SecondWord { get; set; }
-        public string FilePath { get; set; }
-        public bool FirstWordWritable { get; set; } = false;
-        public bool SecondWordWritable { get; set; } = false;
+        private bool _firstWordWritable;
+        public bool FirstWordWritable { 
+            get => _firstWordWritable;
+            set {
+                _firstWordWritable = value;
+                OnPropertyChanged(nameof(FirstWordWritable));
+            } 
+        }
+        private bool _secondWordWritable;
+        public bool SecondWordWritable { 
+            get => _secondWordWritable;
+            set { 
+                _secondWordWritable = value;
+                OnPropertyChanged(nameof(SecondWordWritable));
+            } 
+        }
         private string _editButtonText;
         public string EditButtonText {
             get => _editButtonText;
@@ -31,12 +45,18 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(DeleteButtonText));
             }
         }
-        public ManageEntryViewModel(string firstWord, string secondWord, string filePath) { 
-            FirstWord = firstWord;
-            SecondWord = secondWord;
+        private VocabularyEntry _entry;
+        private ObservableCollection<UserControl> _views;
+        public ManageEntryViewModel(ObservableCollection<UserControl> views, VocabularyEntry entry) {
+            FirstWord = entry.German;
+            FirstWordWritable = false;
+            SecondWord = entry.English;
+            SecondWordWritable = false;
             EditButtonText = "🖉";
             DeleteButtonText = "🗑";
-            FilePath = filePath;
+            _entry = entry;
+            _entry.FilePath = VocabularyEntry.FirstPartFilePath + entry.WordList + VocabularyEntry.SecondPartFilePath;
+            _views = views;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -45,8 +65,20 @@ namespace VocabTrainer.ViewModels {
         private void ChangeText(object obj) {
             if (EditButtonText == "🖉") {
                 EditButtonText = "💾";
-            } else { 
+                FirstWordWritable = true;
+                SecondWordWritable = true;
+            } else {
                 EditButtonText = "🖉";
+                FirstWordWritable = false;
+                SecondWordWritable = false;
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
+                for (int i = 0; i < entries.Count; i++) {
+                    if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
+                        entries[i].German = FirstWord;
+                        entries[i].English = SecondWord;
+                    }
+                }
+                VocabularyEntry.WriteData(_entry, entries);
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
@@ -55,6 +87,30 @@ namespace VocabTrainer.ViewModels {
                 DeleteButtonText = "✓";
             } else {
                 DeleteButtonText = "🗑";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
+                foreach (VocabularyEntry entry in entries) {
+                    if (entry.German == FirstWord && entry.English == SecondWord) {
+                        entries.Remove(entry);
+                        break;
+                    }
+                }
+                foreach (UserControl view in _views) {
+                    int firstViewModel = view.DataContext.GetHashCode();
+                    int secondViewModel = new ManageEntryViewModel(_views, _entry).GetHashCode();
+                    if (firstViewModel == secondViewModel) {
+                        _views.Remove(view);
+                        break;
+                    }
+                }
+                VocabularyEntry.WriteData(_entry, entries);
+            }
+        }
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = 17;
+                hashCode = (hashCode * 23) + (FirstWord?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 23) + (SecondWord?.GetHashCode() ?? 0);
+                return hashCode;
             }
         }
     }
