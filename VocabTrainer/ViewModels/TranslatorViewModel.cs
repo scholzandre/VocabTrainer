@@ -7,6 +7,8 @@ using System.Windows.Input;
 using VocabTrainer.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace VocabTrainer.ViewModels {
     public class TranslatorViewModel : INotifyPropertyChanged {
@@ -32,7 +34,14 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SecondLanguageWord));
             }
         }
-
+        private ObservableCollection<WordlistsList> _comboBoxEntries;
+        public ObservableCollection<WordlistsList> ComboBoxEntries {
+            get => _comboBoxEntries;
+            set {
+                _comboBoxEntries = value;
+                OnPropertyChanged(nameof(ComboBoxEntries));
+            }
+        }
         public List<string> OriginalLanguages { get; set; }
         private List<string> _reducedLanguages;
         public List<string> ReducedLanguages { 
@@ -71,6 +80,17 @@ namespace VocabTrainer.ViewModels {
             { "Italian", "it" },
             { "Russian", "ru" }
         };
+        private WordlistsList _selectedItem;
+        public WordlistsList SelectedItem {
+            get => _selectedItem;
+            set {
+                if (_selectedItem != value) {
+                    _selectedItem = value;
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
+
         public TranslatorViewModel() {
             OriginalLanguages = new List<string>() {
                 "German",
@@ -81,6 +101,11 @@ namespace VocabTrainer.ViewModels {
                 "Italian",
                 "Russian"
             };
+            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Marked" &&
+                                                                                                                  x.WordlistName != "Seen" &&
+                                                                                                                  x.WordlistName != "NotSeen" &&
+                                                                                                                  x.WordlistName != "LastTimeWrong"));
+            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[0] : null;
             SelectedItemFirstLanguage = OriginalLanguages[0];
         }
         private bool CanExecuteCommand(object arg) {
