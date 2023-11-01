@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
-using System.ComponentModel;
-using System.Security.Policy;
-using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Media.Animation;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel : BaseViewModel {
         private List<VocabularyEntry> _allWords = new List<VocabularyEntry>();
         public List<VocabularyEntry> AllWords { 
             get => _allWords;
-            set => _allWords = value;
+            set { 
+                _allWords = value;
+                SearchingWords = new List<VocabularyEntry>(AllWords);
+                OnPropertyChanged(nameof(AllWords));
+            } 
         }
         private int _seenWords;
         public int SeenWords { 
@@ -25,7 +25,6 @@ namespace VocabTrainer.ViewModels {
             set => _seenWords = value;
              
         }
-
         private int _lastTimeWrong;
         public int LastTimeWrong { 
             get => _lastTimeWrong;
@@ -117,12 +116,20 @@ namespace VocabTrainer.ViewModels {
             LastTimeWrongString = $"unknwon words:\t\t{LastTimeWrong}";
         }
 
-        public List<VocabularyEntry> SearchingWords { get; set; } = new List<VocabularyEntry>();
+        private List<VocabularyEntry> _searchingWords = new List<VocabularyEntry>();
+        public List<VocabularyEntry> SearchingWords {
+            get => _searchingWords;
+            set {
+                _searchingWords = value;
+                OnPropertyChanged(nameof(SearchingWords));
+            } 
+        }
         private string _searchingWord = "Searching...";
         public string SearchingWord { 
             get => _searchingWord;
             set {
                 _searchingWord = value;
+                OnPropertyChanged(nameof(SearchingWord));
             }
         }
         private ObservableCollection<WordlistsList> _comboBoxEntries;
@@ -147,9 +154,13 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand SearchCommand => new RelayCommand(Search, CanExecuteCommand);
         private void Search(object obj) {
-            GetPercentages();
-            SearchForWord();
-            OnPropertyChanged(nameof(SearchingWord));
+            SearchingWords = new List<VocabularyEntry>(AllWords);
+            if (SearchingWord != "" && SearchingWord != "Searching...")
+                for (int i = 0; i < SearchingWords.Count; i++)
+                    if (!SearchingWords[i].German.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].English.ToLower().Contains(SearchingWord.ToLower())) {
+                        SearchingWords.Remove(SearchingWords[i]);
+                        i--;
+                    }
         }
         private bool CanExecuteResetCommand(object arg) {
             if ((SeenWords != 0 || SeenWords != 0 || KnownWords != 0 || LastTimeWrong != 0) && AllWords.Count != 0) return true;
@@ -198,6 +209,7 @@ namespace VocabTrainer.ViewModels {
             GetPercentages();
             CreateDiagram();
             SetStrings();
+
         }
         public void GetPercentages() {
             KnownWords = 0;
@@ -258,14 +270,6 @@ namespace VocabTrainer.ViewModels {
                         Fill = System.Windows.Media.Brushes.Red
                     }
                 };
-        }
-        private void SearchForWord() {
-            if (SearchingWord != "" && SearchingWord != "Searching...")
-                for (int i = 0; i < SearchingWords.Count; i++)
-                    if (!SearchingWords[i].German.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].English.ToLower().Contains(SearchingWord.ToLower())) {
-                        SearchingWords.Remove(SearchingWords[i]);
-                        i--;
-                    }
         }
     }
 }
