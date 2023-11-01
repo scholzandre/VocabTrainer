@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             xmlns:views="clr-namespace:VocabTrainer.Views"
              d:DataContext="{d:DesignInstance Type=viewmodels:ManageViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,16 +14,19 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="infoTextManage"  Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Manage words</TextBlock>
-        <ListBox ItemsSource="{Binding Entries}" Background="Transparent" Grid.Row="1" ScrollViewer.CanContentScroll="True" MaxHeight="410" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <ComboBox ItemsSource="{Binding ComboBoxEntries}" x:Name="comboWordlists" Height="20" Width="200" DisplayMemberPath="WordlistName" SelectedItem="{Binding SelectedItem}" Margin="0,0,5,0"/>
+            <TextBox x:Name="searchWord" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding SearchingWord}" VerticalAlignment="Center" Width="137" Height="21" TextChanged="SearchWord_TextChanged"/>
+            <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
+        </StackPanel>
+        <ListBox x:Name="itemListBox" ItemsSource="{Binding SearchingWords}" Background="Transparent" Grid.Row="1" ScrollViewer.CanContentScroll="True" MaxHeight="410" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <VirtualizingStackPanel>
-                        <UserControl Content="{Binding}"/>
+                            <views:ManageEntryView/>
                     </VirtualizingStackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox x:Name="searchWord" HorizontalAlignment="Left" Margin="583,0,0,0" TextWrapping="Wrap" Text="Search..." VerticalAlignment="Center" Width="137" Height="21" TextChanged="SearchWord_TextChanged"/>
-        <ComboBox ItemsSource="{Binding ComboBoxEntries}" x:Name="comboWordlists" Height="24" Margin="388,8,167,9" DisplayMemberPath="WordlistName" SelectedItem="{Binding SelectedItem}"/>
     </Grid>
 </UserControl>
