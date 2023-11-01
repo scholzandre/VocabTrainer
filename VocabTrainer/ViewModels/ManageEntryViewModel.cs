@@ -46,8 +46,8 @@ namespace VocabTrainer.ViewModels {
             }
         }
         private VocabularyEntry _entry;
-        private ObservableCollection<UserControl> _views;
-        public ManageEntryViewModel(ObservableCollection<UserControl> views, VocabularyEntry entry) {
+        private ObservableCollection<ManageEntryViewModel> _views;
+        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry) {
             FirstWord = entry.German;
             FirstWordWritable = false;
             SecondWord = entry.English;
@@ -94,8 +94,8 @@ namespace VocabTrainer.ViewModels {
                         break;
                     }
                 }
-                foreach (UserControl view in _views) {
-                    int firstViewModel = view.DataContext.GetHashCode();
+                foreach (ManageEntryViewModel view in _views) {
+                    int firstViewModel = view.GetHashCode();
                     int secondViewModel = new ManageEntryViewModel(_views, _entry).GetHashCode();
                     if (firstViewModel == secondViewModel) {
                         _views.Remove(view);
