@@ -1,26 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 
-namespace VocabTrainer.ViewModels
-{
+namespace VocabTrainer.ViewModels {
     public class ManageViewModel : BaseViewModel {
-        private ObservableCollection<ManageEntryViewModel> _entries;
-        public ObservableCollection<ManageEntryViewModel> Entries {
-            get => _entries;
-            set {
-                _entries = value;
-                SearchingWords = Entries;
-                OnPropertyChanged(nameof(Entries));
-            }
-        }
         private ObservableCollection<WordlistsList> _comboBoxEntries;
         public ObservableCollection<WordlistsList> ComboBoxEntries {
             get => _comboBoxEntries;
@@ -65,7 +50,7 @@ namespace VocabTrainer.ViewModels
         }
         public ICommand SearchCommand => new RelayCommand(Search, CanExecuteCommand);
         private void Search(object obj) {
-            SearchingWords = new ObservableCollection<ManageEntryViewModel>(Entries);
+            FillEntriesCollection();
             if (SearchingWord != "" && SearchingWord != "Searching...")
                 for (int i = 0; i < SearchingWords.Count; i++)
                     if (!SearchingWords[i].FirstWord.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].SecondWord.ToLower().Contains(SearchingWord.ToLower())) {
@@ -74,13 +59,13 @@ namespace VocabTrainer.ViewModels
                     }
         }
         private void FillEntriesCollection() {
-            Entries = new ObservableCollection<ManageEntryViewModel>();
+            SearchingWords = new ObservableCollection<ManageEntryViewModel>();
             VocabularyEntry entry = new VocabularyEntry() { 
                 FilePath = VocabularyEntry.FirstPartFilePath + SelectedItem.WordlistName + VocabularyEntry.SecondPartFilePath
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
-                Entries.Add(new ManageEntryViewModel(Entries, tempEntry));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry));
             }
         }
     }
