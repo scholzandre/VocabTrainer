@@ -39,6 +39,14 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SecondWordWritable));
             } 
         }
+        private bool _editable;
+        public bool Editable { 
+            get => _editable;
+            set {
+                _editable = value;
+                OnPropertyChanged(nameof(Editable));
+            } 
+        } 
         private string _editButtonText;
         public string EditButtonText {
             get => _editButtonText;
@@ -55,10 +63,18 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(DeleteButtonText));
             }
         }
+        private readonly List<string> filePathsSpecialLists = new List<string> { 
+            $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}"
+        };
+
         private VocabularyEntry _entry;
         private ObservableCollection<ManageEntryViewModel> _views;
         private ManageViewModel _parent;
-        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent) {
+        private WordlistsList _selectedItem;
+        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem) {
             FirstWord = entry.German;
             FirstWordWritable = false;
             SecondWord = entry.English;
@@ -66,9 +82,11 @@ namespace VocabTrainer.ViewModels {
             EditButtonText = "🖉";
             DeleteButtonText = "🗑";
             _entry = entry;
-            _entry.FilePath = VocabularyEntry.FirstPartFilePath + entry.WordList + VocabularyEntry.SecondPartFilePath;
             _views = views;
             _parent = parent;
+            _selectedItem = selectedItem;
+            Editable = (_selectedItem.WordlistName == "Marked") ? false : true;
+            _entry.FilePath = VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -85,24 +103,38 @@ namespace VocabTrainer.ViewModels {
                 DeleteButtonText = "🗑";
                 FirstWordWritable = false;
                 SecondWordWritable = false;
+                bool alreadyExists = false;
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
-                for (int i = 0; i < entries.Count; i++) {
-                    if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
-                        entries[i].German = FirstWord;
-                        entries[i].English = SecondWord;
+                foreach (VocabularyEntry entry in entries) {
+                    if ((entry.German == FirstWord && FirstWord != _entry.German) || (entry.English == SecondWord && SecondWord != _entry.English)) {
+                        alreadyExists = true;
+                        break;
                     }
-                _entry.German = FirstWord;
-                _entry.English = SecondWord;
                 }
-                VocabularyEntry.WriteData(_entry, entries);
+                if (!alreadyExists) {
+                    for (int i = 0; i < entries.Count; i++) {
+                        if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
+                            entries[i].German = FirstWord;
+                            entries[i].English = SecondWord;
+                            _entry.German = FirstWord;
+                            _entry.English = SecondWord;
+                        }
+                    }
+                    VocabularyEntry.WriteData(_entry, entries);
+                } else { 
+                    FirstWord = _entry.German;
+                    SecondWord = _entry.English;
+                } 
             } else { 
                 EditButtonText = "🖉";
                 DeleteButtonText = "🗑";
+                Editable = (_selectedItem.WordlistName == "Marked") ? false : true;
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
             if (DeleteButtonText == "🗑") {
+                Editable = true;
                 EditButtonText = "🗙";
                 DeleteButtonText = "✓";
             } else if (DeleteButtonText == "✓") {
@@ -116,7 +148,7 @@ namespace VocabTrainer.ViewModels {
                 }
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
-                    int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent).GetHashCode();
+                    int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem).GetHashCode();
                     if (firstViewModel == secondViewModel) {
                         _views.Remove(view);
                         _parent.AllEntriesCounter = _views.Count();
