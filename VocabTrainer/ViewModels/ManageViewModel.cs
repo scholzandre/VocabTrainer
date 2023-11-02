@@ -22,6 +22,7 @@ namespace VocabTrainer.ViewModels {
                     _selectedItem = value;
                     OnPropertyChanged(nameof(SelectedItem));
                     FillEntriesCollection();
+                    AllEntriesCounter = SearchingWords.Count;
                 }
             }
         }
@@ -39,6 +40,23 @@ namespace VocabTrainer.ViewModels {
             set {
                 _searchingWord = value;
                 OnPropertyChanged(nameof(SearchingWord));
+            }
+        }
+        private int _allEntriesCounter = 0;
+        public int AllEntriesCounter {
+            get => _allEntriesCounter;
+            set {
+                _allEntriesCounter = value;
+                OnPropertyChanged(nameof(AllEntriesCounter));
+                InfoText = $"There are {AllEntriesCounter} Entries";
+            }
+        }
+        private string _infoText;
+        public string InfoText {
+            get => _infoText;
+            set {
+                _infoText = value;
+                OnPropertyChanged(nameof(InfoText));
             }
         }
         public ManageViewModel() {
@@ -65,7 +83,7 @@ namespace VocabTrainer.ViewModels {
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this));
             }
         }
     }
