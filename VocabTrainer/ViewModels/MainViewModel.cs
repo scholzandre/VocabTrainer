@@ -75,6 +75,7 @@ namespace VocabTrainer.ViewModels {
             }
         }
         public MainViewModel() {
+            WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
             OpenAnalysisView(new object());
         }
