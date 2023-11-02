@@ -95,6 +95,8 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
                 foreach (ManageEntryViewModel view in _views) {
+                    _entry.German = FirstWord;
+                    _entry.English = SecondWord;   
                     int firstViewModel = view.GetHashCode();
                     int secondViewModel = new ManageEntryViewModel(_views, _entry).GetHashCode();
                     if (firstViewModel == secondViewModel) {
