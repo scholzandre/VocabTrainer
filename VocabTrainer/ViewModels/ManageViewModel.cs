@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -60,7 +61,9 @@ namespace VocabTrainer.ViewModels {
             }
         }
         public ManageViewModel() {
-            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList());
+            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Seen" &&
+                                                                                                                  x.WordlistName != "NotSeen" &&
+                                                                                                                  x.WordlistName != "LastTimeWrong"));
             SelectedItem = ComboBoxEntries.Count > 0 ? ComboBoxEntries[0] : null;
         }
         private bool CanExecuteCommand(object arg) {
@@ -83,7 +86,7 @@ namespace VocabTrainer.ViewModels {
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, SelectedItem));
             }
         }
     }
