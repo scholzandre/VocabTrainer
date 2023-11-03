@@ -37,13 +37,6 @@ namespace VocabTrainer.ViewModels {
             _settings = settings;
             _settingsViewModel = settingsViewModel;
         }
-
-        //public SettingsEntryTrueFalseViewModel(string condition, bool isTrue, List<WordlistsList> wordlists, SettingsViewModel settingsViewModel) {
-        //    Condition = condition;
-        //    IsTrue = isTrue;
-        //    _wordlists = wordlists;
-        //    _settingsViewModel = settingsViewModel;
-        //}
         private bool CanExecuteCommand(object arg) {
             return true;
         }
@@ -78,10 +71,7 @@ namespace VocabTrainer.ViewModels {
                 for (int i = 4; i < 6; i++) _settings[i].IsTrue = false;
             } else if (!EnoughWords(1)) {
                 for (int i = 0; i < 6; i++) _settings[i].IsTrue = false;
-            } else {
-                _settings[1].IsTrue = true;
-                _settings[2].IsTrue = true;
-            }
+            } 
             WordlistsList.WriteWordlistsList(_wordlists);
             Settings.WriteSettings(_settings);
             _settingsViewModel.FillCollection();
