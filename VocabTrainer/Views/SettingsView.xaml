@@ -16,7 +16,7 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel>
                 <TextBlock Text="General Settings" FontSize="20" Foreground="White" Margin="5,10,0,0"/>
-                <ListBox ItemsSource="{Binding ListGeneralSettings}" Background="Transparent">
+                <ListBox ItemsSource="{Binding ListGeneralSettings}" Background="Transparent" PreviewMouseWheel="HandlePreviewMouseWheel">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <VirtualizingStackPanel>
@@ -26,7 +26,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <TextBlock Text="Wordlists" FontSize="20" Foreground="White" Margin="5,0,0,0"/>
-                <ListBox ItemsSource="{Binding ListWordlists}" Background="Transparent">
+                <ListBox ItemsSource="{Binding ListWordlists}" Background="Transparent" PreviewMouseWheel="HandlePreviewMouseWheel">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <VirtualizingStackPanel>
