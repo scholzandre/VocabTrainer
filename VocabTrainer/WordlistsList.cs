@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using VocabTrainer.Views;
 using System.Windows;
 
@@ -14,7 +13,7 @@ namespace VocabTrainer {
         public bool IsTrue { get; set; }
         private static string filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
 
-        public static List<WordlistsList> GetWordlistsList() { 
+        public static List<WordlistsList> GetWordlistsList() {
             List<WordlistsList> wordlists = new List<WordlistsList>();
             if (File.Exists(filePath)) {
                 string jsonData = File.ReadAllText(filePath);
@@ -33,7 +32,7 @@ namespace VocabTrainer {
                     wordlistsList[i].FirstLanguage.ToLower() == firstLanguage.ToLower() &&
                     wordlistsList[i].SecondLanguage.ToLower() == secondLanguage.ToLower()) {
                     return (true, i);
-                } 
+                }
             }
             return (false, -1);
         }
@@ -42,7 +41,7 @@ namespace VocabTrainer {
             List<WordlistsList> checkedLists = GetCheckedLists();
 
             for (int i = 0; i < checkedLists.Count; i++) {
-                VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}"};
+                VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(checkedList);
 
                 foreach (VocabularyEntry entry in vocabulary) {
@@ -64,43 +63,43 @@ namespace VocabTrainer {
             List<WordlistsList> allWordLists = GetWordlistsList();
             List<string> namesList = allWordLists.Select(values => values.WordlistName).ToList();
             List<string> filenameList = Directory.GetFiles(VocabularyEntry.FirstPartFilePath).ToList();
-            string temp = string.Empty;
+            string file = string.Empty;
+            string wordlistName = string.Empty;
 
             for (int i = 0; i < filenameList.Count; i++) {
-                temp = filenameList[i].Substring(VocabularyEntry.FirstPartFilePath.Length, filenameList[i].Length - VocabularyEntry.FirstPartFilePath.Length - VocabularyEntry.SecondPartFilePath.Length).Trim();
-                if (temp == "settings" || temp == "wordlists"){
-                    continue;
-                } else if (!namesList.Contains(temp)) {
-                    MessageBoxResult result = MessageBox.Show($"Do you want to add {temp}.json to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (filenameList[i].Contains("_")) {
+                    file = filenameList[i].Substring(VocabularyEntry.FirstPartFilePath.Length);
+                    wordlistName = file.Substring(0, file.IndexOf("_"));
+                    if (!namesList.Contains(wordlistName)) {
+                        MessageBoxResult result = MessageBox.Show($"Do you want to add {file} to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                    if (result == MessageBoxResult.Yes) {
-                        VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + temp + VocabularyEntry.SecondPartFilePath };
-                        WordlistsList newWordlist = new WordlistsList();
-                        Random random = new Random();
-                        string defaultValue = string.Empty;
-                        for (int j = 0; j < 8; j++) {
-                            defaultValue += random.Next(0, 9);
+                        if (result == MessageBoxResult.Yes) {
+                            VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + file };
+                            WordlistsList newWordlist = new WordlistsList();
+                            if (file.Contains('_')) {
+                                newWordlist.FirstLanguage = file.Substring(file.IndexOf('_')+1, file.LastIndexOf('_')-1 - file.IndexOf('_'));
+                                newWordlist.SecondLanguage = file.Substring(file.LastIndexOf('_')+1, file.Length - file.LastIndexOf('_')-1 - VocabularyEntry.SecondPartFilePath.Length);
+                            }
+                            newWordlist.WordlistName = wordlistName;
+                            allWordLists.Add(newWordlist);
+
+                            VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
+                            List<VocabularyEntry> notSeen = VocabularyEntry.GetData(entry);
+                            notSeen.AddRange(VocabularyEntry.GetData(tempEntry));
+                            VocabularyEntry.WriteData(entry, notSeen);
+                        } else {
+                            File.Delete(filenameList[i]);
                         }
-                        newWordlist.WordlistName = temp;
-                        newWordlist.FirstLanguage = defaultValue;
-                        newWordlist.SecondLanguage = defaultValue;
-                        allWordLists.Add(newWordlist);
-
-                        VocabularyEntry entry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
-                        List<VocabularyEntry> notSeen = VocabularyEntry.GetData(entry);
-                        notSeen.AddRange(VocabularyEntry.GetData(tempEntry));
-                        VocabularyEntry.WriteData(entry, notSeen);
-                    } else {
-                        File.Delete(filenameList[i]);
                     }
                 }
             }
 
             for (int i = 0; i < allWordLists.Count; i++) {
-                if (!File.Exists(VocabularyEntry.FirstPartFilePath+ allWordLists[i].WordlistName+VocabularyEntry.SecondPartFilePath)) {
-                    allWordLists.Remove(allWordLists[i]);
-                    i--;
-                }
+                if(allWordLists[i].FirstLanguage != "-" && allWordLists[i].SecondLanguage != "-")
+                    if (!File.Exists($"{VocabularyEntry.FirstPartFilePath}{allWordLists[i].WordlistName}_{allWordLists[i].FirstLanguage}_{allWordLists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}")) {
+                        allWordLists.Remove(allWordLists[i]);
+                        i--;
+                    }
             }
 
             WriteWordlistsList(allWordLists);
