@@ -40,8 +40,8 @@ namespace VocabTrainer.Views {
                     languages != "NotSeen" &&
                     languages != "LastTimeWrong") { 
                     vocabulary[i].WordList = tempWordlist;
-                    vocabulary[i].FirstLanguage = languages.Substring(0, languages.IndexOf('_'));
-                    vocabulary[i].SecondLanguage = languages.Substring(languages.IndexOf('_')+1);
+                    vocabulary[i].FirstLanguage = entry.FirstLanguage;
+                    vocabulary[i].SecondLanguage = entry.SecondLanguage;
                 }
             }
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
