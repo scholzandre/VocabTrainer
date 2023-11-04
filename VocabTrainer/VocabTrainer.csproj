@@ -81,6 +81,7 @@
     <Compile Include="ViewModels\ManageEntryViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel.cs" />
     <Compile Include="ViewModels\ManageWordlistsViewModel.cs" />
+    <Compile Include="ViewModels\ManageWordlistViewModel.cs" />
     <Compile Include="ViewModels\SettingsEntryTextViewModel.cs" />
     <Compile Include="ViewModels\SettingsEntryTrueFalseViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -117,6 +118,9 @@
     </Compile>
     <Compile Include="Views\ManageWordlistsView.xaml.cs">
       <DependentUpon>ManageWordlistsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageWordlistView.xaml.cs">
+      <DependentUpon>ManageWordlistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsEntryTextView.xaml.cs">
       <DependentUpon>SettingsEntryTextView.xaml</DependentUpon>
@@ -185,6 +189,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ManageWordlistsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageWordlistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
