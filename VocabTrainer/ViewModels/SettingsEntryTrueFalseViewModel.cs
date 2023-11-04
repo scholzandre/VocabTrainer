@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -82,7 +77,7 @@ namespace VocabTrainer.ViewModels {
             for (int i = 0; i < _wordlists.Count; i++) {
                 if (_wordlists[i].IsTrue) {
                     VocabularyEntry entry = new VocabularyEntry() {
-                        FilePath = VocabularyEntry.FirstPartFilePath + wordlists[i].WordlistName + VocabularyEntry.SecondPartFilePath
+                        FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                     };
                     counter += VocabularyEntry.GetData(entry).Count;
                 }

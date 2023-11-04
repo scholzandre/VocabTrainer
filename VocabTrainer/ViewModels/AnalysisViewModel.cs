@@ -7,6 +7,7 @@ using VocabTrainer.Models;
 using VocabTrainer.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel : BaseViewModel {
@@ -172,7 +173,7 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry entry = new VocabularyEntry();
             List<VocabularyEntry> entries;
             if (Wordlist != "") {
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}_{VocabularyEntry.SecondPartFilePath}";
                 entries = VocabularyEntry.GetData(entry);
                 for (int i = 0; i < entries.Count; i++) {
                     entries[i].Seen = false;
@@ -228,7 +229,7 @@ namespace VocabTrainer.ViewModels {
                         wordlistsList[i].WordlistName != "Seen" &&
                         wordlistsList[i].WordlistName != "NotSeen" &&
                         wordlistsList[i].WordlistName != "LastTimeWrong") {
-                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlistsList[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlistsList[i].WordlistName}_{wordlistsList[i].FirstLanguage}_{wordlistsList[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                         words = VocabularyEntry.GetData(entry);
                         AddCounters(words);
                     }
