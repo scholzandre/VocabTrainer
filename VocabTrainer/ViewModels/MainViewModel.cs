@@ -133,7 +133,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenAddWordsView(object obj) {
             Type viewType = typeof(AddView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
-            //UserControl.DataContext = new AddViewModel(); code behind
+            UserControl.DataContext = new AddViewModel();
         }
         public ICommand OpenAddWordlistViewCommand => new RelayCommand(OpenAddWordlistView, CanExecuteCommand);
         private void OpenAddWordlistView(object obj) {
