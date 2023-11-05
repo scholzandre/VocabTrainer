@@ -6,8 +6,6 @@ using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.ExceptionServices;
 
 namespace VocabTrainer.ViewModels {
     public class AnalysisViewModel : BaseViewModel {
