@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class ManageViewModel : BaseViewModel {
-        private ObservableCollection<WordlistsList> _comboBoxEntries;
-        public ObservableCollection<WordlistsList> ComboBoxEntries {
+        private ObservableCollection<string> _comboBoxEntries = new ObservableCollection<string>();
+        public ObservableCollection<string> ComboBoxEntries {
             get => _comboBoxEntries;
             set {
                 _comboBoxEntries = value;
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
-        private WordlistsList _selectedItem;
-        public WordlistsList SelectedItem {
+        private string _selectedItem;
+        public string SelectedItem {
             get => _selectedItem;
             set {
                 if (_selectedItem != value) {
@@ -60,11 +61,26 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(InfoText));
             }
         }
+        private Dictionary<string, WordlistsList> _comboBoxWordlists = new Dictionary<string, WordlistsList>();
+        public Dictionary<string, WordlistsList> ComboBoxWordlists {
+            get => _comboBoxWordlists;
+            set {
+                _comboBoxWordlists = value;
+                OnPropertyChanged(nameof(ComboBoxWordlists));
+            }
+        }
         public ManageViewModel() {
-            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Seen" &&
-                                                                                                                  x.WordlistName != "NotSeen" &&
-                                                                                                                  x.WordlistName != "LastTimeWrong"));
-            SelectedItem = ComboBoxEntries.Count > 0 ? ComboBoxEntries[0] : null;
+            List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
+            foreach (WordlistsList temp in tempWordlists) {
+                if (temp.WordlistName != "Seen" &&
+                    temp.WordlistName != "LastTimeWrong" &&
+                    temp.WordlistName != "NotSeen") {
+                    string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
+                    ComboBoxWordlists.Add(tempString, temp);
+                    ComboBoxEntries.Add(tempString);
+                }
+            }
+            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -82,11 +98,14 @@ namespace VocabTrainer.ViewModels {
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
             VocabularyEntry entry = new VocabularyEntry() { 
-                FilePath = VocabularyEntry.FirstPartFilePath + SelectedItem.WordlistName + VocabularyEntry.SecondPartFilePath
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, SelectedItem));
+                WordlistsList tempWordlist = new WordlistsList() {
+                    WordlistName = $"{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}"
+                };
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, tempWordlist));
             }
         }
     }

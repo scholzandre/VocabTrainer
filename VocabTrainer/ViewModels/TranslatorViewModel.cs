@@ -43,8 +43,8 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SecondLanguageWord));
             }
         }
-        private ObservableCollection<WordlistsList> _comboBoxEntries;
-        public ObservableCollection<WordlistsList> ComboBoxEntries {
+        private ObservableCollection<string> _comboBoxEntries = new ObservableCollection<string>();
+        public ObservableCollection<string> ComboBoxEntries {
             get => _comboBoxEntries;
             set {
                 _comboBoxEntries = value;
@@ -89,8 +89,8 @@ namespace VocabTrainer.ViewModels {
             { "Italian", "it" },
             { "Russian", "ru" }
         };
-        private WordlistsList _selectedItem;
-        public WordlistsList SelectedItem {
+        private string _selectedItem;
+        public string SelectedItem {
             get => _selectedItem;
             set {
                 if (_selectedItem != value) {
@@ -99,7 +99,14 @@ namespace VocabTrainer.ViewModels {
                 }
             }
         }
-
+        private Dictionary<string, WordlistsList> _comboBoxWordlists = new Dictionary<string, WordlistsList>();
+        public Dictionary<string, WordlistsList> ComboBoxWordlists {
+            get => _comboBoxWordlists;
+            set {
+                _comboBoxWordlists = value;
+                OnPropertyChanged(nameof(ComboBoxWordlists));
+            }
+        }
         public TranslatorViewModel() {
             OriginalLanguages = new List<string>() {
                 "German",
@@ -110,10 +117,18 @@ namespace VocabTrainer.ViewModels {
                 "Italian",
                 "Russian"
             };
-            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Marked" &&
-                                                                                                                  x.WordlistName != "Seen" &&
-                                                                                                                  x.WordlistName != "NotSeen" &&
-                                                                                                                  x.WordlistName != "LastTimeWrong"));
+            List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
+            foreach (WordlistsList temp in tempWordlists) {
+                if (temp.WordlistName != "Marked" &&
+                    temp.WordlistName != "Seen" &&
+                    temp.WordlistName != "LastTimeWrong" &&
+                    temp.WordlistName != "NotSeen") {
+                    string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
+                    ComboBoxWordlists.Add(tempString, temp);
+                    ComboBoxEntries.Add(tempString);
+                }
+            }
+            ComboBoxEntries.Add("All words");
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[0] : null;
             SelectedItemFirstLanguage = OriginalLanguages[0];
         }
@@ -135,9 +150,9 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry entry = new VocabularyEntry() {
                 German = FirstLanguageWord,
                 English = SecondLanguageWord,
-                FirstLanguage = SelectedItem.FirstLanguage,
-                SecondLanguage = SelectedItem.SecondLanguage,
-                FilePath = VocabularyEntry.FirstPartFilePath + SelectedItem.WordlistName + VocabularyEntry.SecondPartFilePath
+                FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
+                SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             if (entries.Count > 0) {
