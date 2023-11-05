@@ -42,6 +42,7 @@ namespace VocabTrainer.ViewModels {
             set => _notSeenWords = value;
         }
         private string _wordlist = string.Empty;
+        public string Wordlist { get => _wordlist; set => _wordlist = value; }
         private string _allWordsString = string.Empty;
         public string AllWordsString { 
             get => _allWordsString;
@@ -82,7 +83,6 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(KnownWordsString));
             }
         }
-        public string Wordlist { get => _wordlist; set => _wordlist = value; }
         public event EventHandler CanExecuteChange;
         private SeriesCollection _seriesCollection;
         public SeriesCollection SeriesCollection { 
@@ -93,15 +93,13 @@ namespace VocabTrainer.ViewModels {
             } 
         } 
 
-        private WordlistsList _selectedItem = new WordlistsList() {
-            WordlistName = "All words"
-        };
-        public WordlistsList SelectedItem {
+        private string _selectedItem;
+        public string SelectedItem {
             get => _selectedItem;
             set {
                 _selectedItem = value;
-                if (SelectedItem.WordlistName == "All words") Wordlist = string.Empty;
-                else Wordlist = SelectedItem.WordlistName;
+                if (SelectedItem == "All words") Wordlist = string.Empty;
+                else Wordlist = SelectedItem;
                 GetPercentages();
                 CreateDiagram();
                 SetStrings();
@@ -133,21 +131,35 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SearchingWord));
             }
         }
-        private ObservableCollection<WordlistsList> _comboBoxEntries;
-        public ObservableCollection<WordlistsList> ComboBoxEntries {
+        private ObservableCollection<string> _comboBoxEntries = new ObservableCollection<string>();
+        public ObservableCollection<string> ComboBoxEntries {
             get => _comboBoxEntries;
             set {
                 _comboBoxEntries = value;
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
-
+        private Dictionary<string, WordlistsList> _comboBoxWordlists = new Dictionary<string, WordlistsList>();
+        public Dictionary<string, WordlistsList> ComboBoxWordlists {
+            get => _comboBoxWordlists;
+            set {
+                _comboBoxWordlists = value;
+                OnPropertyChanged(nameof(ComboBoxWordlists));
+            }
+        }
         public AnalysisViewModel() {
-            ComboBoxEntries = new ObservableCollection<WordlistsList>(WordlistsList.GetWordlistsList().Where(x => x.WordlistName != "Marked" &&
-                                                                                                                  x.WordlistName != "Seen" &&
-                                                                                                                  x.WordlistName != "NotSeen" &&
-                                                                                                                  x.WordlistName != "LastTimeWrong"));
-            ComboBoxEntries.Add(new WordlistsList() { WordlistName = "All words" });
+            List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
+            foreach (WordlistsList temp in tempWordlists) {
+                if (temp.WordlistName != "Marked" &&
+                    temp.WordlistName != "Seen" &&
+                    temp.WordlistName != "LastTimeWrong" &&
+                    temp.WordlistName != "NotSeen") {
+                    string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
+                    ComboBoxWordlists.Add(tempString, temp);
+                    ComboBoxEntries.Add(tempString);
+                }
+            }
+            ComboBoxEntries.Add("All words");
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count-1] : null;
         }
         private bool CanExecuteCommand(object arg) {
@@ -173,7 +185,7 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry entry = new VocabularyEntry();
             List<VocabularyEntry> entries;
             if (Wordlist != "") {
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}_{VocabularyEntry.SecondPartFilePath}";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                 entries = VocabularyEntry.GetData(entry);
                 for (int i = 0; i < entries.Count; i++) {
                     entries[i].Seen = false;
@@ -188,7 +200,7 @@ namespace VocabTrainer.ViewModels {
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
-                    entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                    entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                     entries = VocabularyEntry.GetData(entry);
                     for (int j = 0; j < entries.Count; j++) {
                         entries[j].Seen = false;
@@ -235,7 +247,7 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
             } else {
-                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{Wordlist}{VocabularyEntry.SecondPartFilePath}";
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                 words = VocabularyEntry.GetData(entry);
                 AddCounters(words);
             }
