@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:AddViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              MouseDown="Windows_MouseDown">
@@ -17,20 +19,20 @@
             <RowDefinition Height="413*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Add words</TextBlock>
-        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="comboWordlists" Height="20" Width="350" DropDownClosed="Closed"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ComboBoxEntries}" Height="20" Width="350"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Margin="10,0,10,0">
                 <StackPanel Margin="0,55,0,0">
                     <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
-                    <TextBox x:Name="germanWord" FontSize="24" Margin="5,0,5,0"/>
+                    <TextBox x:Name="germanWord" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Margin="0,25,0,30">
                     <TextBlock x:Name="secondLanguage" Foreground="White" FontSize="24"/>
-                    <TextBox x:Name="englishWord" FontSize="24" Margin="5,0,5,0"/>
+                    <TextBox x:Name="englishWord" FontSize="24" Margin="5,0,5,0" Text="{Binding SecondWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                <Button Width="180" Height="30" FontSize="18" Click="AddWord">Add word</Button>
-                <TextBlock x:Name="addingSuccessful" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
+                <Button Width="180" Height="30" FontSize="18" Content="Add words" Command="{Binding AddEntryCommand}"/> 
+                <TextBlock x:Name="addingSuccessful" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap" Text="{Binding InfoText}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

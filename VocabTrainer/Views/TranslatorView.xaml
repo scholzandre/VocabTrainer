@@ -10,7 +10,7 @@
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,10,0">
-                <ComboBox x:Name="wordlists" Width="200" HorizontalAlignment="Right" ItemsSource="{Binding ComboBoxEntries}" DisplayMemberPath="WordlistName" SelectedItem="{Binding SelectedItem}"/>
+                <ComboBox x:Name="wordlists" Width="200" HorizontalAlignment="Right" ItemsSource="{Binding ComboBoxEntries}" SelectedItem="{Binding SelectedItem}"/>
                 <ComboBox x:Name="firstLanguage" Width="150" HorizontalAlignment="Left" ItemsSource="{Binding OriginalLanguages}" SelectedItem="{Binding SelectedItemFirstLanguage}"/>
                 <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstLanguageWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
