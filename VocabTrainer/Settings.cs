@@ -47,14 +47,6 @@ namespace VocabTrainer {
                     setting.IsTrue = false;
                 }
             }
-            if (allWords.Count < 2) {
-                settings[0].IsTrue = false; // random mode
-                settings[4].IsTrue = false; // learning mode three
-                settings[5].IsTrue = false; // learning mode four
-            } else if (allWords.Count < 5) {
-                settings[4].IsTrue = false; // learning mode three
-                settings[5].IsTrue = false; // learning mode four
-            }
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
             File.WriteAllText(_filePath, json);
         }
