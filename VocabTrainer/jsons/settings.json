@@ -17,7 +17,7 @@
     "BorderBrush": null,
     "BorderBackground": null,
     "NavBarBackground": null,
-    "Condition": "list order",
+    "Condition": "intelligent order",
     "IsTrue": true,
     "LearningMode": 0,
     "IsLearningMode": false,
@@ -30,7 +30,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode One",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 1,
     "IsLearningMode": true,
     "APIKey": null
@@ -42,7 +42,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode Two",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 2,
     "IsLearningMode": true,
     "APIKey": null
@@ -54,7 +54,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode Three",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 3,
     "IsLearningMode": true,
     "APIKey": null
@@ -72,7 +72,7 @@
     "APIKey": null
   },
   {
-    "ButtonsForeground": "#000000",
+    "ButtonsForeground": "#FFFFFF",
     "ButtonsBackground": null,
     "BorderBrush": null,
     "BorderBackground": null,
@@ -85,7 +85,7 @@
   },
   {
     "ButtonsForeground": null,
-    "ButtonsBackground": "#FFFFFF",
+    "ButtonsBackground": "#000000",
     "BorderBrush": null,
     "BorderBackground": null,
     "NavBarBackground": null,
@@ -124,7 +124,7 @@
     "ButtonsBackground": null,
     "BorderBrush": null,
     "BorderBackground": null,
-    "NavBarBackground": "#000000",
+    "NavBarBackground": "#AACCFF",
     "Condition": "Navigationbar Background",
     "IsTrue": false,
     "LearningMode": 0,
