@@ -38,7 +38,7 @@ namespace VocabTrainer.ViewModels {
             for (int i = 0; i < _settings.Count; i++) {
                 if (_settings[i].LearningMode > 0 ||
                     _settings[i].Condition == "random order" ||
-                    _settings[i].Condition == "list order") {
+                    _settings[i].Condition == "intelligent order") {
                     Type viewType = typeof(SettingsEntryTrueFalseView);
                     UserControl tempControl = (UserControl)Activator.CreateInstance(viewType);
                     tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_settings[i].Condition, _settings[i].IsTrue, _settings, this, _wordlists);
