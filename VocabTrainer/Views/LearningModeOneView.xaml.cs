@@ -25,6 +25,9 @@ namespace VocabTrainer.Views {
             CreateGUI();
             SetStar();
         }
+        public LearningModeOneView() { 
+            InitializeComponent();
+        }
         private void CreateGUI() {
             firstLanguage.Text = Vocabulary[Counter].FirstLanguage;
             secondLanguage.Text = Vocabulary[Counter].SecondLanguage;

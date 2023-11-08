@@ -25,6 +25,9 @@ namespace VocabTrainer.Views {
             CheckEmptyLocal();
             SetStar();
         }
+        public LearningModeTwoView() { 
+            InitializeComponent();
+        }
         public async void CheckAnswer(object sender, RoutedEventArgs e) {
             checkButton.IsEnabled = false;
             if (Counter < vocabulary.Count()) {

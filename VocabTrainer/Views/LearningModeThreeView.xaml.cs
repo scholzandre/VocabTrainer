@@ -24,6 +24,9 @@ namespace VocabTrainer.Views {
             SetStar();
             CreateQuestion();
         }
+        public LearningModeThreeView() { 
+            InitializeComponent();
+        }
         public void CreateQuestion() {
             Random random = new Random();
             for (int i = 0; i < 4; i++) {

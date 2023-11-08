@@ -30,6 +30,9 @@ namespace VocabTrainer.Views {
             newGrid = (Grid)grid;
             CreateQuestion();
         }
+        public LearningModeFourView() { 
+            InitializeComponent();
+        }
         public void CreateQuestion() {
             CreateRandomOrder();
             SetValues();
