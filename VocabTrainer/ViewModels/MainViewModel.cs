@@ -103,7 +103,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenLearnView(object obj) {
             Type viewType = typeof(LearnView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
-            //UserControl.DataContext = new LearnViewModel(); because code behind
+            UserControl.DataContext = new LearnViewModel();
         }
         public ICommand OpenSettingsViewCommand => new RelayCommand(OpenSettingsView, CanExecuteCommand);
         private void OpenSettingsView(object obj) {
