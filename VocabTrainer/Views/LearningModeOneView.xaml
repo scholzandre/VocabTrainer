@@ -3,25 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:LearningModeOneViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,0,0">
-                <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
-                <TextBlock x:Name="germanWord" Foreground="white" FontSize="24" Margin="5,0,0,0"/>
+                <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24" Text="{Binding FirstLanguage}"/>
+                <TextBlock x:Name="germanWord" Foreground="white" FontSize="24" Margin="5,0,0,0" Text="{Binding FirstWord}"/>
             </StackPanel>
             <StackPanel Margin="10,25,0,30">
-                <TextBlock x:Name="secondLanguage" Foreground="white" FontSize="24"/>
-                <TextBlock x:Name="englishWord" Foreground="white" FontSize="24" Margin="5,0,0,0"/>
+                <TextBlock x:Name="secondLanguage" Foreground="white" FontSize="24" Text="{Binding SecondLanguage}"/>
+                <TextBlock x:Name="englishWord" Foreground="white" FontSize="24" Margin="5,0,0,0" Text="{Binding SecondWord}"/>
             </StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="311*"/>
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Width="180" Height="30" FontSize="18" Click="NextWord" IsDefault="True" HorizontalAlignment="Left">next word</Button>
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right" Click="StarWord"/>
+                <Button Grid.Column="1" Width="180" Height="30" FontSize="18" IsDefault="True" HorizontalAlignment="Left" Content="next word" Command="{Binding NextWordCommand}"/> 
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right"/>
             </Grid>
         </StackPanel>
     </Grid>
