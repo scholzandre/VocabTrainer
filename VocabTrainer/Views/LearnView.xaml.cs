@@ -30,7 +30,7 @@ namespace VocabTrainer.Views {
         public List<string> OriginPath { get => _originPath; set => _originPath = value; }
 
         private List<Settings> settings = Settings.GetSettings();
-        bool randomOrder, upCountingOrder = false;
+        bool randomOrder, intelligentOrder = false;
         bool emptyList = true;
         private readonly Random _random = new Random();
 
@@ -50,29 +50,30 @@ namespace VocabTrainer.Views {
                 emptyList = false;
             }
             int random = _random.Next(0, LearningModes.Count());
-            if (LearningModes.Count() > 0 && AllWordsList.Count != 0) {
-                switch (LearningModes[random]) {
-                    case 1:
-                        DataContext = new LearningModeOneView(this);
-                        break;
-                    case 2:
-                        DataContext = new LearningModeTwoView(this);
-                        break;
-                    case 3:
-                        DataContext = new LearningModeThreeView(this);
-                        break;
-                    case 4:
-                        SetCounters();
-                        DataContext = new LearningModeFourView(this);
-                        break;
-                }
-            } else {
-                DataContext =  null;
-                header.Text = "No learning mode available - not enough words";
-            }
+            //if (LearningModes.Count() > 0 && AllWordsList.Count != 0) {
+            //    switch (LearningModes[random]) {
+            //        case 1:
+            //            DataContext = new LearningModeOneView(this);
+            //            break;
+            //        case 2:
+            //            DataContext = new LearningModeTwoView(this);
+            //            break;
+            //        case 3:
+            //            DataContext = new LearningModeThreeView(this);
+            //            break;
+            //        case 4:
+            //            SetCounters();
+            //            DataContext = new LearningModeFourView(this);
+            //            break;
+            //    }
+            //} else {
+            //    DataContext =  null;
+            //    header.Text = "No learning mode available - not enough words";
+            //}
         }
         public void GetCounter() {
-            if (upCountingOrder) {
+
+            if (intelligentOrder) {
                 Counter = (Counter == AllWordsList.Count - 1) ? Counter = 0 : Counter += 1;
             } else if (randomOrder) {
                 while (true) {
@@ -90,7 +91,7 @@ namespace VocabTrainer.Views {
         public void GetLearningModes() {
             LearningModes.Clear();
             randomOrder = settings[0].IsTrue;
-            upCountingOrder = settings[1].IsTrue;
+            intelligentOrder = settings[1].IsTrue;
             for (int i = 0; i < settings.Count(); i++) {
                 if (settings[i].LearningMode > 0 && settings[i].IsTrue == true) LearningModes.Add(settings[i].LearningMode);
             }
