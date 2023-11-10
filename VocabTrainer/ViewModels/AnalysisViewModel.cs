@@ -110,7 +110,7 @@ namespace VocabTrainer.ViewModels {
             SeenWordsString = $"seen:\t\t\t{SeenWords}";
             NotSeenWordsString = $"not seen:\t\t{NotSeenWords}";
             KnownWordsString = $"known words:\t\t{KnownWords}";
-            LastTimeWrongString = $"unknwon words:\t\t{LastTimeWrong}";
+            LastTimeWrongString = $"unknown words:\t\t{LastTimeWrong}";
         }
 
         private List<VocabularyEntry> _searchingWords = new List<VocabularyEntry>();
