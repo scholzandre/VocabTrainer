@@ -3,17 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:VocabTrainer.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:LearningModeTwoViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,10,0">
-                <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
-                <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0"/>
+                <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24" Text="{Binding FirstLanguage}"/>
+                <TextBox x:Name="germanWordBox" Foreground="{Binding FirstWordForeground}" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstWordAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding FirstWordWritable}"/>
             </StackPanel>
             <StackPanel Margin="10,25,10,30">
-                <TextBlock x:Name="secondLanguage" Foreground="white" FontSize="24">English</TextBlock>
-                <TextBox x:Name="englishWordBox" FontSize="24" Margin="5,0,5,0"/>
+                <TextBlock x:Name="secondLanguage" Foreground="white" FontSize="24" Text="{Binding SecondLanguage}"/>
+                <TextBox x:Name="englishWordBox" Foreground="{Binding SecondWordForeground}" FontSize="24" Margin="5,0,5,0" Text="{Binding SecondWordAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SecondWordWritable}"/>
             </StackPanel>
 
             <Grid>
@@ -21,11 +23,11 @@
                     <ColumnDefinition Width="311*"/>
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18" Click="CheckAnswer" HorizontalAlignment="Left" IsDefault="True">check answer</Button>
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right" Click="StarWord"/>
-                <Button x:Name="firstLetterButton" Margin="0,0, 15,0" Grid.Column="0" Content="Hint" Height="25" Width="30" HorizontalAlignment="Center" Click="Hint"/>
+                <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18" HorizontalAlignment="Left" IsDefault="True" Content="{Binding ButtonText}" Command="{Binding CheckAnswerCommand}"/>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="{Binding Star}" Height="25" Width="25" HorizontalAlignment="Right"/>
+                <Button x:Name="firstLetterButton" Margin="0,0, 15,0" Grid.Column="0" Content="Hint" Height="25" Width="30" HorizontalAlignment="Center" Command="{Binding HintCommand}"/>
             </Grid>
-            <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="100" TextWrapping="Wrap"/>
+            <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="auto" TextWrapping="Wrap" Text="{Binding InfoText}"/>
         </StackPanel>
     </Grid>
 </UserControl>
