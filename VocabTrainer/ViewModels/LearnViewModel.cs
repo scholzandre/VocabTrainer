@@ -37,6 +37,7 @@ namespace VocabTrainer.ViewModels
             }
         }
         public int Counter { get; set; } = 0;
+        public Random Random = new Random();
         public LearnViewModel() {
             GetSettings();
             GetEntries();
@@ -44,9 +45,25 @@ namespace VocabTrainer.ViewModels
         }
 
         public void ShowLearnMode() {
-            Type viewType = typeof(LearningModeOneView);
-            UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new LearningModeOneViewModel(this);
+            int learningMode = Random.Next(_learningModes.Count);
+            if (_learningModes[learningMode].LearningMode == 1) { 
+                Type viewType = typeof(LearningModeOneView);
+                UserControl = (UserControl)Activator.CreateInstance(viewType);
+                UserControl.DataContext = new LearningModeOneViewModel(this);
+            } else if (_learningModes[learningMode].LearningMode == 2) {
+                Type viewType = typeof(LearningModeTwoView);
+                UserControl = (UserControl)Activator.CreateInstance(viewType);
+                UserControl.DataContext = new LearningModeTwoViewModel(this);
+            } else if (_learningModes[learningMode].LearningMode == 3) {
+                Type viewType = typeof(LearningModeThreeView);
+                UserControl = (UserControl)Activator.CreateInstance(viewType);
+                UserControl.DataContext = new LearningModeThreeViewModel(this);
+            } else if (_learningModes[learningMode].LearningMode == 4) {
+                Type viewType = typeof(LearningModeFourView);
+                UserControl = (UserControl)Activator.CreateInstance(viewType);
+                UserControl.DataContext = new LearningModeFourViewModel(this);
+            }
+
             if (Counter < Entries.Count) {
                 Counter++;
             } else {
@@ -58,7 +75,7 @@ namespace VocabTrainer.ViewModels
         private void GetSettings() {
             _settings = Settings.GetSettings();
             for (int i = 2; i < 6; i++) {
-                if (_settings[i].LearningMode > 0) {
+                if (_settings[i].LearningMode > 0 && _settings[i].IsTrue) {
                     _learningModes.Add(_settings[i]);
                 }
             }
@@ -67,7 +84,6 @@ namespace VocabTrainer.ViewModels
         private void GetEntries() {
             List<WordlistsList> tempWordlist = WordlistsList.GetWordlistsList();
             List<VocabularyEntry> tempEntries = new List<VocabularyEntry>();
-            Random random = new Random();
             for (int i = 0; i < tempWordlist.Count; i++) {
                 if (tempWordlist[i].IsTrue) {
                     _wordlists.Add(tempWordlist[i]);
@@ -82,7 +98,7 @@ namespace VocabTrainer.ViewModels
             }
             if (_settings[0].IsTrue) {
                 while (tempEntries.Count > 0) { 
-                    int index = random.Next(tempEntries.Count);
+                    int index = Random.Next(tempEntries.Count);
                     Entries.Add(tempEntries[index]);
                     tempEntries.Remove(tempEntries[index]);
                 }
@@ -102,7 +118,7 @@ namespace VocabTrainer.ViewModels
                     else if (tempEntry.Repeated > 5) known.Add(tempEntry);
                 }
                 for (int i = 0; i < tempEntries.Count; i++) {
-                    int percentage = random.Next(1, 101);
+                    int percentage = Random.Next(1, 101);
                     if (percentage > 60 && counterLastTimeWrong < lastTimeWrong.Count) {
                         Entries.Add(lastTimeWrong[counterLastTimeWrong]);
                         counterLastTimeWrong++;
