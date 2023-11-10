@@ -63,7 +63,6 @@ namespace VocabTrainer.ViewModels {
             SecondWord = _parent.Entries[_counter].English;
             FirstLanguage = _parent.Entries[_counter].FirstLanguage;
             SecondLanguage = _parent.Entries[_counter].SecondLanguage;
-
             Star = (markedEntries.Contains(_parent.Entries[_counter])) ? "★" : "☆";
         }
 
@@ -75,7 +74,9 @@ namespace VocabTrainer.ViewModels {
             _parent.Entries[_counter].Seen = true;
             _parent.Entries[_counter].Repeated += 1;
             VocabularyEntry tempEntry = new VocabularyEntry() {
-                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}"
+                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}",
+                FirstLanguage = _parent.Entries[_parent.Counter].FirstLanguage,
+                SecondLanguage = _parent.Entries[_parent.Counter].SecondLanguage,
             };
             VocabularyEntry.WriteData(tempEntry, _parent.Entries);
             _parent.ShowLearnMode();
