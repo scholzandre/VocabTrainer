@@ -23,7 +23,7 @@
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="1" Width="180" Height="30" FontSize="18" IsDefault="True" HorizontalAlignment="Left" Content="next word" Command="{Binding NextWordCommand}"/> 
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="☆" Height="25" Width="25" HorizontalAlignment="Right"/>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="{Binding Star}" Height="25" Width="25" Command="{Binding MarkEntryCommand}" HorizontalAlignment="Right"/>
             </Grid>
         </StackPanel>
     </Grid>
