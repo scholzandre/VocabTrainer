@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18" HorizontalAlignment="Left" IsDefault="True" Content="{Binding ButtonText}" Command="{Binding CheckAnswerCommand}"/>
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="{Binding Star}" Height="25" Width="25" HorizontalAlignment="Right"/>
+                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="{Binding Star}" Command="{Binding MarkEntryCommand}" Height="25" Width="25" HorizontalAlignment="Right"/>
                 <Button x:Name="firstLetterButton" Margin="0,0, 15,0" Grid.Column="0" Content="Hint" Height="25" Width="30" HorizontalAlignment="Center" Command="{Binding HintCommand}"/>
             </Grid>
             <TextBlock x:Name="answer" Foreground="White" FontSize="18" Margin="0,15,0,0" Height="auto" TextWrapping="Wrap" Text="{Binding InfoText}"/>
