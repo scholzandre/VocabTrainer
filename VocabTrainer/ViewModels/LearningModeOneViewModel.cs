@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -75,8 +69,8 @@ namespace VocabTrainer.ViewModels {
             _parent.Entries[_counter].Repeated += 1;
             VocabularyEntry tempEntry = new VocabularyEntry() {
                 FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}",
-                FirstLanguage = _parent.Entries[_parent.Counter].FirstLanguage,
-                SecondLanguage = _parent.Entries[_parent.Counter].SecondLanguage,
+                FirstLanguage = _parent.Entries[_counter].FirstLanguage,
+                SecondLanguage = _parent.Entries[_counter].SecondLanguage,
             };
             VocabularyEntry.WriteData(tempEntry, _parent.Entries);
             _parent.ShowLearnMode();
