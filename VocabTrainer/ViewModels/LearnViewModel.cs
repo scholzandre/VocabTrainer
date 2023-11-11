@@ -64,7 +64,7 @@ namespace VocabTrainer.ViewModels
                 UserControl.DataContext = new LearningModeFourViewModel(this);
             }
 
-            if (Counter < Entries.Count) {
+            if (Counter < Entries.Count-1) {
                 Counter++;
             } else {
                 Counter = 0;
@@ -82,6 +82,7 @@ namespace VocabTrainer.ViewModels
         }
 
         private void GetEntries() {
+            Entries = new List<VocabularyEntry>();
             List<WordlistsList> tempWordlist = WordlistsList.GetWordlistsList();
             List<VocabularyEntry> tempEntries = new List<VocabularyEntry>();
             for (int i = 0; i < tempWordlist.Count; i++) {
