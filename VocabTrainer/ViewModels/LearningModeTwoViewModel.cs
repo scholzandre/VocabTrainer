@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using VocabTrainer.Models;
@@ -127,26 +128,39 @@ namespace VocabTrainer.ViewModels {
         public ICommand CheckAnswerCommand => new RelayCommand(CheckAnswer, CanExecuteCommand);
         private void CheckAnswer(object obj) {
             if (ButtonText == _checkText) {
-                if (FirstWordAnswer == _parent.Entries[_counter].German && SecondWordAnswer == _parent.Entries[_counter].English) {
+                bool isPartyCorrect = false;
+                bool isCorrect = false;
+                bool isWrong = false;
+                string[] answers = SplitAnswer((FirstWordWritable) ? FirstWordAnswer : SecondWordAnswer);
+                string[] correctAnswers = SplitAnswer((FirstWordWritable) ? _firstWord : _secondWord);
+                if (answers.Length > correctAnswers.Length) isPartyCorrect = true;
+                for (int i = 0; i < answers.Length; i++) { 
+                    if (correctAnswers.Contains(answers[i])) isCorrect = true;
+                    else isWrong = true;
+                }
+                if (isCorrect && isWrong) isPartyCorrect = true;
+
+                if (isPartyCorrect) {
+                    if (FirstWordWritable) FirstWordForeground = Brushes.Orange;
+                    else  SecondWordForeground = Brushes.Orange;
                     _parent.Entries[_counter].Seen = true;
-                    if (_hints < 3) _parent.Entries[_counter].Repeated += 1;
-                    _parent.Entries[_counter].LastTimeWrong = false;
-                    if (FirstWordWritable) {
-                        FirstWordForeground = Brushes.Green;
-                    } else {
-                        SecondWordForeground = Brushes.Green;
-                    }
-                } else {
+                    InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
+                } else if (isCorrect && !isWrong) {
+                    if (FirstWordWritable) FirstWordForeground = Brushes.Green;
+                    else SecondWordForeground = Brushes.Green;
+                    _parent.Entries[_counter].Seen = true;
+                    _parent.Entries[_counter].Repeated += 1;
+                } else if (isWrong && !isCorrect) { 
+                    if (FirstWordWritable) FirstWordForeground = Brushes.Red;
+                    else SecondWordForeground = Brushes.Red;
                     _parent.Entries[_counter].Seen = true;
                     _parent.Entries[_counter].Repeated = 0;
                     _parent.Entries[_counter].LastTimeWrong = true;
-                    if (FirstWordWritable) {
-                        FirstWordForeground = Brushes.Red;
-                    } else { 
-                        SecondWordForeground = Brushes.Red;
-                    }
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
                 }
+
+                FirstWordWritable = false;
+                SecondWordWritable = false;
                 VocabularyEntry tempEntry = new VocabularyEntry() {
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}",
                     FirstLanguage = _parent.Entries[_parent.Counter].FirstLanguage,
@@ -178,6 +192,13 @@ namespace VocabTrainer.ViewModels {
                 FirstWordAnswer = _firstWord.Substring(0, FirstWordAnswer.Length+1);
             else if (SecondWordWritable && SecondWordAnswer.Length < _secondWord.Length)
                 SecondWordAnswer = _secondWord.Substring(0, SecondWordAnswer.Length+1);
+        }
+        private string[] SplitAnswer(string answer) {
+            string[] splittedAnswer = answer.Split(',');
+            for (int i = 0; i < splittedAnswer.Length; i++) {
+                splittedAnswer[i] =  splittedAnswer[i].Trim();
+            }
+            return splittedAnswer;
         }
     }
 }
