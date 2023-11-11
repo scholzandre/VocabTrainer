@@ -23,7 +23,6 @@ namespace VocabTrainer.Views {
             InitializeComponent();
             CreateQuestion();
             CheckEmptyLocal();
-            SetStar();
         }
         public LearningModeTwoView() { 
             InitializeComponent();
@@ -177,66 +176,6 @@ namespace VocabTrainer.Views {
             germanWordBox.IsReadOnly = germanWordBoxReadable;
             englishWordBox.Text = textEnglish;
             englishWordBox.IsReadOnly = englishWordBoxReadable;
-        }
-        private void SetStar() {
-            VocabularyEntry marked = new VocabularyEntry() {
-                FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}",
-                German = Vocabulary[Counter].German,
-                English = Vocabulary[Counter].English,
-            };
-            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
-            for (int i = 0; i < vocabulary.Count; i++) {
-                if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
-                    markedButton.Content = "★";
-                }
-            }
-        }
-        private void StarWord(object sender, RoutedEventArgs e) {
-            VocabularyEntry marked = new VocabularyEntry() { 
-                FilePath = $"{VocabularyEntry.FirstPartFilePath}{"Marked"}{VocabularyEntry.SecondPartFilePath}",
-                German = Vocabulary[Counter].German,
-                English = Vocabulary[Counter].English,
-                WordList = files[Counter],
-                FirstLanguage = Vocabulary[Counter].FirstLanguage,
-                SecondLanguage = Vocabulary[Counter].SecondLanguage,
-            };
-            markedButton.Content = marked.ChangeMarkedList(marked, markedButton.Content.ToString(), files, Counter, _parentLearnView, Vocabulary);
-        }
-
-        
-        private void Hint(object sender, RoutedEventArgs e) {
-            int wordLength;
-            string word;
-            _allHints++;
-            if (germanWordBox.IsReadOnly && englishWordBox.Text != Vocabulary[Counter].English) {
-                word = englishWordBox.Text;
-                wordLength = word.Length;
-                try {
-                    if (word.Substring(0, wordLength) == Vocabulary[Counter].English.Substring(0, wordLength)) englishWordBox.Text += Vocabulary[Counter].English[wordLength].ToString();
-                    else
-                        for (int i = 0; i < wordLength; i++) {
-                            if (Vocabulary[Counter].English.Substring(0, i) == word.Substring(0, i)) englishWordBox.Text = word.Substring(0, i);
-                        }
-                } catch (Exception exception) {
-                    for (int i = 0; i <= Vocabulary[Counter].English.Length; i++) {
-                        if (Vocabulary[Counter].English.Substring(0, i) == word.Substring(0, i)) englishWordBox.Text = word.Substring(0, i);
-                    }
-                }
-            } else if (englishWordBox.IsReadOnly && germanWordBox.Text != Vocabulary[Counter].German) {
-                word = germanWordBox.Text;
-                wordLength = word.Length;
-                try {
-                    if (word.Substring(0, wordLength) == Vocabulary[Counter].German.Substring(0, wordLength)) germanWordBox.Text += Vocabulary[Counter].German[wordLength].ToString();
-                    else
-                        for (int i = 0; i < wordLength; i++) {
-                            if (Vocabulary[Counter].German.Substring(0, i) == word.Substring(0, i)) germanWordBox.Text = word.Substring(0, i);
-                        }
-                } catch (Exception exception) {
-                    for (int i = 0; i <= Vocabulary[Counter].German.Length; i++) {
-                        if (Vocabulary[Counter].German.Substring(0, i) == word.Substring(0, i)) germanWordBox.Text = word.Substring(0, i);
-                    }
-                }
-            }
         }
     }
 }
