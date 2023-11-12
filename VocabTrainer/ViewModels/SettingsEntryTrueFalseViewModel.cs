@@ -82,7 +82,7 @@ namespace VocabTrainer.ViewModels {
                     counter += VocabularyEntry.GetData(entry).Count;
                 }
             }
-            return (counter > minNumber);
+            return (counter >= minNumber);
         }
     }
 }
