@@ -116,9 +116,11 @@ namespace VocabTrainer.ViewModels {
         }
         private LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
+        private int _language = 0;
         public LearningModeThreeViewModel(LearnViewModel parent) {
             _parent = parent;
-            FillProperties(_parent.Random.Next(1, 3));
+            _language = _parent.Random.Next(1, 3);
+            FillProperties(_language);
         }
         private void FillProperties(int language) {
             _entries = new List<VocabularyEntry>();
@@ -173,6 +175,22 @@ namespace VocabTrainer.ViewModels {
             CheckInput(_entries[4]);
         }
         private void CheckInput(VocabularyEntry choice) {
+            if (_language == 1) {
+                if (_parent.Entries[_parent.Counter].English == choice.English) {
+                    _parent.Entries[_parent.Counter].Seen = true;
+                    _parent.Entries[_parent.Counter].LastTimeWrong = false;
+                    _parent.Entries[_parent.Counter].Repeated += 1;
+                }   
+            } else {
+                if (_parent.Entries[_parent.Counter].German == choice.German) {
+                    _parent.Entries[_parent.Counter].Seen = true;
+                    _parent.Entries[_parent.Counter].LastTimeWrong = true;
+                    _parent.Entries[_parent.Counter].Repeated = 0;
+                }   
+            }
+
+            _parent.Entries[_parent.Counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_parent.Counter].WordList}_{_parent.Entries[_parent.Counter].FirstLanguage}_{_parent.Entries[_parent.Counter].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+            VocabularyEntry.WriteData(_parent.Entries[_parent.Counter], _parent.Entries);
             _parent.ShowLearnMode();
         }
     }
