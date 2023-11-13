@@ -6,5 +6,7 @@ using System.Threading.Tasks;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeFourViewModel {
+        public LearningModeFourViewModel(LearnViewModel parent) { 
+        }
     }
 }
