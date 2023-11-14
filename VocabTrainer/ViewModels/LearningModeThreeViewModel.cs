@@ -117,8 +117,10 @@ namespace VocabTrainer.ViewModels {
         private LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
         private int _language = 0;
+        private int _counter;
         public LearningModeThreeViewModel(LearnViewModel parent) {
             _parent = parent;
+            _counter = _parent.Counter;
             _language = _parent.Random.Next(1, 3);
             FillProperties(_language);
         }
@@ -134,16 +136,16 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             int positionCorrectAnswer = _parent.Random.Next(0, 5);
-            _entries.Insert(positionCorrectAnswer, _parent.Entries[_parent.Counter]);
+            _entries.Insert(positionCorrectAnswer, _parent.Entries[_counter]);
             if (language == 1) {
-                FirstWord = _parent.Entries[_parent.Counter].German;
+                FirstWord = _parent.Entries[_counter].German;
                 FirstAnswer = _entries[0].English;
                 SecondAnswer = _entries[1].English;
                 ThirdAnswer = _entries[2].English;
                 FourthAnswer = _entries[3].English;
                 FifthAnswer = _entries[4].English;
             } else {
-                FirstWord = _parent.Entries[_parent.Counter].English;
+                FirstWord = _parent.Entries[_counter].English;
                 FirstAnswer = _entries[0].German;
                 SecondAnswer = _entries[1].German;
                 ThirdAnswer = _entries[2].German;
@@ -176,21 +178,21 @@ namespace VocabTrainer.ViewModels {
         }
         private void CheckInput(VocabularyEntry choice) {
             if (_language == 1) {
-                if (_parent.Entries[_parent.Counter].English == choice.English) {
-                    _parent.Entries[_parent.Counter].Seen = true;
-                    _parent.Entries[_parent.Counter].LastTimeWrong = false;
-                    _parent.Entries[_parent.Counter].Repeated += 1;
+                if (_parent.Entries[_counter].English == choice.English) {
+                    _parent.Entries[_counter].Seen = true;
+                    _parent.Entries[_counter].LastTimeWrong = false;
+                    _parent.Entries[_counter].Repeated += 1;
                 }   
             } else {
-                if (_parent.Entries[_parent.Counter].German == choice.German) {
-                    _parent.Entries[_parent.Counter].Seen = true;
-                    _parent.Entries[_parent.Counter].LastTimeWrong = true;
-                    _parent.Entries[_parent.Counter].Repeated = 0;
+                if (_parent.Entries[_counter].German == choice.German) {
+                    _parent.Entries[_counter].Seen = true;
+                    _parent.Entries[_counter].LastTimeWrong = true;
+                    _parent.Entries[_counter].Repeated = 0;
                 }   
             }
 
-            _parent.Entries[_parent.Counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_parent.Counter].WordList}_{_parent.Entries[_parent.Counter].FirstLanguage}_{_parent.Entries[_parent.Counter].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
-            VocabularyEntry.WriteData(_parent.Entries[_parent.Counter], _parent.Entries);
+            _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
+            VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
             _parent.ShowLearnMode();
         }
     }
