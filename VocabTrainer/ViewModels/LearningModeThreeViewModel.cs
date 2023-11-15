@@ -118,11 +118,14 @@ namespace VocabTrainer.ViewModels {
         private List<VocabularyEntry> _entries;
         private int _language = 0;
         private int _counter;
+        static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        private List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         public LearningModeThreeViewModel(LearnViewModel parent) {
             _parent = parent;
             _counter = _parent.Counter;
             _language = _parent.Random.Next(1, 3);
             FillProperties(_language);
+            Star = (_markedEntries.Contains(_parent.Entries[_counter])) ? "★" : "☆";
         }
         private void FillProperties(int language) {
             _entries = new List<VocabularyEntry>();
@@ -194,6 +197,17 @@ namespace VocabTrainer.ViewModels {
             _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
             _parent.ShowLearnMode();
+        }
+        public ICommand MarkEntryCommand => new RelayCommand(MarkEntry, CanExecuteCommand);
+        private void MarkEntry(object obj) {
+            if (Star == "☆") {
+                Star = "★";
+                _markedEntries.Add(_parent.Entries[_counter]);
+            } else {
+                Star = "☆";
+                _markedEntries.Remove(_parent.Entries[_counter]);
+            }
+            VocabularyEntry.WriteData(_markEntry, _markedEntries);
         }
     }
 }
