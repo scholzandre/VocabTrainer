@@ -47,8 +47,8 @@ namespace VocabTrainer.ViewModels {
         }
         public bool IsMarked { get; set; }
         private readonly LearnViewModel _parent;
-        static VocabularyEntry markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
-        private List<VocabularyEntry> markedEntries = VocabularyEntry.GetData(markEntry);
+        static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        private List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _counter;
         public LearningModeOneViewModel(LearnViewModel parent) { 
             _parent = parent;
@@ -57,7 +57,7 @@ namespace VocabTrainer.ViewModels {
             SecondWord = _parent.Entries[_counter].English;
             FirstLanguage = _parent.Entries[_counter].FirstLanguage;
             SecondLanguage = _parent.Entries[_counter].SecondLanguage;
-            Star = (markedEntries.Contains(_parent.Entries[_counter])) ? "★" : "☆";
+            Star = (_markedEntries.Contains(_parent.Entries[_counter])) ? "★" : "☆";
         }
 
         private bool CanExecuteCommand(object arg) {
@@ -80,12 +80,12 @@ namespace VocabTrainer.ViewModels {
         private void MarkEntry(object obj) {
             if (Star == "☆") {
                 Star = "★";
-                markedEntries.Add(_parent.Entries[_counter]);
+                _markedEntries.Add(_parent.Entries[_counter]);
             } else {
                 Star = "☆";
-                markedEntries.Remove(_parent.Entries[_counter]);
+                _markedEntries.Remove(_parent.Entries[_counter]);
             }
-            VocabularyEntry.WriteData(markEntry, markedEntries);
+            VocabularyEntry.WriteData(_markEntry, _markedEntries);
         }
     }
 }
