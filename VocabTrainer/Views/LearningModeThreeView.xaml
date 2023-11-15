@@ -31,6 +31,6 @@
         <Button Command="{Binding CheckFourthAnswerCommand}" Background="{Binding FourthAnswerBackground}" Content="{Binding FourthAnswer}" x:Name="answer4" Grid.Row="3" Height="40" Grid.Column="3"/>
         <Button Command="{Binding CheckFifthAnswerCommand}" Background="{Binding FifthAnswerBackground}" Content="{Binding FifthAnswer}"  x:Name="answer5" Grid.Row="4" Height="40" Grid.Column="3"/>
 
-        <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="1" Grid.Row="3" Content="☆" Height="25" Width="25" HorizontalAlignment="Right"/>
+        <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="1" Grid.Row="3" Content="{Binding Star}" Height="25" Width="25" HorizontalAlignment="Right" Command="{Binding MarkEntryCommand}"/>
     </Grid> 
 </UserControl>
