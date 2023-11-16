@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
-using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     internal class SettingsEntryTextViewModel : BaseViewModel {
