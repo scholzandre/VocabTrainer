@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using VocabTrainer.Models;
@@ -71,11 +72,11 @@ namespace VocabTrainer.ViewModels {
             }
         }
         private Brush _firstAnswerBackground = Brushes.White;
-        public Brush FirstWordBackground {
+        public Brush FirstAnswerBackground {
             get => _firstAnswerBackground;
             set {
                 _firstAnswerBackground = value;
-                OnPropertyChanged(nameof(FirstWordBackground));
+                OnPropertyChanged(nameof(FirstAnswerBackground));
             }
         }
         private Brush _secondAnswerBackground = Brushes.White;
@@ -127,7 +128,7 @@ namespace VocabTrainer.ViewModels {
             _entries = new List<VocabularyEntry>();
             for (int i = 0; i < 4; i++) {
                 int position = _parent.Random.Next(0, _parent.Entries.Count);
-                if (_entries.Contains(_parent.Entries[position])) {
+                if (_entries.Contains(_parent.Entries[position]) || _parent.Entries[position] == _parent.Entries[_parent.Counter]) {
                     i--;
                     continue;
                 } else {
@@ -157,31 +158,33 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand CheckFirstAnswerCommand => new RelayCommand(CheckFirstAnswer, CanExecuteCommand);
         private void CheckFirstAnswer(object obj) {
-            CheckInput(_entries[0]);
+            CheckInput(_entries[0], FirstAnswerBackground);
         }
         public ICommand CheckSecondAnswerCommand => new RelayCommand(CheckSecondAnswer, CanExecuteCommand);
         private void CheckSecondAnswer(object obj) {
-            CheckInput(_entries[1]);
+            CheckInput(_entries[1], SecondAnswerBackground);
         }
         public ICommand CheckThirdAnswerCommand => new RelayCommand(CheckThirdAnswer, CanExecuteCommand);
         private void CheckThirdAnswer(object obj) {
-            CheckInput(_entries[2]);
+            CheckInput(_entries[2], ThirdAnswerBackground);
         }
         public ICommand CheckFourthAnswerCommand => new RelayCommand(CheckFourthAnswer, CanExecuteCommand);
         private void CheckFourthAnswer(object obj) {
-            CheckInput(_entries[3]);
+            CheckInput(_entries[3], FourthAnswerBackground);
         }
         public ICommand CheckFifthAnswerCommand => new RelayCommand(CheckFifthAnswer, CanExecuteCommand);
         private void CheckFifthAnswer(object obj) {
-            CheckInput(_entries[4]);
+            CheckInput(_entries[4], FifthAnswerBackground);
         }
-        private void CheckInput(VocabularyEntry choice) {
+        private void CheckInput(VocabularyEntry choice, Brush backgroundColor) {
             if (_language == 1) {
                 if (_parent.Entries[_counter].English == choice.English) {
                     _parent.Entries[_counter].Seen = true;
                     _parent.Entries[_counter].LastTimeWrong = false;
                     _parent.Entries[_counter].Repeated += 1;
-                }   
+                    CorrectWordBackground = Brushes.Green; // why does it not work 
+                    backgroundColor = Brushes.Green;
+                }   // else is missing
             } else {
                 if (_parent.Entries[_counter].German == choice.German) {
                     _parent.Entries[_counter].Seen = true;
@@ -192,7 +195,8 @@ namespace VocabTrainer.ViewModels {
 
             _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
-            _parent.ShowLearnMode();
+            //Thread.Sleep(1000);
+            //_parent.ShowLearnMode();
         }
         public ICommand MarkEntryCommand => new RelayCommand(MarkEntry, CanExecuteCommand);
         private void MarkEntry(object obj) {
