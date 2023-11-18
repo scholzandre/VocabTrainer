@@ -24,12 +24,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextElement.FontSize>20</TextElement.FontSize>
-        <Button Content="{Binding FirstWord}" Background="{Binding CorrectWordBackground}" x:Name="question" Grid.Row="2" Height="40" Grid.Column="1" IsEnabled="False"/>
-        <Button Command="{Binding CheckFirstAnswerCommand}" Background="{Binding FirstAnswerBackground}" Content="{Binding FirstAnswer}" x:Name="answer1" Grid.Row="0" Height="40" Grid.Column="3"/>
-        <Button Command="{Binding CheckSecondAnswerCommand}" Background="{Binding SecondAnswerBackground}" Content="{Binding SecondAnswer}" x:Name="answer2" Grid.Row="1" Height="40" Grid.Column="3"/>
-        <Button Command="{Binding CheckThirdAnswerCommand}" Background="{Binding ThirdAnswerBackground}" Content="{Binding ThirdAnswer}" x:Name="answer3" Grid.Row="2" Height="40" Grid.Column="3"/>
-        <Button Command="{Binding CheckFourthAnswerCommand}" Background="{Binding FourthAnswerBackground}" Content="{Binding FourthAnswer}" x:Name="answer4" Grid.Row="3" Height="40" Grid.Column="3"/>
-        <Button Command="{Binding CheckFifthAnswerCommand}" Background="{Binding FifthAnswerBackground}" Content="{Binding FifthAnswer}"  x:Name="answer5" Grid.Row="4" Height="40" Grid.Column="3"/>
+        <Button Content="{Binding FirstWord}" Background="{Binding BackgroundColors[0]}" x:Name="question" Grid.Row="2" Height="40" Grid.Column="1" IsCancel="True"/>
+        <Button Command="{Binding CheckFirstAnswerCommand}" Background="{Binding BackgroundColors[1]}" Content="{Binding FirstAnswer}" x:Name="answer1" Grid.Row="0" Height="40" Grid.Column="3"/>
+        <Button Command="{Binding CheckSecondAnswerCommand}" Background="{Binding BackgroundColors[2]}" Content="{Binding SecondAnswer}" x:Name="answer2" Grid.Row="1" Height="40" Grid.Column="3"/>
+        <Button Command="{Binding CheckThirdAnswerCommand}" Background="{Binding BackgroundColors[3]}" Content="{Binding ThirdAnswer}" x:Name="answer3" Grid.Row="2" Height="40" Grid.Column="3"/>
+        <Button Command="{Binding CheckFourthAnswerCommand}" Background="{Binding BackgroundColors[4]}" Content="{Binding FourthAnswer}" x:Name="answer4" Grid.Row="3" Height="40" Grid.Column="3"/>
+        <Button Command="{Binding CheckFifthAnswerCommand}" Background="{Binding BackgroundColors[5]}" Content="{Binding FifthAnswer}"  x:Name="answer5" Grid.Row="4" Height="40" Grid.Column="3"/>
 
         <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="1" Grid.Row="3" Content="{Binding Star}" Height="25" Width="25" HorizontalAlignment="Right" Command="{Binding MarkEntryCommand}"/>
     </Grid> 
