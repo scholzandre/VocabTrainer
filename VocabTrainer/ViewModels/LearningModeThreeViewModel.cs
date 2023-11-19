@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using VocabTrainer.Models;
@@ -81,12 +79,12 @@ namespace VocabTrainer.ViewModels {
             }
         }
 
-        private LearnViewModel _parent;
+        private readonly LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
-        private int _language = 0;
-        private int _counter;
-        static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
-        private List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
+        private readonly int _language = 0;
+        private readonly int _counter;
+        static readonly VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        private readonly List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _positionCorrectItem;
         public LearningModeThreeViewModel(LearnViewModel parent) {
             _parent = parent;
@@ -128,24 +126,24 @@ namespace VocabTrainer.ViewModels {
             return true;
         }
         public ICommand CheckFirstAnswerCommand => new RelayCommand(CheckFirstAnswer, CanExecuteCommand);
-        private void CheckFirstAnswer(object obj) {
-            CheckInput(_entries[0], 1);
+        private async void CheckFirstAnswer(object obj) {
+            await CheckInput(_entries[0], 1);
         }
         public ICommand CheckSecondAnswerCommand => new RelayCommand(CheckSecondAnswer, CanExecuteCommand);
-        private void CheckSecondAnswer(object obj) {
-            CheckInput(_entries[1], 2);
+        private async void CheckSecondAnswer(object obj) {
+            await CheckInput(_entries[1], 2);
         }
         public ICommand CheckThirdAnswerCommand => new RelayCommand(CheckThirdAnswer, CanExecuteCommand);
-        private void CheckThirdAnswer(object obj) {
-            CheckInput(_entries[2], 3);
+        private async void CheckThirdAnswer(object obj) {
+            await CheckInput(_entries[2], 3);
         }
         public ICommand CheckFourthAnswerCommand => new RelayCommand(CheckFourthAnswer, CanExecuteCommand);
-        private void CheckFourthAnswer(object obj) {
-            CheckInput(_entries[3], 4);
+        private async void CheckFourthAnswer(object obj) {
+            await CheckInput(_entries[3], 4);
         }
         public ICommand CheckFifthAnswerCommand => new RelayCommand(CheckFifthAnswer, CanExecuteCommand);
-        private void CheckFifthAnswer(object obj) {
-            CheckInput(_entries[4], 5);
+        private async void CheckFifthAnswer(object obj) {
+            await CheckInput(_entries[4], 5);
         }
         private async Task CheckInput(VocabularyEntry choice, int answer) {
             List<Brush> tempList = new List<Brush>(BackgroundColors);
