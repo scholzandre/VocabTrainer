@@ -13,7 +13,6 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class TranslatorViewModel : INotifyPropertyChanged {
-        public event EventHandler CanExecuteChange;
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

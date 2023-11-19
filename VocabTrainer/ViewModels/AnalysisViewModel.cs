@@ -81,7 +81,6 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(KnownWordsString));
             }
         }
-        public event EventHandler CanExecuteChange;
         private SeriesCollection _seriesCollection;
         public SeriesCollection SeriesCollection { 
             get => _seriesCollection;
