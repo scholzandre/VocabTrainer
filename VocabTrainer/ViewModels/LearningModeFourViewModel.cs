@@ -10,87 +10,25 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeFourViewModel : BaseViewModel {
-        private string _firstAnswerText;
-        public string FirstAnswerText {
-            get => _firstAnswerText;
+        private List<string> _AnswerText;
+        public List<string> AnswerText {
+            get => _AnswerText;
             set {
-                _firstAnswerText = value;
-                OnPropertyChanged(nameof(FirstAnswerText));
+                _AnswerText = value;
+                OnPropertyChanged(nameof(AnswerText));
             }
         }
-        private string _secondAnswerText;
-        public string SecondAnswerText {
-            get => _secondAnswerText;
+        private List<string> _QuestionText;
+        public List<string> QuestionText {
+            get => _QuestionText;
             set {
-                _secondAnswerText = value;
-                OnPropertyChanged(nameof(SecondAnswerText));
+                _QuestionText = value;
+                OnPropertyChanged(nameof(QuestionText));
             }
         }
-        private string _thirdAnswerText;
-        public string ThirdAnswerText {
-            get => _thirdAnswerText;
-            set {
-                _thirdAnswerText = value;
-                OnPropertyChanged(nameof(ThirdAnswerText));
-            }
-        }
-        private string _fourthAnswerText;
-        public string FourthAnswerText {
-            get => _fourthAnswerText;
-            set {
-                _fourthAnswerText = value;
-                OnPropertyChanged(nameof(FourthAnswerText));
-            }
-        }
-        private string _fifthAnswerText;
-        public string FifthAnswerText {
-            get => _fifthAnswerText;
-            set {
-                _fifthAnswerText = value;
-                OnPropertyChanged(nameof(FifthAnswerText));
-            }
-        }
-        private string _firstQuestionText;
-        public string FirstQuestionText {
-            get => _firstQuestionText;
-            set {
-                _firstQuestionText = value;
-                OnPropertyChanged(nameof(FirstQuestionText));
-            }
-        }
-        private string _secondQuestionText;
-        public string SecondQuestionText {
-            get => _secondQuestionText;
-            set {
-                _secondQuestionText = value;
-                OnPropertyChanged(nameof(SecondQuestionText));
-            }
-        }
-        private string _thirdQuestionText;
-        public string ThirdQuestionText {
-            get => _thirdQuestionText;
-            set {
-                _thirdQuestionText = value;
-                OnPropertyChanged(nameof(ThirdQuestionText));
-            }
-        }
-        private string _fourthQuestionText;
-        public string FourthQuestionText {
-            get => _fourthQuestionText;
-            set {
-                _fourthQuestionText = value;
-                OnPropertyChanged(nameof(FourthQuestionText));
-            }
-        }
-        private string _fifthQuestionText;
-        public string FifthQuestionText {
-            get => _fifthQuestionText;
-            set {
-                _fifthQuestionText = value;
-                OnPropertyChanged(nameof(FifthQuestionText));
-            }
-        }
-        private LearnViewModel _parent;
+        private string _answer = string.Empty;
+        private string _question = string.Empty;
+        private readonly LearnViewModel _parent;
         public LearningModeFourViewModel(LearnViewModel parent) {
             _parent = parent;
         }
@@ -100,44 +38,44 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand SetFirstQuestionCommand => new RelayCommand(SetFirstQuestion, CanExecuteCommand);
         private void SetFirstQuestion(object obj) {
-            
+            _question = QuestionText[0];
         }
         public ICommand SetSecondQuestionCommand => new RelayCommand(SetSecondQuestion, CanExecuteCommand);
         private void SetSecondQuestion(object obj) {
-
+            _question = QuestionText[1];
         }
         public ICommand SetThirdQuestionCommand => new RelayCommand(SetThirdQuestion, CanExecuteCommand);
         private void SetThirdQuestion(object obj) {
-
+            _question = QuestionText[2];
         }
         public ICommand SetFourthQuestionCommand => new RelayCommand(SetFourthQuestion, CanExecuteCommand);
         private void SetFourthQuestion(object obj) {
-
+            _question = QuestionText[3];
         }
         public ICommand SetFifthQuestionCommand => new RelayCommand(SetFifthQuestion, CanExecuteCommand);
         private void SetFifthQuestion(object obj) {
-
+            _question = QuestionText[4];
         }
 
-        public ICommand SetFirstAnswerCommand => new RelayCommand(SetÁnswerQuestion, CanExecuteCommand);
-        private void SetÁnswerQuestion(object obj) {
-
+        public ICommand SetFirstAnswerCommand => new RelayCommand(SetAnswerQuestion, CanExecuteCommand);
+        private void SetAnswerQuestion(object obj) {
+            _question = AnswerText[0];
         }
         public ICommand SetSecondAnswerCommand => new RelayCommand(SetSecondAnswer, CanExecuteCommand);
         private void SetSecondAnswer(object obj) {
-
+            _question = AnswerText[1];
         }
         public ICommand SetThirdAnswerCommand => new RelayCommand(SetThirdAnswer, CanExecuteCommand);
         private void SetThirdAnswer(object obj) {
-
+            _question = AnswerText[2];
         }
         public ICommand SetFourthAnswerCommand => new RelayCommand(SetFourthAnswer, CanExecuteCommand);
         private void SetFourthAnswer(object obj) {
-
+            _question = AnswerText[3];
         }
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
-
+            _question = AnswerText[4];
         }
     }
 }
