@@ -59,9 +59,19 @@ namespace VocabTrainer.ViewModels
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
                 UserControl.DataContext = new LearningModeThreeViewModel(this);
             } else if (_learningModes[learningMode].LearningMode == 4) {
+                List<VocabularyEntry> tempEntires = new List<VocabularyEntry>();
+                for (int i = 0; i < 5; i++) {
+                    if (Counter >= Entries.Count()) {
+                        Counter = 0;
+                        tempEntires.Add(Entries[Counter]);
+                    } else { 
+                        tempEntires.Add(Entries[Counter]);
+                        Counter++;
+                    }
+                }
                 Type viewType = typeof(LearningModeFourView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
-                UserControl.DataContext = new LearningModeFourViewModel(this);
+                UserControl.DataContext = new LearningModeFourViewModel(this, tempEntires);
             }
 
             if (Counter < Entries.Count-1) {
