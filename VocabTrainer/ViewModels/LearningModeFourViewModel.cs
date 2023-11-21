@@ -26,11 +26,45 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
+        private List<Brush> _backgroundColorsQuestion = new List<Brush>() {
+            Brushes.White,
+            Brushes.White,
+            Brushes.White,
+            Brushes.White,
+            Brushes.White
+        };
+        public List<Brush> BackgroundColorsQuestion {
+            get => _backgroundColorsQuestion;
+            set {
+                _backgroundColorsQuestion = value;
+                OnPropertyChanged(nameof(BackgroundColorsQuestion));
+            }
+        }
+        private List<Brush> _backgroundColorsAnswer = new List<Brush>() {
+            Brushes.White,
+            Brushes.White,
+            Brushes.White,
+            Brushes.White,
+            Brushes.White
+        };
+        public List<Brush> BackgroundColorsAnswer {
+            get => _backgroundColorsAnswer;
+            set {
+                _backgroundColorsAnswer = value;
+                OnPropertyChanged(nameof(BackgroundColorsAnswer));
+            }
+        }
         private string _answer = string.Empty;
         private string _question = string.Empty;
         private readonly LearnViewModel _parent;
-        public LearningModeFourViewModel(LearnViewModel parent) {
+        private List<VocabularyEntry> _entries;
+        private int _language;
+        public LearningModeFourViewModel(LearnViewModel parent, List<VocabularyEntry> tempEntry) {
             _parent = parent;
+            _entries = tempEntry;
+            _language = _parent.Random.Next(1, 3);
+            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
+            QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
         }
 
         private bool CanExecuteCommand(object arg) {
