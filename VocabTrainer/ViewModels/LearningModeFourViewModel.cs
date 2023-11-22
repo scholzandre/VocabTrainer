@@ -26,13 +26,14 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
-        private List<Brush> _backgroundColorsQuestion = new List<Brush>() {
+        private static List<Brush> _standardColors = new List<Brush>() {
             Brushes.White,
             Brushes.White,
             Brushes.White,
             Brushes.White,
             Brushes.White
         };
+        private List<Brush> _backgroundColorsQuestion = new List<Brush>(_standardColors);
         public List<Brush> BackgroundColorsQuestion {
             get => _backgroundColorsQuestion;
             set {
@@ -40,13 +41,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsQuestion));
             }
         }
-        private List<Brush> _backgroundColorsAnswer = new List<Brush>() {
-            Brushes.White,
-            Brushes.White,
-            Brushes.White,
-            Brushes.White,
-            Brushes.White
-        };
+        private List<Brush> _backgroundColorsAnswer = new List<Brush>(_standardColors);
         public List<Brush> BackgroundColorsAnswer {
             get => _backgroundColorsAnswer;
             set {
@@ -110,6 +105,20 @@ namespace VocabTrainer.ViewModels {
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
             _question = AnswerText[4];
+        }
+        private void CheckAnswer(string field, int index) {
+            if (field == "answer") {
+                BackgroundColorsAnswer = new List<Brush>(_standardColors);
+                BackgroundColorsAnswer[index] = Brushes.Green;
+            } else {
+                BackgroundColorsQuestion = new List<Brush>(_standardColors);
+                BackgroundColorsAnswer[index] = Brushes.Green;
+            }
+            if (_question != string.Empty && _answer != string.Empty) {
+                for (int i = 0; i < _entries.Count; i++) { 
+                    
+                }
+            }
         }
     }
 }
