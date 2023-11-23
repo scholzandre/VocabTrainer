@@ -58,8 +58,8 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
-            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
             QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
+            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
         }
 
         private bool CanExecuteCommand(object arg) {
@@ -115,8 +115,14 @@ namespace VocabTrainer.ViewModels {
                 BackgroundColorsAnswer[index] = Brushes.Green;
             }
             if (_question != string.Empty && _answer != string.Empty) {
-                for (int i = 0; i < _entries.Count; i++) { 
-                    
+                for (int i = 0; i < _entries.Count; i++) {
+                    if (_language == 1) {
+                        if (_entries[i].German == _answer && _entries[i].English == _question) { 
+                        }
+                    } else {
+                        if (_entries[i].German == _question && _entries[i].English == _answer) {
+                        }
+                    }
                 }
             }
         }
