@@ -68,56 +68,74 @@ namespace VocabTrainer.ViewModels {
         public ICommand SetFirstQuestionCommand => new RelayCommand(SetFirstQuestion, CanExecuteCommand);
         private void SetFirstQuestion(object obj) {
             _question = QuestionText[0];
+            CheckAnswer("question", 0); 
         }
         public ICommand SetSecondQuestionCommand => new RelayCommand(SetSecondQuestion, CanExecuteCommand);
         private void SetSecondQuestion(object obj) {
             _question = QuestionText[1];
+            CheckAnswer("question", 1); 
         }
         public ICommand SetThirdQuestionCommand => new RelayCommand(SetThirdQuestion, CanExecuteCommand);
         private void SetThirdQuestion(object obj) {
             _question = QuestionText[2];
+            CheckAnswer("question", 2); 
         }
         public ICommand SetFourthQuestionCommand => new RelayCommand(SetFourthQuestion, CanExecuteCommand);
         private void SetFourthQuestion(object obj) {
             _question = QuestionText[3];
+            CheckAnswer("question", 3); 
         }
         public ICommand SetFifthQuestionCommand => new RelayCommand(SetFifthQuestion, CanExecuteCommand);
         private void SetFifthQuestion(object obj) {
             _question = QuestionText[4];
+            CheckAnswer("question", 4); 
         }
 
-        public ICommand SetFirstAnswerCommand => new RelayCommand(SetAnswerQuestion, CanExecuteCommand);
-        private void SetAnswerQuestion(object obj) {
-            _question = AnswerText[0];
+        public ICommand SetFirstAnswerCommand => new RelayCommand(SetFirstAnswer, CanExecuteCommand);
+        private void SetFirstAnswer(object obj) {
+            _answer = AnswerText[0];
+            CheckAnswer("answer", 0); 
         }
         public ICommand SetSecondAnswerCommand => new RelayCommand(SetSecondAnswer, CanExecuteCommand);
         private void SetSecondAnswer(object obj) {
-            _question = AnswerText[1];
+            _answer = AnswerText[1];
+            CheckAnswer("answer", 1); 
         }
         public ICommand SetThirdAnswerCommand => new RelayCommand(SetThirdAnswer, CanExecuteCommand);
         private void SetThirdAnswer(object obj) {
-            _question = AnswerText[2];
+            _answer = AnswerText[2];
+            CheckAnswer("answer", 2); 
         }
         public ICommand SetFourthAnswerCommand => new RelayCommand(SetFourthAnswer, CanExecuteCommand);
         private void SetFourthAnswer(object obj) {
-            _question = AnswerText[3];
+            _answer = AnswerText[3];
+            CheckAnswer("answer", 3); 
         }
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
-            _question = AnswerText[4];
+            _answer = AnswerText[4];
+            CheckAnswer("answer", 4);
         }
         private void CheckAnswer(string field, int index) {
             if (field == "answer") {
                 BackgroundColorsAnswer = new List<Brush>(_standardColors);
                 BackgroundColorsAnswer[index] = Brushes.Green;
+                _standardColors = BackgroundColorsAnswer;
             } else {
                 BackgroundColorsQuestion = new List<Brush>(_standardColors);
-                BackgroundColorsAnswer[index] = Brushes.Green;
+                BackgroundColorsQuestion[index] = Brushes.Green;
             }
             if (_question != string.Empty && _answer != string.Empty) {
                 for (int i = 0; i < _entries.Count; i++) {
                     if (_language == 1) {
-                        if (_entries[i].German == _answer && _entries[i].English == _question) { 
+                        if (_entries[i].German == _answer && _entries[i].English == _question) {
+                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].Seen = true;
+                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].Repeated += 1;
+                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].LastTimeWrong = false;
+                            VocabularyEntry tempEntry = new VocabularyEntry() {
+                                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_entries[i].WordList}_{_entries[i].FirstLanguage}_{_entries[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                            };
+                            VocabularyEntry.WriteData(tempEntry, _parent.Entries);
                         }
                     } else {
                         if (_entries[i].German == _question && _entries[i].English == _answer) {
