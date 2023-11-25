@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using VocabTrainer.Models;
@@ -10,19 +6,19 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeFourViewModel : BaseViewModel {
-        private List<string> _AnswerText;
-        public List<string> AnswerText {
-            get => _AnswerText;
+        private List<(string word, string wordlist)> _answerText = new List<(string word, string wordlist)>();
+        public List<(string word, string wordlist)> AnswerText {
+            get => _answerText;
             set {
-                _AnswerText = value;
+                _answerText = value;
                 OnPropertyChanged(nameof(AnswerText));
             }
         }
-        private List<string> _QuestionText;
-        public List<string> QuestionText {
-            get => _QuestionText;
+        private List<(string word, string wordlist)> _questionText = new List<(string word, string wordlist)>();
+        public List<(string word, string wordlist)> QuestionText {
+            get => _questionText;
             set {
-                _QuestionText = value;
+                _questionText = value;
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
@@ -49,8 +45,8 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsAnswer));
             }
         }
-        private string _answer = string.Empty;
-        private string _question = string.Empty;
+        private (string word, string wordlist) _question;
+        private (string word, string wordlist) _answer;
         private readonly LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
         private int _language;
@@ -58,8 +54,10 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
-            QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
-            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
+            for (int i = 0; i < tempEntry.Count; i++) { 
+                QuestionText.Add((_language == 1) ? (tempEntry[i].English, tempEntry[i].WordList) : (tempEntry[i].German, tempEntry[i].WordList));
+                AnswerText.Add((_language == 1) ? (tempEntry[i].German, tempEntry[i].WordList) : (tempEntry[i].English, tempEntry[i].WordList));
+            }
         }
 
         private bool CanExecuteCommand(object arg) {
@@ -120,28 +118,30 @@ namespace VocabTrainer.ViewModels {
             if (field == "answer") {
                 BackgroundColorsAnswer = new List<Brush>(_standardColors);
                 BackgroundColorsAnswer[index] = Brushes.Green;
-                _standardColors = BackgroundColorsAnswer;
             } else {
                 BackgroundColorsQuestion = new List<Brush>(_standardColors);
                 BackgroundColorsQuestion[index] = Brushes.Green;
             }
-            if (_question != string.Empty && _answer != string.Empty) {
-                for (int i = 0; i < _entries.Count; i++) {
-                    if (_language == 1) {
-                        if (_entries[i].German == _answer && _entries[i].English == _question) {
-                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].Seen = true;
-                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].Repeated += 1;
-                            _parent.Entries[_parent.Entries.IndexOf(_entries[i])].LastTimeWrong = false;
-                            VocabularyEntry tempEntry = new VocabularyEntry() {
-                                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_entries[i].WordList}_{_entries[i].FirstLanguage}_{_entries[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
-                            };
-                            VocabularyEntry.WriteData(tempEntry, _parent.Entries);
-                        }
-                    } else {
-                        if (_entries[i].German == _question && _entries[i].English == _answer) {
-                        }
-                    }
+            if (_question.word != string.Empty && _answer.word != string.Empty) {
+                VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
+                    German = (_language == 1) ?  _answer.word : _question.word,
+                    English = (_language == 1) ? _question.word : _answer.word,
+                    WordList = _answer.wordlist,
+                };
+                int indexEntries = _parent.Entries.IndexOf(tempAnswerEntry);
+                if (_parent.Entries.Contains(tempAnswerEntry)) {
+                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Seen = true;
+                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Repeated += 1;
+                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
+                    VocabularyEntry tempEntry = new VocabularyEntry() {
+                        FilePath = $"{VocabularyEntry.FirstPartFilePath}{_entries[indexEntries].WordList}{VocabularyEntry.SecondPartFilePath}"
+                    };
+                    VocabularyEntry.WriteData(tempEntry, _parent.Entries);
+                } else { 
+                
                 }
+                _answer = (string.Empty, string.Empty);
+                _question = (string.Empty, string.Empty);
             }
         }
     }
