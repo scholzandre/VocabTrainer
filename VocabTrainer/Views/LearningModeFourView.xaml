@@ -24,9 +24,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextElement.FontSize>20</TextElement.FontSize>
-        <Button Background="{Binding BackgroundColorsQuestion[0]}" Command="{Binding SetFirstQuestionCommand}" Content="{Binding QuestionText[0]}" x:Name="question1" Grid.Row="0" Height="40" Grid.Column="1" Foreground="Black"/>
-        <Button Background="{Binding BackgroundColorsQuestion[1]}" Command="{Binding SetSecondQuestionCommand}" Content="{Binding QuestionText[1]}" x:Name="question2" Grid.Row="1" Height="40" Grid.Column="1" Foreground="Black"/>
-        <Button Background="{Binding BackgroundColorsQuestion[2]}" Command="{Binding SetThirdQuestionCommand}" Content="{Binding QuestionText[2]}" x:Name="question3" Grid.Row="2" Height="40" Grid.Column="1" Foreground="Black"/>
+        <Button Background="{Binding BackgroundColorsQuestion[0]}" Command="{Binding SetFirstQuestionCommand}" Content="{Binding QuestionText[0]}" Grid.Row="0" Height="40" Grid.Column="1"/>
+        <Button Background="{Binding BackgroundColorsQuestion[1]}" Command="{Binding SetSecondQuestionCommand}" Content="{Binding QuestionText[1]}" Grid.Row="1" Height="40" Grid.Column="1"/>
+        <Button Background="{Binding BackgroundColorsQuestion[2]}" Command="{Binding SetThirdQuestionCommand}" Content="{Binding QuestionText[2]}" Grid.Row="2" Height="40" Grid.Column="1"/>
         <Button Background="{Binding BackgroundColorsQuestion[3]}" Command="{Binding SetFourthQuestionCommand}" Content="{Binding QuestionText[3]}" Grid.Row="3" Height="40" Grid.Column="1"/>
         <Button Background="{Binding BackgroundColorsQuestion[4]}" Command="{Binding SetFifthQuestionCommand}" Content="{Binding QuestionText[4]}" Grid.Row="4" Height="40" Grid.Column="1"/>
         <Button Background="{Binding BackgroundColorsAnswer[0]}" Command="{Binding SetFirstAnswerCommand}" Content="{Binding AnswerText[0]}" Grid.Row="0" Height="40" Grid.Column="3"/>
@@ -34,6 +34,6 @@
         <Button Background="{Binding BackgroundColorsAnswer[2]}" Command="{Binding SetThirdAnswerCommand}" Content="{Binding AnswerText[2]}" Grid.Row="2" Height="40" Grid.Column="3"/>
         <Button Background="{Binding BackgroundColorsAnswer[3]}" Command="{Binding SetFourthAnswerCommand}" Content="{Binding AnswerText[3]}" Grid.Row="3" Height="40" Grid.Column="3"/>
         <Button Background="{Binding BackgroundColorsAnswer[4]}" Command="{Binding SetFifthAnswerCommand}" Content="{Binding AnswerText[4]}" Grid.Row="4" Height="40" Grid.Column="3"/>
-        <TextBlock x:Name="message" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White"/>
     </Grid>
 </UserControl>
