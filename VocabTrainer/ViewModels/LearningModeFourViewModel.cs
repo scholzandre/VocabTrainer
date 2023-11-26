@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using VocabTrainer.Models;
@@ -6,22 +7,23 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeFourViewModel : BaseViewModel {
-        private List<(string word, string wordlist)> _answerText = new List<(string word, string wordlist)>();
-        public List<(string word, string wordlist)> AnswerText {
+        private List<string> _answerText = new List<string>();
+        public List<string> AnswerText {
             get => _answerText;
             set {
                 _answerText = value;
                 OnPropertyChanged(nameof(AnswerText));
             }
         }
-        private List<(string word, string wordlist)> _questionText = new List<(string word, string wordlist)>();
-        public List<(string word, string wordlist)> QuestionText {
+        private List<string> _questionText = new List<string>();
+        public List<string > QuestionText {
             get => _questionText;
             set {
                 _questionText = value;
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
+
         private static readonly List<Brush> _standardColors = new List<Brush>() {
             Brushes.White,
             Brushes.White,
@@ -45,8 +47,10 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsAnswer));
             }
         }
-        private (string word, string wordlist) _question = (string.Empty, string.Empty);
-        private (string word, string wordlist) _answer = (string.Empty, string.Empty);
+        private Dictionary<string, string> _answers = new Dictionary<string, string>();
+        private Dictionary<string, string> _questions = new Dictionary<string, string>();
+        private string _question = string.Empty;
+        private string _answer = string.Empty;
         private readonly LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
         private int _language;
@@ -54,9 +58,11 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
-            for (int i = 0; i < tempEntry.Count; i++) { 
-                QuestionText.Add((_language == 1) ? (tempEntry[i].English, tempEntry[i].WordList) : (tempEntry[i].German, tempEntry[i].WordList));
-                AnswerText.Add((_language == 1) ? (tempEntry[i].German, tempEntry[i].WordList) : (tempEntry[i].English, tempEntry[i].WordList));
+            QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
+            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
+            for (int i = 0; i < tempEntry.Count; i++) {
+                _answers.Add((_language == 1) ? tempEntry[i].German : tempEntry[i].English, tempEntry[i].WordList);
+                _questions.Add((_language == 1) ? tempEntry[i].English : tempEntry[i].German, tempEntry[i].WordList);
             }
         }
 
@@ -122,11 +128,11 @@ namespace VocabTrainer.ViewModels {
                 BackgroundColorsQuestion = new List<Brush>(_standardColors);
                 BackgroundColorsQuestion[index] = Brushes.Green;
             }
-            if (_question.word != string.Empty && _answer.word != string.Empty) {
+            if (_question != string.Empty && _answer != string.Empty) {
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
-                    German = (_language == 1) ?  _answer.word : _question.word,
-                    English = (_language == 1) ? _question.word : _answer.word,
-                    WordList = _answer.wordlist,
+                    German = (_language == 1) ? _answer : _question,
+                    English = (_language == 1) ? _question : _answer,
+                    WordList = _questions[_question]
                 };
                 int indexEntries = _parent.Entries.IndexOf(tempAnswerEntry);
                 if (_parent.Entries.Contains(tempAnswerEntry)) {
@@ -135,7 +141,7 @@ namespace VocabTrainer.ViewModels {
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
                 } else {
                     for (int i = 0; i < _parent.Entries.Count; i++) {
-                        if (_language == 1 && _parent.Entries[i].English == _question.word || _language == 2 && _parent.Entries[i].German == _question.word) {
+                        if (_language == 1 && _parent.Entries[i].English == _question || _language == 2 && _parent.Entries[i].German == _question) {
                             _parent.Entries[i].Seen = true;
                             _parent.Entries[i].LastTimeWrong = true;
                             _parent.Entries[i].Repeated = 0;
@@ -143,11 +149,11 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
                 VocabularyEntry tempEntry = new VocabularyEntry() {
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_question.wordlist}{VocabularyEntry.SecondPartFilePath}"
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question]}{VocabularyEntry.SecondPartFilePath}"
                 };
                 VocabularyEntry.WriteData(tempEntry, _parent.Entries);
-                _answer = (string.Empty, string.Empty);
-                _question = (string.Empty, string.Empty);
+                _answer = string.Empty;
+                _question = string.Empty;
             }
         }
     }
