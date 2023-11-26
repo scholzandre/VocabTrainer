@@ -22,7 +22,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
-        private static List<Brush> _standardColors = new List<Brush>() {
+        private static readonly List<Brush> _standardColors = new List<Brush>() {
             Brushes.White,
             Brushes.White,
             Brushes.White,
@@ -45,8 +45,8 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsAnswer));
             }
         }
-        private (string word, string wordlist) _question;
-        private (string word, string wordlist) _answer;
+        private (string word, string wordlist) _question = (string.Empty, string.Empty);
+        private (string word, string wordlist) _answer = (string.Empty, string.Empty);
         private readonly LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
         private int _language;
@@ -133,13 +133,19 @@ namespace VocabTrainer.ViewModels {
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Seen = true;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Repeated += 1;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
-                    VocabularyEntry tempEntry = new VocabularyEntry() {
-                        FilePath = $"{VocabularyEntry.FirstPartFilePath}{_entries[indexEntries].WordList}{VocabularyEntry.SecondPartFilePath}"
-                    };
-                    VocabularyEntry.WriteData(tempEntry, _parent.Entries);
-                } else { 
-                
+                } else {
+                    for (int i = 0; i < _parent.Entries.Count; i++) {
+                        if (_language == 1 && _parent.Entries[i].English == _question.word || _language == 2 && _parent.Entries[i].German == _question.word) {
+                            _parent.Entries[i].Seen = true;
+                            _parent.Entries[i].LastTimeWrong = true;
+                            _parent.Entries[i].Repeated = 0;
+                        }
+                    }
                 }
+                VocabularyEntry tempEntry = new VocabularyEntry() {
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_question.wordlist}{VocabularyEntry.SecondPartFilePath}"
+                };
+                VocabularyEntry.WriteData(tempEntry, _parent.Entries);
                 _answer = (string.Empty, string.Empty);
                 _question = (string.Empty, string.Empty);
             }
