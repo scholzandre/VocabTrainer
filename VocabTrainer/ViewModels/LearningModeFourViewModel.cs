@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -59,10 +60,13 @@ namespace VocabTrainer.ViewModels {
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
             QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
-            AnswerText = (_language == 1) ? tempEntry.Select(x => x.German).ToList() : tempEntry.Select(x => x.English).ToList();
+            List<VocabularyEntry> tempEntry2 = new List<VocabularyEntry>(tempEntry);
             for (int i = 0; i < tempEntry.Count; i++) {
-                _answers.Add((_language == 1) ? tempEntry[i].German : tempEntry[i].English, tempEntry[i].WordList);
                 _questions.Add((_language == 1) ? tempEntry[i].English : tempEntry[i].German, tempEntry[i].WordList);
+                int random = _parent.Random.Next(0, tempEntry2.Count);
+                _answers.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English, tempEntry2[random].WordList);
+                AnswerText.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English);
+                tempEntry2.Remove(tempEntry2[random]);
             }
         }
 
