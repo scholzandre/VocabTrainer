@@ -125,12 +125,14 @@ namespace VocabTrainer.ViewModels {
             CheckAnswer("answer", 4);
         }
         private void CheckAnswer(string field, int index) {
+            List<Brush> tempListAnswer = new List<Brush>(BackgroundColorsAnswer);
+            List<Brush> tempListQuestion = new List<Brush>(BackgroundColorsAnswer);
             if (field == "answer") {
-                BackgroundColorsAnswer = new List<Brush>(_standardColors);
-                BackgroundColorsAnswer[index] = Brushes.Green;
+                tempListAnswer[index] = Brushes.Green;
+                BackgroundColorsAnswer = tempListAnswer;
             } else {
-                BackgroundColorsQuestion = new List<Brush>(_standardColors);
-                BackgroundColorsQuestion[index] = Brushes.Green;
+                tempListQuestion[index] = Brushes.Green;
+                BackgroundColorsQuestion = tempListQuestion;
             }
             if (_question != string.Empty && _answer != string.Empty) {
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
