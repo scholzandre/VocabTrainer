@@ -32,6 +32,15 @@ namespace VocabTrainer.ViewModels {
             Brushes.White,
             Brushes.White
         };
+
+        private static readonly List<bool> _writable = new List<bool>() {
+            true,
+            true,
+            true,
+            true,
+            true
+        };
+
         private List<Brush> _backgroundColorsQuestion = new List<Brush>(_standardColors);
         public List<Brush> BackgroundColorsQuestion {
             get => _backgroundColorsQuestion;
@@ -48,13 +57,32 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsAnswer));
             }
         }
+
+        private List<bool> _answersClickable = new List<bool>(_writable);
+        public List<bool> AnswersClickable {
+            get => _answersClickable;
+            set {
+                _answersClickable = value;
+                OnPropertyChanged(nameof(AnswersClickable));
+            }
+        }
+
+        private List<bool> _questionsClickable = new List<bool>(_writable);
+        public List<bool> QuestionsClickable {
+            get => _questionsClickable;
+            set {
+                _questionsClickable = value;
+                OnPropertyChanged(nameof(QuestionsClickable));
+            }
+        }
         private Dictionary<string, string> _answers = new Dictionary<string, string>();
         private Dictionary<string, string> _questions = new Dictionary<string, string>();
-        private string _question = string.Empty;
-        private string _answer = string.Empty;
+        private (string, int) _question = (string.Empty, 0);
+        private (string, int) _answer = (string.Empty,0);
         private readonly LearnViewModel _parent;
         private List<VocabularyEntry> _entries;
         private int _language;
+        private int _counter = 1;
         public LearningModeFourViewModel(LearnViewModel parent, List<VocabularyEntry> tempEntry) {
             _parent = parent;
             _entries = tempEntry;
@@ -75,91 +103,105 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand SetFirstQuestionCommand => new RelayCommand(SetFirstQuestion, CanExecuteCommand);
         private void SetFirstQuestion(object obj) {
-            _question = QuestionText[0];
-            CheckAnswer("question", 0); 
+            _question = (QuestionText[0], 0);
+            CheckAnswer("question"); 
         }
         public ICommand SetSecondQuestionCommand => new RelayCommand(SetSecondQuestion, CanExecuteCommand);
         private void SetSecondQuestion(object obj) {
-            _question = QuestionText[1];
-            CheckAnswer("question", 1); 
+            _question = (QuestionText[1], 1);
+            CheckAnswer("question"); 
         }
         public ICommand SetThirdQuestionCommand => new RelayCommand(SetThirdQuestion, CanExecuteCommand);
         private void SetThirdQuestion(object obj) {
-            _question = QuestionText[2];
-            CheckAnswer("question", 2); 
+            _question = (QuestionText[2], 2);
+            CheckAnswer("question"); 
         }
         public ICommand SetFourthQuestionCommand => new RelayCommand(SetFourthQuestion, CanExecuteCommand);
         private void SetFourthQuestion(object obj) {
-            _question = QuestionText[3];
-            CheckAnswer("question", 3); 
+            _question = (QuestionText[3], 3);
+            CheckAnswer("question"); 
         }
         public ICommand SetFifthQuestionCommand => new RelayCommand(SetFifthQuestion, CanExecuteCommand);
         private void SetFifthQuestion(object obj) {
-            _question = QuestionText[4];
-            CheckAnswer("question", 4); 
+            _question = (QuestionText[4], 4);
+            CheckAnswer("question"); 
         }
-
         public ICommand SetFirstAnswerCommand => new RelayCommand(SetFirstAnswer, CanExecuteCommand);
         private void SetFirstAnswer(object obj) {
-            _answer = AnswerText[0];
-            CheckAnswer("answer", 0); 
+            _answer = (AnswerText[0], 0);
+            CheckAnswer("answer"); 
         }
         public ICommand SetSecondAnswerCommand => new RelayCommand(SetSecondAnswer, CanExecuteCommand);
         private void SetSecondAnswer(object obj) {
-            _answer = AnswerText[1];
-            CheckAnswer("answer", 1); 
+            _answer = (AnswerText[1], 1);
+            CheckAnswer("answer"); 
         }
         public ICommand SetThirdAnswerCommand => new RelayCommand(SetThirdAnswer, CanExecuteCommand);
         private void SetThirdAnswer(object obj) {
-            _answer = AnswerText[2];
-            CheckAnswer("answer", 2); 
+            _answer = (AnswerText[2], 2);
+            CheckAnswer("answer"); 
         }
         public ICommand SetFourthAnswerCommand => new RelayCommand(SetFourthAnswer, CanExecuteCommand);
         private void SetFourthAnswer(object obj) {
-            _answer = AnswerText[3];
-            CheckAnswer("answer", 3); 
+            _answer = (AnswerText[3], 3);
+            CheckAnswer("answer"); 
         }
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
-            _answer = AnswerText[4];
-            CheckAnswer("answer", 4);
+            _answer = (AnswerText[4], 4);
+            CheckAnswer("answer");
         }
-        private void CheckAnswer(string field, int index) {
-            List<Brush> tempListAnswer = new List<Brush>(BackgroundColorsAnswer);
-            List<Brush> tempListQuestion = new List<Brush>(BackgroundColorsAnswer);
-            if (field == "answer") {
-                tempListAnswer[index] = Brushes.Green;
-                BackgroundColorsAnswer = tempListAnswer;
-            } else {
-                tempListQuestion[index] = Brushes.Green;
-                BackgroundColorsQuestion = tempListQuestion;
-            }
-            if (_question != string.Empty && _answer != string.Empty) {
+        private async void CheckAnswer(string field) {
+            if (_question.Item1 != string.Empty && _answer.Item1 != string.Empty) {
+                _counter++;
+                bool isCorrect = false;
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
-                    German = (_language == 1) ? _answer : _question,
-                    English = (_language == 1) ? _question : _answer,
-                    WordList = _questions[_question]
+                    German = (_language == 1) ? _answer.Item1 : _question.Item1,
+                    English = (_language == 1) ? _question.Item1 : _answer.Item1,
+                    WordList = _questions[_question.Item1]
                 };
-                int indexEntries = _parent.Entries.IndexOf(tempAnswerEntry);
+                int indexEntries = _entries.IndexOf(tempAnswerEntry);
                 if (_parent.Entries.Contains(tempAnswerEntry)) {
+                    isCorrect = true;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Seen = true;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Repeated += 1;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
                 } else {
                     for (int i = 0; i < _parent.Entries.Count; i++) {
-                        if (_language == 1 && _parent.Entries[i].English == _question || _language == 2 && _parent.Entries[i].German == _question) {
+                        if (_language == 1 && _parent.Entries[i].English == _question.Item1 || _language == 2 && _parent.Entries[i].German == _question.Item1) {
                             _parent.Entries[i].Seen = true;
                             _parent.Entries[i].LastTimeWrong = true;
                             _parent.Entries[i].Repeated = 0;
                         }
                     }
                 }
+                List<Brush> tempListAnswer = new List<Brush>(BackgroundColorsAnswer);
+                List<Brush> tempListQuestion = new List<Brush>(BackgroundColorsQuestion);
+                List<bool> tempListAnswersClickable = new List<bool>(AnswersClickable);
+                List<bool> tempListQuestionsClickable = new List<bool>(QuestionsClickable);
+
+                tempListAnswersClickable[_answer.Item2] = false;
+                AnswersClickable = tempListAnswersClickable;
+
+                tempListQuestionsClickable[_question.Item2] = false;
+                QuestionsClickable = tempListQuestionsClickable;
+
+                tempListAnswer[_answer.Item2] = (isCorrect)? Brushes.Green : Brushes.Red;
+                BackgroundColorsAnswer = tempListAnswer;
+
+                tempListQuestion[_question.Item2] = (isCorrect) ? Brushes.Green : Brushes.Red;
+                BackgroundColorsQuestion = tempListQuestion;
+
                 VocabularyEntry tempEntry = new VocabularyEntry() {
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question]}{VocabularyEntry.SecondPartFilePath}"
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
                 };
                 VocabularyEntry.WriteData(tempEntry, _parent.Entries);
-                _answer = string.Empty;
-                _question = string.Empty;
+                _answer = (string.Empty, 0);
+                _question = (string.Empty, 0);
+                if (_counter == 5) {
+                    await ExtraFunctions.Wait();
+                    _parent.ShowLearnMode();
+                }
             }
         }
     }
