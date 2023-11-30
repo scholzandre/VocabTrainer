@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using VocabTrainer.Views;
 
-namespace VocabTrainer.ViewModels
-{
+namespace VocabTrainer.ViewModels {
     public class LearnViewModel : BaseViewModel {
         private UserControl _userControl;
         public UserControl UserControl {

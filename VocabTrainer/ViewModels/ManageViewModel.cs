@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Emit;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;

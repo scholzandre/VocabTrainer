@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -8,7 +7,6 @@ using VocabTrainer.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {

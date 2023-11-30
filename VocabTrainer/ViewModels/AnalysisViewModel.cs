@@ -1,6 +1,5 @@
 ﻿using LiveCharts.Wpf;
 using LiveCharts;
-using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
