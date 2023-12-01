@@ -152,7 +152,6 @@ namespace VocabTrainer.ViewModels {
         }
         private async void CheckAnswer(string field) {
             if (_question.Item1 != string.Empty && _answer.Item1 != string.Empty) {
-                _counter++;
                 bool isCorrect = false;
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
                     German = (_language == 1) ? _answer.Item1 : _question.Item1,
@@ -179,25 +178,27 @@ namespace VocabTrainer.ViewModels {
                 List<bool> tempListAnswersClickable = new List<bool>(AnswersClickable);
                 List<bool> tempListQuestionsClickable = new List<bool>(QuestionsClickable);
 
-                tempListAnswersClickable[_answer.Item2] = false;
-                AnswersClickable = tempListAnswersClickable;
-
-                tempListQuestionsClickable[_question.Item2] = false;
-                QuestionsClickable = tempListQuestionsClickable;
-
-                tempListAnswer[_answer.Item2] = (isCorrect)? Brushes.Green : Brushes.Red;
+                tempListAnswer[_answer.Item2] = Brushes.Red;
                 BackgroundColorsAnswer = tempListAnswer;
 
-                tempListQuestion[_question.Item2] = (isCorrect) ? Brushes.Green : Brushes.Red;
+                tempListQuestion[_question.Item2] = Brushes.Red;
                 BackgroundColorsQuestion = tempListQuestion;
 
+                if (isCorrect) {
+                    _counter++;
+                    tempListAnswersClickable[_answer.Item2] = false;
+                    AnswersClickable = tempListAnswersClickable;
+                    tempListQuestionsClickable[_question.Item2] = false;
+                    QuestionsClickable = tempListQuestionsClickable;
+                }
+                
                 VocabularyEntry tempEntry = new VocabularyEntry() {
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
                 };
                 VocabularyEntry.WriteData(tempEntry, _parent.Entries);
                 _answer = (string.Empty, 0);
                 _question = (string.Empty, 0);
-                if (_counter == 5) {
+                if (_counter > 5) {
                     await ExtraFunctions.Wait();
                     _parent.ShowLearnMode();
                 }
