@@ -40,6 +40,7 @@ namespace VocabTrainer.ViewModels {
             true
         };
 
+        private List<Brush> _backgroundColorsQuestionNG = new List<Brush>(_standardColors);
         private List<Brush> _backgroundColorsQuestion = new List<Brush>(_standardColors);
         public List<Brush> BackgroundColorsQuestion {
             get => _backgroundColorsQuestion;
@@ -48,6 +49,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(BackgroundColorsQuestion));
             }
         }
+        private List<Brush> _backgroundColorsAnswerNG = new List<Brush>(_standardColors);
         private List<Brush> _backgroundColorsAnswer = new List<Brush>(_standardColors);
         public List<Brush> BackgroundColorsAnswer {
             get => _backgroundColorsAnswer;
@@ -82,6 +84,7 @@ namespace VocabTrainer.ViewModels {
         private List<VocabularyEntry> _entries;
         private int _language;
         private int _counter = 1;
+        private Brush _clickColor = Brushes.Gray;
         public LearningModeFourViewModel(LearnViewModel parent, List<VocabularyEntry> tempEntry) {
             _parent = parent;
             _entries = tempEntry;
@@ -173,16 +176,8 @@ namespace VocabTrainer.ViewModels {
                         }
                     }
                 }
-                List<Brush> tempListAnswer = new List<Brush>(BackgroundColorsAnswer);
-                List<Brush> tempListQuestion = new List<Brush>(BackgroundColorsQuestion);
                 List<bool> tempListAnswersClickable = new List<bool>(AnswersClickable);
                 List<bool> tempListQuestionsClickable = new List<bool>(QuestionsClickable);
-
-                tempListAnswer[_answer.Item2] = Brushes.Red;
-                BackgroundColorsAnswer = tempListAnswer;
-
-                tempListQuestion[_question.Item2] = Brushes.Red;
-                BackgroundColorsQuestion = tempListQuestion;
 
                 if (isCorrect) {
                     _counter++;
@@ -190,8 +185,11 @@ namespace VocabTrainer.ViewModels {
                     AnswersClickable = tempListAnswersClickable;
                     tempListQuestionsClickable[_question.Item2] = false;
                     QuestionsClickable = tempListQuestionsClickable;
+                } else {
+                    SetAnswerBackground(Brushes.Red);
+                    SetQuestionBackground(Brushes.Red);
                 }
-                
+
                 VocabularyEntry tempEntry = new VocabularyEntry() {
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
                 };
@@ -202,7 +200,38 @@ namespace VocabTrainer.ViewModels {
                     await ExtraFunctions.Wait();
                     _parent.ShowLearnMode();
                 }
+            } else {
+                if (field == "answer") {
+                    SetAnswerBackground(_clickColor);
+                } else {
+                    SetQuestionBackground(_clickColor);
+                }
             }
+        }
+
+        private void SetAnswerBackground(Brush color) {
+            BackgroundColorsAnswer = new List<Brush>(_backgroundColorsAnswerNG);
+            if (color == Brushes.Gray) 
+                _backgroundColorsAnswerNG = new List<Brush>(BackgroundColorsAnswer);
+            
+            List<Brush> tempListAnswer = new List<Brush>(BackgroundColorsAnswer);
+            tempListAnswer[_answer.Item2] = color;
+            BackgroundColorsAnswer = tempListAnswer;
+
+            if (color == Brushes.Red)
+                _backgroundColorsAnswerNG = new List<Brush>(BackgroundColorsAnswer);
+        }
+        private void SetQuestionBackground(Brush color) {
+            BackgroundColorsQuestion = new List<Brush>(_backgroundColorsQuestionNG);
+            if (color == Brushes.Gray)
+                _backgroundColorsQuestionNG = new List<Brush>(BackgroundColorsQuestion);
+            
+            List<Brush> tempListQuestion = new List<Brush>(BackgroundColorsQuestion);
+            tempListQuestion[_question.Item2] = color;
+            BackgroundColorsQuestion = tempListQuestion;
+            
+            if (color == Brushes.Red)
+                _backgroundColorsQuestionNG = new List<Brush>(BackgroundColorsQuestion);
         }
     }
 }
