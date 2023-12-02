@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "English": "3",
+    "German": "3",
+    "Seen": true,
+    "LastTimeWrong": false,
+    "Repeated": 2,
+    "WordList": "test_Test_Test",
+    "FirstLanguage": null,
+    "SecondLanguage": null
+  },
+  {
+    "English": "5",
+    "German": "5",
+    "Seen": true,
+    "LastTimeWrong": true,
+    "Repeated": 0,
+    "WordList": "test_Test_Test",
+    "FirstLanguage": null,
+    "SecondLanguage": null
+  }
+]
