@@ -7,6 +7,5 @@ Ideas:
 	- fix Wordlists -> search + remove not working
 	- delete Words from Speciallists, if deleted
 	- change add conditions -> no empty inputs
-	- fix Coloring of LM4
 	- Fill tabs with color and disable them 
 	- watermark
