@@ -69,7 +69,7 @@ namespace VocabTrainer.ViewModels {
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
-            return true;
+            return (FirstWord != string.Empty && SecondWord != string.Empty);
         }
         public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteCommand);
         private void AddEntry(object obj) {
