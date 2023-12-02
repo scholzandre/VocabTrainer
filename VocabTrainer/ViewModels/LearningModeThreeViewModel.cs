@@ -86,6 +86,7 @@ namespace VocabTrainer.ViewModels {
         static readonly VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
         private readonly List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _positionCorrectItem;
+        private bool _isOver = false;
         public LearningModeThreeViewModel(LearnViewModel parent) {
             _parent = parent;
             _counter = _parent.Counter;
@@ -123,7 +124,7 @@ namespace VocabTrainer.ViewModels {
             }
         }
         private bool CanExecuteCommand(object arg) {
-            return true;
+            return !_isOver;
         }
         public ICommand CheckFirstAnswerCommand => new RelayCommand(CheckFirstAnswer, CanExecuteCommand);
         private async void CheckFirstAnswer(object obj) {
@@ -147,6 +148,7 @@ namespace VocabTrainer.ViewModels {
         }
         private async Task CheckInput(VocabularyEntry choice, int answer) {
             List<Brush> tempList = new List<Brush>(BackgroundColors);
+            int awaitTime = 1500;
             if (_parent.Entries[_counter].English == choice.English || _parent.Entries[_counter].German == choice.German) {
                 _parent.Entries[_counter].Seen = true;
                 _parent.Entries[_counter].LastTimeWrong = false;
@@ -157,15 +159,16 @@ namespace VocabTrainer.ViewModels {
                 _parent.Entries[_counter].Seen = true;
                 _parent.Entries[_counter].LastTimeWrong = true;
                 _parent.Entries[_counter].Repeated = 0;
-                tempList[0] = Brushes.DarkRed;
-                tempList[answer] = Brushes.DarkRed;
+                tempList[0] = Brushes.Red;
+                tempList[answer] = Brushes.Red;
                 tempList[_positionCorrectItem+1] = Brushes.Green;
+                awaitTime = 2250;
             }
 
             _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
             BackgroundColors = tempList;
-            await ExtraFunctions.Wait();
+            await ExtraFunctions.Wait(awaitTime);
             _parent.ShowLearnMode();
         }
 
