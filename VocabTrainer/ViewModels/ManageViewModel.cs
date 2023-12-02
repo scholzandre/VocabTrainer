@@ -95,9 +95,12 @@ namespace VocabTrainer.ViewModels {
         }
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
-            VocabularyEntry entry = new VocabularyEntry() { 
-                FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
-            };
+            VocabularyEntry entry = new VocabularyEntry();
+            if (ComboBoxWordlists[SelectedItem].WordlistName != "Marked") {
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+            } else {
+                entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}{VocabularyEntry.SecondPartFilePath}";
+            }
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
                 WordlistsList tempWordlist = new WordlistsList() {
