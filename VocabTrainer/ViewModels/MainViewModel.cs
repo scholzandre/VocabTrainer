@@ -74,6 +74,25 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ListWordlist));
             }
         }
+        private readonly static List<bool> _defaultEnabled = new List<bool> {
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        };
+        private List<bool> _enabled = new List<bool>(_defaultEnabled);
+        public List<bool> Enabled {
+            get => _enabled;
+            set {
+                _enabled = value;
+                OnPropertyChanged(nameof(Enabled));
+            }
+        }
+
         public MainViewModel() {
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
@@ -93,53 +112,67 @@ namespace VocabTrainer.ViewModels {
         private bool CanExecuteCommand(object arg) {
             return true;
         }
-        public ICommand OpenAnalysisViewCommand => new RelayCommand(OpenAnalysisView, CanExecuteCommand);
-        private void OpenAnalysisView(object obj) {
-            Type viewType = typeof(AnalysisView);
-            UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new AnalysisViewModel();
-        }
         public ICommand OpenLearnViewCommand => new RelayCommand(OpenLearnView, CanExecuteCommand);
         private void OpenLearnView(object obj) {
+            SetEnabled(0);
             Type viewType = typeof(LearnView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
             UserControl.DataContext = new LearnViewModel();
         }
-        public ICommand OpenSettingsViewCommand => new RelayCommand(OpenSettingsView, CanExecuteCommand);
-        private void OpenSettingsView(object obj) {
-            Type viewType = typeof(SettingsView);
+        public ICommand OpenAddWordlistViewCommand => new RelayCommand(OpenAddWordlistView, CanExecuteCommand);
+        private void OpenAddWordlistView(object obj) {
+            SetEnabled(1);
+            Type viewType = typeof(AddWordlistView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new SettingsViewModel(this);
-        }
-        public ICommand OpenTranslatorViewCommand => new RelayCommand(OpenTranslatorView, CanExecuteCommand);
-        private void OpenTranslatorView(object obj) {
-            Type viewType = typeof(TranslatorView);
-            UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new TranslatorViewModel();
-        }
-        public ICommand OpenManageWordsViewCommand => new RelayCommand(OpenManageWordsView, CanExecuteCommand);
-        private void OpenManageWordsView(object obj) {
-            Type viewType = typeof(ManageView);
-            UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new ManageViewModel();
+            //UserControl.DataContext = new AddWordlistViewModel(); code behind
         }
         public ICommand OpenManageWordlistsViewCommand => new RelayCommand(OpenManageWordlistsView, CanExecuteCommand);
         private void OpenManageWordlistsView(object obj) {
+            SetEnabled(2);
             Type viewType = typeof(ManageWordlistsView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
             UserControl.DataContext = new ManageWordlistsViewModel();
         }
         public ICommand OpenAddWordsViewCommand => new RelayCommand(OpenAddWordsView, CanExecuteCommand);
         private void OpenAddWordsView(object obj) {
+            SetEnabled(3);
             Type viewType = typeof(AddView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
             UserControl.DataContext = new AddViewModel();
         }
-        public ICommand OpenAddWordlistViewCommand => new RelayCommand(OpenAddWordlistView, CanExecuteCommand);
-        private void OpenAddWordlistView(object obj) {
-            Type viewType = typeof(AddWordlistView);
+        public ICommand OpenManageWordsViewCommand => new RelayCommand(OpenManageWordsView, CanExecuteCommand);
+        private void OpenManageWordsView(object obj) {
+            SetEnabled(4);
+            Type viewType = typeof(ManageView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
-            //UserControl.DataContext = new AddWordlistViewModel(); code behind
+            UserControl.DataContext = new ManageViewModel();
+        }
+        public ICommand OpenAnalysisViewCommand => new RelayCommand(OpenAnalysisView, CanExecuteCommand);
+        private void OpenAnalysisView(object obj) {
+            SetEnabled(5);
+            Type viewType = typeof(AnalysisView);
+            UserControl = (UserControl)Activator.CreateInstance(viewType);
+            UserControl.DataContext = new AnalysisViewModel();
+        }
+        public ICommand OpenTranslatorViewCommand => new RelayCommand(OpenTranslatorView, CanExecuteCommand);
+        private void OpenTranslatorView(object obj) {
+            SetEnabled(6);
+            Type viewType = typeof(TranslatorView);
+            UserControl = (UserControl)Activator.CreateInstance(viewType);
+            UserControl.DataContext = new TranslatorViewModel();
+        }
+        public ICommand OpenSettingsViewCommand => new RelayCommand(OpenSettingsView, CanExecuteCommand);
+        private void OpenSettingsView(object obj) {
+            SetEnabled(7);
+            Type viewType = typeof(SettingsView);
+            UserControl = (UserControl)Activator.CreateInstance(viewType);
+            UserControl.DataContext = new SettingsViewModel(this);
+        }
+        private void SetEnabled(int index) {
+            List<bool> tempEnabled = new List<bool>(_defaultEnabled) {
+                [index] = false
+            };
+            Enabled = tempEnabled;
         }
     }
 }
