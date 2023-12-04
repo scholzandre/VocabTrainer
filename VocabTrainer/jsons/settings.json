@@ -18,7 +18,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "intelligent order",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 0,
     "IsLearningMode": false,
     "APIKey": null
@@ -42,7 +42,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode Two",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 2,
     "IsLearningMode": true,
     "APIKey": null
@@ -54,7 +54,7 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode Three",
-    "IsTrue": true,
+    "IsTrue": false,
     "LearningMode": 3,
     "IsLearningMode": true,
     "APIKey": null
@@ -130,17 +130,5 @@
     "LearningMode": 0,
     "IsLearningMode": false,
     "APIKey": null
-  },
-  {
-    "ButtonsForeground": null,
-    "ButtonsBackground": null,
-    "BorderBrush": null,
-    "BorderBackground": null,
-    "NavBarBackground": null,
-    "Condition": "API Key",
-    "IsTrue": false,
-    "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": ""
   }
 ]
