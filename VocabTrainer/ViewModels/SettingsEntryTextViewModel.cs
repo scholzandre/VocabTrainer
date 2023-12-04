@@ -36,9 +36,7 @@ namespace VocabTrainer.ViewModels {
             if (Value.Length == 7) {
                 for(int i = 0; i < _settings.Count; i++)  {
                     if (_settings[i].Condition == Condition) {
-                        if (_settings[i].APIKey != null) {
-                            _settings[i].APIKey = Value;
-                        } else if (_settings[i].BorderBackground != null) {
+                        if (_settings[i].BorderBackground != null) {
                             _settings[i].BorderBackground = Value;
                         } else if (_settings[i].BorderBrush != null) {
                             _settings[i].BorderBrush = Value;

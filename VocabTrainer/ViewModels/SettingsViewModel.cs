@@ -46,9 +46,7 @@ namespace VocabTrainer.ViewModels {
                 } else {
                     Type viewType = typeof(SettingsEntryTextView);
                     UserControl tempControl = (UserControl)Activator.CreateInstance(viewType);
-                    if (_settings[i].APIKey != null) {
-                        tempControl.DataContext = new SettingsEntryTextViewModel(_settings[i].Condition, _settings[i].APIKey, _settings, _parent);
-                    } else if (_settings[i].BorderBackground != null) {
+                    if (_settings[i].BorderBackground != null) {
                         tempControl.DataContext = new SettingsEntryTextViewModel(_settings[i].Condition, _settings[i].BorderBackground, _settings, _parent);
                     } else if (_settings[i].BorderBrush != null) {
                         tempControl.DataContext = new SettingsEntryTextViewModel(_settings[i].Condition, _settings[i].BorderBrush, _settings, _parent);
