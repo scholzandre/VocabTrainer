@@ -15,7 +15,6 @@ namespace VocabTrainer {
         public bool IsTrue { get; set; }
         public int LearningMode { get; set; }
         public bool IsLearningMode { get; set; }
-        public string APIKey { get; set; }
         private static string _filePath = $"{VocabularyEntry.FirstPartFilePath}settings{VocabularyEntry.SecondPartFilePath}";
         public static List<Settings> GetSettings() {
             List<Settings> settings = new List<Settings>();
