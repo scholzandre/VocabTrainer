@@ -140,12 +140,7 @@ namespace VocabTrainer.ViewModels {
             } else if (DeleteButtonText == "✓") {
                 DeleteButtonText = "🗑";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
-                foreach (VocabularyEntry entry in entries) {
-                    if (entry.German == FirstWord && entry.English == SecondWord) {
-                        entries.Remove(entry);
-                        break;
-                    }
-                }
+                entries.Remove(_entry);
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
                     int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem).GetHashCode();
