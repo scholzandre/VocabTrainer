@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -151,6 +152,15 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
                 VocabularyEntry.WriteData(_entry, entries);
+                for (int i = 0; i < filePathsSpecialLists.Count; i++) {
+                    VocabularyEntry tempEntry = new VocabularyEntry() {
+                        FilePath = filePathsSpecialLists[i]
+                    };
+                    List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
+                    if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
+                    VocabularyEntry.WriteData(tempEntry, tempEntries);    
+                }
+                
             } else {
                 DeleteButtonText = "🗑";
                 EditButtonText = "🖉";
