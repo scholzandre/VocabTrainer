@@ -117,11 +117,28 @@ namespace VocabTrainer.ViewModels {
                         if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
                             entries[i].German = FirstWord;
                             entries[i].English = SecondWord;
-                            _entry.German = FirstWord;
-                            _entry.English = SecondWord;
+                            break;
                         }
                     }
                     VocabularyEntry.WriteData(_entry, entries);
+
+                    for (int i = 0; i < filePathsSpecialLists.Count; i++) {
+                        VocabularyEntry tempEntry = new VocabularyEntry() {
+                            FilePath = filePathsSpecialLists[i]
+                        };
+                        List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
+                        for (int j = 0; j < tempEntries.Count; j++) {
+                            if (tempEntries[i].German == _entry.German && tempEntries[i].English == _entry.English) {
+                                tempEntries[i].German = FirstWord;
+                                tempEntries[i].English = SecondWord;
+                                break;
+                            }
+                        }
+                        VocabularyEntry.WriteData(tempEntry, tempEntries);
+                    }
+                    _entry.German = FirstWord;
+                    _entry.English = SecondWord;
+
                 } else { 
                     FirstWord = _entry.German;
                     SecondWord = _entry.English;
