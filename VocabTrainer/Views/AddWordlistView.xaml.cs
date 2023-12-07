@@ -6,15 +6,6 @@ namespace VocabTrainer.Views {
         public AddWordlistView() {
             InitializeComponent();
         }
-        private void AddWordlist(object sender, RoutedEventArgs e) {
-            AddWordlist addWordlist = new AddWordlist();
-            addingSuccessful.Text = addWordlist.CheckInput($"{wordListN.Text.Trim()}", firstLan.Text, secondLan.Text);
-            if (addingSuccessful.Text == "Adding was successful.") {
-                wordListN.Text = "";
-                firstLan.Text = "";
-                secondLan.Text = "";
-            }
-        }
         private void Windows_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             MainWindow mainWindow = new MainWindow();
             mainWindow.Windows_MouseDown(sender, e);
