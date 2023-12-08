@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using VocabTrainer.Models;
+using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     internal class AddWordlistViewModel : BaseViewModel {
@@ -58,6 +59,7 @@ namespace VocabTrainer.ViewModels {
             }
             if (!alreadyExists) {
                 wordlists.Add(wordlist);
+                VocabularyEntry.WriteData(new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlist.WordlistName}_{wordlist.FirstLanguage}_{wordlist.SecondLanguage}{VocabularyEntry.SecondPartFilePath}" }, new List<VocabularyEntry>());
                 InfoText = "Wordlist has been added successfully";
                 WordlistName = string.Empty;
                 FirstLanguage = string.Empty;
