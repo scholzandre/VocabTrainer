@@ -64,7 +64,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddWordlist.cs" />
     <Compile Include="ExtraFunctions.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Settings.cs" />
