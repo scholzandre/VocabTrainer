@@ -153,18 +153,21 @@ namespace VocabTrainer.ViewModels {
                 _parent.Entries[_counter].Seen = true;
                 _parent.Entries[_counter].LastTimeWrong = false;
                 _parent.Entries[_counter].Repeated += 1;
+                VocabularyEntry.RemoveEntry("LastTimeWrong", _parent.Entries[_counter]);
                 tempList[0] = Brushes.Green;
                 tempList[answer] = Brushes.Green;
             } else {
                 _parent.Entries[_counter].Seen = true;
                 _parent.Entries[_counter].LastTimeWrong = true;
                 _parent.Entries[_counter].Repeated = 0;
+                VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[_counter]);
                 tempList[0] = Brushes.Red;
                 tempList[answer] = Brushes.Red;
                 tempList[_positionCorrectItem+1] = Brushes.Green;
                 awaitTime = 2250;
             }
-
+            VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
+            VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
             _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
             VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
             BackgroundColors = tempList;
