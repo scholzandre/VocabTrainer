@@ -94,6 +94,8 @@ namespace VocabTrainer.ViewModels {
                 InfoText = $"{FirstWord} and {SecondWord} have been successfully added!";
                 FirstWord = string.Empty;
                 SecondWord = string.Empty;
+
+                VocabularyEntry.AddEntry("NotSeen", entry);
             } else {
                 InfoText = "This entry already exists.";
             }
