@@ -167,12 +167,14 @@ namespace VocabTrainer.ViewModels {
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Seen = true;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Repeated += 1;
                     _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
+                    VocabularyEntry.RemoveEntry("LastTimeWrong", tempAnswerEntry);
                 } else {
                     for (int i = 0; i < _parent.Entries.Count; i++) {
                         if (_language == 1 && _parent.Entries[i].English == _question.Item1 || _language == 2 && _parent.Entries[i].German == _question.Item1) {
                             _parent.Entries[i].Seen = true;
                             _parent.Entries[i].LastTimeWrong = true;
                             _parent.Entries[i].Repeated = 0;
+                            VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[i]);
                             break;
                         }
                     }
@@ -186,11 +188,9 @@ namespace VocabTrainer.ViewModels {
                     AnswersClickable = tempListAnswersClickable;
                     tempListQuestionsClickable[_question.Item2] = false;
                     QuestionsClickable = tempListQuestionsClickable;
-                    VocabularyEntry.RemoveEntry("LastTimeWrong", tempAnswerEntry);
                 } else {
                     SetAnswerBackground(Brushes.Red);
                     SetQuestionBackground(Brushes.Red);
-                    VocabularyEntry.AddEntry("LastTimeWrong", tempAnswerEntry);
                 }
 
                 VocabularyEntry tempEntry = new VocabularyEntry() {
