@@ -136,5 +136,12 @@ namespace VocabTrainer.Views {
                 VocabularyEntry.WriteData(tempEntry, list);
             }
         }
+
+        public static void RemoveEntry(string fileName, VocabularyEntry entry) {
+            VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}" };
+            List<VocabularyEntry> list = VocabularyEntry.GetData(tempEntry);
+            list.Remove(entry);
+            VocabularyEntry.WriteData(tempEntry, list);
+        }
     }
 }
