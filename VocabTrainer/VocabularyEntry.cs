@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Reflection;
 
 namespace VocabTrainer.Views {
     public class VocabularyEntry {
@@ -44,11 +43,6 @@ namespace VocabTrainer.Views {
                     vocabulary[i].SecondLanguage = entry.SecondLanguage;
                 }
             }
-            string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
-            File.WriteAllText(entry.FilePath, json);
-        }
-        public static void WriteData(List<VocabularyEntry> vocabulary) {
-            VocabularyEntry entry = new VocabularyEntry();
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
             File.WriteAllText(entry.FilePath, json);
         }
@@ -130,26 +124,17 @@ namespace VocabTrainer.Views {
             hash = hash * 31 + (English ?? "").GetHashCode();
             return hash;
         }
-        public string ChangeMarkedList(VocabularyEntry marked, string buttonContent, List<string> files, int Counter, LearnView _parentLearnView, List<VocabularyEntry> vocabularyParent) {
-            List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(marked);
-
-            if (buttonContent == "☆") {
-                vocabulary.Add(marked);
-            } else if (buttonContent == "★") {
-                for (int i = 0; i < vocabulary.Count; i++) {
-                    if (marked.German == vocabulary[i].German && marked.English == vocabulary[i].English) {
-                        vocabulary.Remove(vocabulary[i]);
-                        if (files[Counter] == "Marked") {
-                            _parentLearnView.Counter = (Counter <= 0) ? _parentLearnView.Counter = 0 : _parentLearnView.Counter -= 1;
-                            _parentLearnView.AllWordsList.Remove(vocabularyParent[Counter]);
-                            _parentLearnView.GetCounter();
-                        }
-                        break;
-                    }
-                }
+        public static void AddEntry(string fileName, VocabularyEntry entry) {
+            bool alreadyExists = false;
+            VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}" };
+            List<VocabularyEntry> list = VocabularyEntry.GetData(tempEntry);
+            for (int i = 0; i < list.Count; i++)
+                if (list[i].English == entry.English && list[i].German == entry.German && list[i].WordList == entry.WordList)
+                    alreadyExists = true;
+            if (!alreadyExists) { 
+                list.Add(entry);
+                VocabularyEntry.WriteData(tempEntry, list);
             }
-            VocabularyEntry.WriteData(marked, vocabulary);
-            return (buttonContent == "☆") ? "★" : "☆";
         }
     }
 }
