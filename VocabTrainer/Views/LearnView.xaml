@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="0,9*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="header" Grid.Column="0" Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Learn words</TextBlock>
+            <TextBlock x:Name="header" Grid.Column="0" Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0" Text="{Binding InfoText}"/>
         </Grid>
         <ContentControl Grid.Row="1" Content="{Binding UserControl}"/>
     </Grid>
