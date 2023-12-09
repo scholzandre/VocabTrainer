@@ -150,15 +150,20 @@ namespace VocabTrainer.ViewModels {
                     else SecondWordForeground = Brushes.Green;
                     _parent.Entries[_counter].Seen = true;
                     _parent.Entries[_counter].Repeated += 1;
+                    _parent.Entries[_counter].LastTimeWrong = false;
+                    VocabularyEntry.RemoveEntry("LastTimeWrong", _parent.Entries[_counter]);
                 } else if (isWrong && !isCorrect) { 
                     if (FirstWordWritable) FirstWordForeground = Brushes.Red;
                     else SecondWordForeground = Brushes.Red;
                     _parent.Entries[_counter].Seen = true;
                     _parent.Entries[_counter].Repeated = 0;
                     _parent.Entries[_counter].LastTimeWrong = true;
+                    VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[_counter]);
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
                 }
 
+                VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
+                VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
                 FirstWordWritable = false;
                 SecondWordWritable = false;
                 VocabularyEntry tempEntry = new VocabularyEntry() {
