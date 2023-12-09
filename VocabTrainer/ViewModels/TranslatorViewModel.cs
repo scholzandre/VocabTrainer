@@ -125,7 +125,6 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxEntries.Add(tempString);
                 }
             }
-            ComboBoxEntries.Add("All words");
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[0] : null;
             SelectedItemFirstLanguage = OriginalLanguages[0];
         }
@@ -170,7 +169,7 @@ namespace VocabTrainer.ViewModels {
                 entries.Add(entry);
                 InfoText = "Entry has been added.";
             }
-
+            VocabularyEntry.AddEntry("NotSeen", entry);
             VocabularyEntry.WriteData(entry, entries);
         }
 
