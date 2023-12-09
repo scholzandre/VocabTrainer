@@ -65,6 +65,8 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand NextWordCommand => new RelayCommand(NextWord, CanExecuteCommand);
         private void NextWord(object obj) {
+            VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
+            VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
             _parent.Entries[_counter].Seen = true;
             _parent.Entries[_counter].Repeated += 1;
             VocabularyEntry tempEntry = new VocabularyEntry() {
