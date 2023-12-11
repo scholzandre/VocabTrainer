@@ -10,7 +10,6 @@
     <Grid>
         <StackPanel>
             <StackPanel Margin="10,0,10,0">
-                <ComboBox x:Name="wordlists" Width="200" HorizontalAlignment="Right" ItemsSource="{Binding ComboBoxEntries}" SelectedItem="{Binding SelectedItem}"/>
                 <ComboBox x:Name="firstLanguage" Width="150" HorizontalAlignment="Left" ItemsSource="{Binding OriginalLanguages}" SelectedItem="{Binding SelectedItemFirstLanguage}"/>
                 <TextBox x:Name="germanWordBox" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstLanguageWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
@@ -25,8 +24,12 @@
                     <ColumnDefinition Width="489*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="1" x:Name="checkButton" Width="180" Height="30" FontSize="18"  HorizontalAlignment="Left" IsDefault="True" Command="{Binding TranslateCommand}" Content="translate"/>
-                <Button x:Name="markedButton" Margin="0,0, 15,0" Grid.Column="0" Content="➕" Height="25" Width="25" HorizontalAlignment="Right" Command="{Binding AddWordCommand}"/>
             </Grid>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <Button x:Name="markedButton" Margin="25,0,5,0" Grid.Column="0" Content="Add" Height="25" Width="25" HorizontalAlignment="Left" Command="{Binding AddWordCommand}"/>
+                <TextBlock Text="to" Grid.Column="0" Foreground="White" FontSize="20"/>
+                <ComboBox Margin="5,0,5,0" x:Name="wordlists" Width="200" HorizontalAlignment="Right" ItemsSource="{Binding ComboBoxEntries}" SelectedItem="{Binding SelectedItem}"/>
+            </StackPanel>
             <TextBlock Text="{Binding InfoText}" Foreground="White" FontSize="18" Margin="5,15,0,0" Height="100" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>
