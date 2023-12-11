@@ -167,13 +167,15 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
                 VocabularyEntry.WriteData(_entry, entries);
-                for (int i = 0; i < filePathsSpecialLists.Count; i++) {
-                    VocabularyEntry tempEntry = new VocabularyEntry() {
-                        FilePath = filePathsSpecialLists[i]
-                    };
-                    List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
-                    if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
-                    VocabularyEntry.WriteData(tempEntry, tempEntries);    
+                if (_selectedItem.WordlistName != "Marked_-_-") { 
+                    for (int i = 0; i < filePathsSpecialLists.Count; i++) {
+                        VocabularyEntry tempEntry = new VocabularyEntry() {
+                            FilePath = filePathsSpecialLists[i]
+                        };
+                        List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
+                        if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
+                        VocabularyEntry.WriteData(tempEntry, tempEntries);    
+                    }
                 }
             } else {
                 DeleteButtonText = "🗑";
