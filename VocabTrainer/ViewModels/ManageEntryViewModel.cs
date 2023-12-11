@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -86,7 +85,7 @@ namespace VocabTrainer.ViewModels {
             _views = views;
             _parent = parent;
             _selectedItem = selectedItem;
-            Editable = (_selectedItem.WordlistName == "Marked") ? false : true;
+            Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
         private bool CanExecuteCommand(object arg) {
@@ -138,7 +137,6 @@ namespace VocabTrainer.ViewModels {
                     }
                     _entry.German = FirstWord;
                     _entry.English = SecondWord;
-
                 } else { 
                     FirstWord = _entry.German;
                     SecondWord = _entry.English;
@@ -146,7 +144,7 @@ namespace VocabTrainer.ViewModels {
             } else { 
                 EditButtonText = "🖉";
                 DeleteButtonText = "🗑";
-                Editable = (_selectedItem.WordlistName == "Marked") ? false : true;
+                Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
@@ -177,7 +175,6 @@ namespace VocabTrainer.ViewModels {
                     if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
                     VocabularyEntry.WriteData(tempEntry, tempEntries);    
                 }
-                
             } else {
                 DeleteButtonText = "🗑";
                 EditButtonText = "🖉";
