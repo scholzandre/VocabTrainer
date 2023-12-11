@@ -85,6 +85,7 @@
                     </Border>
                 </StackPanel>
             </DockPanel>
+            <TextBlock Margin="10,0,0,0" Grid.Row="6" Text="An app by scholzandre"/>
             <ContentControl x:Name="viewControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="6" Content="{Binding UserControl}"/>
             <Border x:Name="minimizeButton" Grid.Column="3" Style="{StaticResource BorderButton}" Margin="11,1,0,1">
                 <Button Background="Transparent" FontSize="10"  Content="-" Click="MinimizeWindow" BorderThickness="0" Style="{StaticResource ButtonStyle}" Template="{StaticResource NoHoverEffectTemplate}"/>
