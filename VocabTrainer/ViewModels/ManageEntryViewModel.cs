@@ -23,7 +23,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SecondWord));
             }
         }
-        private bool _firstWordWritable;
+        private bool _firstWordWritable = false;
         public bool FirstWordWritable { 
             get => _firstWordWritable;
             set {
@@ -31,7 +31,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(FirstWordWritable));
             } 
         }
-        private bool _secondWordWritable;
+        private bool _secondWordWritable = false;
         public bool SecondWordWritable { 
             get => _secondWordWritable;
             set { 
@@ -47,7 +47,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(Editable));
             } 
         } 
-        private string _editButtonText;
+        private string _editButtonText = "🖉";
         public string EditButtonText {
             get => _editButtonText;
             set {
@@ -55,7 +55,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(EditButtonText));
             }
         }
-        private string _deleteButtonText;
+        private string _deleteButtonText = "🗑";
         public string DeleteButtonText {
             get => _deleteButtonText;
             set {
@@ -76,11 +76,7 @@ namespace VocabTrainer.ViewModels {
         private WordlistsList _selectedItem;
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem) {
             FirstWord = entry.German;
-            FirstWordWritable = false;
             SecondWord = entry.English;
-            SecondWordWritable = false;
-            EditButtonText = "🖉";
-            DeleteButtonText = "🗑";
             _entry = entry;
             _views = views;
             _parent = parent;
@@ -157,16 +153,18 @@ namespace VocabTrainer.ViewModels {
                 DeleteButtonText = "🗑";
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 entries.Remove(_entry);
+                VocabularyEntry.WriteData(_entry, entries);
+
+                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem).GetHashCode();
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
-                    int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem).GetHashCode();
                     if (firstViewModel == secondViewModel) {
                         _views.Remove(view);
                         _parent.AllEntriesCounter = _views.Count();
                         break;
                     }
                 }
-                VocabularyEntry.WriteData(_entry, entries);
+
                 if (_selectedItem.WordlistName != "Marked_-_-") { 
                     for (int i = 0; i < filePathsSpecialLists.Count; i++) {
                         VocabularyEntry tempEntry = new VocabularyEntry() {
