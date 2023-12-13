@@ -64,9 +64,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExtraFunctions.cs" />
+    <Compile Include="Models\ExtraFunctions.cs" />
+    <Compile Include="Models\ButtonIcons.cs" />
     <Compile Include="Models\RelayCommand.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="ViewModels\AddViewModel.cs" />
     <Compile Include="ViewModels\AddWordlistViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
@@ -133,8 +134,8 @@
     <Compile Include="Views\TranslatorView.xaml.cs">
       <DependentUpon>TranslatorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VocabularyEntry.cs" />
-    <Compile Include="WordlistsList.cs" />
+    <Compile Include="Models\VocabularyEntry.cs" />
+    <Compile Include="Models\WordlistsList.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
