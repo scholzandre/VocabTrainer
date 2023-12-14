@@ -103,8 +103,8 @@ namespace VocabTrainer.ViewModels {
             AllWordlists = allWordlists;
             _views = views;
             Writable = false;
-            EditButtonText = "🖉";
-            DeleteButtonText = "🗑";
+            EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+            DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
             if (Wordlist.WordlistName == "Marked" ||
                         Wordlist.WordlistName == "Seen" ||
                         Wordlist.WordlistName == "NotSeen" ||
@@ -128,14 +128,14 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand ChangeTextCommand => new RelayCommand(ChangeText, CanExecuteCommand);
         private void ChangeText(object obj) {
-            if (EditButtonText == "🖉") {
+            if (EditButtonText == ButtonIcons.GetIconString(IconType.Edit)) {
                 Writable = true;
-                EditButtonText = "💾";
-                DeleteButtonText = "🗙";
-            } else if (EditButtonText == "💾") {
+                EditButtonText = ButtonIcons.GetIconString(IconType.Save);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Cancel);
+            } else if (EditButtonText == ButtonIcons.GetIconString(IconType.Save)) {
                 Writable = false;
-                EditButtonText = "🖉";
-                DeleteButtonText = "🗑";
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{_original.WordlistName}_{_original.FirstLanguage}_{_original.SecondLanguage}{VocabularyEntry.SecondPartFilePath}")) {
                     File.Move($"{VocabularyEntry.FirstPartFilePath}{_original.WordlistName}_{_original.FirstLanguage}_{_original.SecondLanguage}{VocabularyEntry.SecondPartFilePath}",
                               $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
@@ -158,19 +158,19 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
             } else {
-                EditButtonText = "🖉";
-                DeleteButtonText = "🗑";
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
             }
             WordlistsList.WriteWordlistsList(AllWordlists);
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
-            if (DeleteButtonText == "🗑") {
-                EditButtonText = "🗙";
-                DeleteButtonText = "✓";
-            } else if (DeleteButtonText == "✓") {
-                DeleteButtonText = "🗑";
-                EditButtonText = "🖉";
+            if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
+                EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
+            } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 for (int i = 0; i < _views.Count; i++) {
                     if (_views[i].Wordlist.WordlistName == _original.WordlistName &&
                         _views[i].Wordlist.FirstLanguage == _original.FirstLanguage &&
@@ -184,8 +184,8 @@ namespace VocabTrainer.ViewModels {
                     File.Delete($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
             } else {
                 Writable = false;
-                DeleteButtonText = "🗑";
-                EditButtonText = "🖉";
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 SetOriginalValues();
             }
             WordlistsList.WriteWordlistsList(AllWordlists);

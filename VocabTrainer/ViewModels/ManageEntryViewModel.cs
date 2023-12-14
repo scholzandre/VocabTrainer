@@ -47,7 +47,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(Editable));
             } 
         } 
-        private string _editButtonText = "🖉";
+        private string _editButtonText = ButtonIcons.GetIconString(IconType.Edit);
         public string EditButtonText {
             get => _editButtonText;
             set {
@@ -55,7 +55,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(EditButtonText));
             }
         }
-        private string _deleteButtonText = "🗑";
+        private string _deleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
         public string DeleteButtonText {
             get => _deleteButtonText;
             set {
@@ -89,14 +89,14 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand ChangeTextCommand => new RelayCommand(ChangeText, CanExecuteCommand);
         private void ChangeText(object obj) {
-            if (EditButtonText == "🖉") {
-                EditButtonText = "💾";
-                DeleteButtonText = "🗙";
+            if (EditButtonText == ButtonIcons.GetIconString(IconType.Edit)) {
+                EditButtonText = ButtonIcons.GetIconString(IconType.Save);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 FirstWordWritable = true;
                 SecondWordWritable = true;
-            } else if (EditButtonText == "💾") {
-                EditButtonText = "🖉";
-                DeleteButtonText = "🗑";
+            } else if (EditButtonText == ButtonIcons.GetIconString(IconType.Save)) {
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 FirstWordWritable = false;
                 SecondWordWritable = false;
                 bool alreadyExists = false;
@@ -138,19 +138,19 @@ namespace VocabTrainer.ViewModels {
                     SecondWord = _entry.English;
                 } 
             } else { 
-                EditButtonText = "🖉";
-                DeleteButtonText = "🗑";
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
-            if (DeleteButtonText == "🗑") {
+            if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
                 Editable = true;
-                EditButtonText = "🗙";
-                DeleteButtonText = "✓";
-            } else if (DeleteButtonText == "✓") {
-                DeleteButtonText = "🗑";
+                EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
+            } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 entries.Remove(_entry);
                 VocabularyEntry.WriteData(_entry, entries);
@@ -176,8 +176,8 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
             } else {
-                DeleteButtonText = "🗑";
-                EditButtonText = "🖉";
+                DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
+                EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 FirstWordWritable = false;
                 SecondWordWritable = false;
                 FirstWord = _entry.German;
