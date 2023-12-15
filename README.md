@@ -5,3 +5,4 @@ Ideas:
 	- improve GUI, because not very user friendly
 	- optimize code -> enums
 	- central methods
+	- icon 
