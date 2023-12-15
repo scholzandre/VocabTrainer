@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -37,6 +39,17 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(InfoText));
             }
         }
+        private List<char> _forbiddenCharacters = new List<char>() { 
+            '\\',
+            '/',
+            ':',
+            '*',
+            '?',
+            '"',
+            '<',
+            '>',
+            '|'
+        };
         public AddWordlistViewModel() {}
 
         private bool CanExecuteCommand(object arg) {
@@ -51,6 +64,14 @@ namespace VocabTrainer.ViewModels {
                 SecondLanguage = SecondLanguage
             };
             bool alreadyExists = false;
+            for(int i = 0; i < _forbiddenCharacters.Count; i++) {
+                if (WordlistName.Contains(_forbiddenCharacters[i].ToString()) ||
+                    FirstLanguage.Contains(_forbiddenCharacters[i].ToString()) ||
+                    SecondLanguage.Contains(_forbiddenCharacters[i].ToString())) {
+                    InfoText = $"Don't use the following characters: {string.Join(" ", _forbiddenCharacters.Where(x => x != ' '))}";
+                    return;
+                }
+            }
             for (int i = 0; i < wordlists.Count; i++) {
                 if (wordlists[i].WordlistName == WordlistName &&
                     wordlists[i].FirstLanguage == FirstLanguage &&
