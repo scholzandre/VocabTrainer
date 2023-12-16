@@ -124,7 +124,7 @@ namespace VocabTrainer.ViewModels {
             SetEnabled(1);
             Type viewType = typeof(AddWordlistView);
             UserControl = (UserControl)Activator.CreateInstance(viewType);
-            UserControl.DataContext = new AddWordlistViewModel();
+            UserControl.DataContext = new AddWordlistViewModel(this);
         }
         public ICommand OpenManageWordlistsViewCommand => new RelayCommand(OpenManageWordlistsView, CanExecuteCommand);
         private void OpenManageWordlistsView(object obj) {
