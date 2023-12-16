@@ -50,7 +50,10 @@ namespace VocabTrainer.ViewModels {
             '>',
             '|'
         };
-        public AddWordlistViewModel() {}
+        private MainViewModel _parent;
+        public AddWordlistViewModel(MainViewModel parent) {
+            _parent = parent;
+        }
 
         private bool CanExecuteCommand(object arg) {
             return (WordlistName != string.Empty && FirstLanguage != string.Empty && SecondLanguage != string.Empty);
@@ -87,8 +90,10 @@ namespace VocabTrainer.ViewModels {
                 SecondLanguage = string.Empty;
             } else { 
                 InfoText = "This Wordlist already exists";
+                return;
             }
             WordlistsList.WriteWordlistsList(wordlists);
+            _parent.ListWordlist = WordlistsList.GetWordlistsList();
         }
     }
 }
