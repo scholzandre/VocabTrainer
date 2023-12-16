@@ -14,6 +14,14 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(Condition));
             }
         }
+        private string _text;
+        public string Text {
+            get => _text;
+            set {
+                _text = value;
+                OnPropertyChanged(nameof(Text));
+            }
+        }
         private bool _isTrue;
         public bool IsTrue {
             get => _isTrue;
@@ -25,8 +33,9 @@ namespace VocabTrainer.ViewModels {
         private List<Settings> _settings;
         private List<WordlistsList> _wordlists;
         private SettingsViewModel _settingsViewModel;
-        public SettingsEntryTrueFalseViewModel(string condition, bool isTrue, List<Settings> settings, SettingsViewModel settingsViewModel, List<WordlistsList> wordlists) {
+        public SettingsEntryTrueFalseViewModel(string condition, bool isTrue, List<Settings> settings, SettingsViewModel settingsViewModel, List<WordlistsList> wordlists, string text) {
             Condition = condition;
+            Text = text;
             IsTrue = isTrue;
             _wordlists = wordlists;
             _settings = settings;
