@@ -41,7 +41,7 @@ namespace VocabTrainer.ViewModels {
                     _settings[i].Condition == "intelligent order") {
                     Type viewType = typeof(SettingsEntryTrueFalseView);
                     UserControl tempControl = (UserControl)Activator.CreateInstance(viewType);
-                    tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_settings[i].Condition, _settings[i].IsTrue, _settings, this, _wordlists);
+                    tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_settings[i].Condition, _settings[i].IsTrue, _settings, this, _wordlists, _settings[i].Condition);
                     ListGeneralSettings.Add(tempControl);
                 } else {
                     Type viewType = typeof(SettingsEntryTextView);
@@ -63,7 +63,7 @@ namespace VocabTrainer.ViewModels {
             for (int i = 0; i < _wordlists.Count; i++) {
                 Type viewType = typeof(SettingsEntryTrueFalseView);
                 UserControl tempControl = (UserControl)Activator.CreateInstance(viewType);
-                tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_wordlists[i].WordlistName, _wordlists[i].IsTrue, _settings, this, _wordlists);
+                tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_wordlists[i].WordlistName, _wordlists[i].IsTrue, _settings, this, _wordlists, $"{_wordlists[i].WordlistName} ({_wordlists[i].FirstLanguage}, {_wordlists[i].SecondLanguage})");
                 ListWordlists.Add(tempControl);
             }
         }
