@@ -143,5 +143,37 @@ namespace VocabTrainer.Views {
             list.Remove(entry);
             VocabularyEntry.WriteData(tempEntry, list);
         }
+
+        public static void PartyCorrectAnswer(VocabularyEntry entry) {
+            List<VocabularyEntry> entries = GetData(entry);
+            int index = entries.IndexOf(entry);
+        }
+        public static bool CheckAnswer(VocabularyEntry entry, VocabularyEntry answer) {
+            bool isCorrect = false;
+            entry.FilePath = $"{FirstPartFilePath}{entry.WordList}{SecondPartFilePath}";
+            List<VocabularyEntry> entries = GetData(entry);
+            RemoveEntry("NotSeen", entry);
+            AddEntry("Seen", entry);
+            if (entries.Contains(answer)) {
+                int index = entries.IndexOf(answer);
+                entries[index].LastTimeWrong = false;
+                entries[index].Repeated += 1;
+                entries[index].Seen = true;
+                RemoveEntry("LastTimeWrong", entry);
+                isCorrect = true;
+            } else if (entries.Contains(entry)){
+                int index = entries.IndexOf(entry);
+                entries[index].LastTimeWrong = true;
+                entries[index].Repeated = 0;
+                entries[index].Seen = true;
+                AddEntry("LastTimeWrong", entry);
+            }
+            WriteData(entry, entries);
+            return isCorrect;
+        }
+        public static void FalseAnswer(VocabularyEntry entry) {
+            List<VocabularyEntry> entries = GetData(entry);
+            int index = entries.IndexOf(entry);
+        }
     }
 }
