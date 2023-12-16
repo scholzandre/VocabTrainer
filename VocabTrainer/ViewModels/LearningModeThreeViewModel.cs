@@ -147,29 +147,23 @@ namespace VocabTrainer.ViewModels {
             await CheckInput(_entries[4], 5);
         }
         private async Task CheckInput(VocabularyEntry choice, int answer) {
+            if (_language == 1) 
+                choice.German = FirstWord;
+            else 
+                choice.English = FirstWord;
+            
             List<Brush> tempList = new List<Brush>(BackgroundColors);
             int awaitTime = 1500;
-            if (_parent.Entries[_counter].English == choice.English || _parent.Entries[_counter].German == choice.German) {
-                _parent.Entries[_counter].Seen = true;
-                _parent.Entries[_counter].LastTimeWrong = false;
-                _parent.Entries[_counter].Repeated += 1;
-                VocabularyEntry.RemoveEntry("LastTimeWrong", _parent.Entries[_counter]);
+            bool isCorrect = VocabularyEntry.CheckAnswer(_parent.Entries[_counter], choice);
+            if (isCorrect) {
                 tempList[0] = Brushes.Green;
                 tempList[answer] = Brushes.Green;
             } else {
-                _parent.Entries[_counter].Seen = true;
-                _parent.Entries[_counter].LastTimeWrong = true;
-                _parent.Entries[_counter].Repeated = 0;
-                VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[_counter]);
                 tempList[0] = Brushes.Red;
                 tempList[answer] = Brushes.Red;
-                tempList[_positionCorrectItem+1] = Brushes.Green;
+                tempList[_positionCorrectItem + 1] = Brushes.Green;
                 awaitTime = 2250;
             }
-            VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
-            VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
-            _parent.Entries[_counter].FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}";
-            VocabularyEntry.WriteData(_parent.Entries[_counter], _parent.Entries);
             BackgroundColors = tempList;
             await ExtraFunctions.Wait(awaitTime);
             _parent.ShowLearnMode();

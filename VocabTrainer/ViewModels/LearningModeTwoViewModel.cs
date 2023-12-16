@@ -133,6 +133,10 @@ namespace VocabTrainer.ViewModels {
                 bool isWrong = false;
                 string[] answers = SplitAnswer((FirstWordWritable) ? FirstWordAnswer : SecondWordAnswer);
                 string[] correctAnswers = SplitAnswer((FirstWordWritable) ? _firstWord : _secondWord);
+                VocabularyEntry tempEntry = _parent.Entries[_counter];
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempEntry.WordList}{VocabularyEntry.SecondPartFilePath}";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(_parent.Entries[_counter]);
+                int index = entries.IndexOf(_parent.Entries[_counter]);
                 if (answers.Length > correctAnswers.Length) isPartyCorrect = true;
                 for (int i = 0; i < answers.Length; i++) { 
                     if (correctAnswers.Contains(answers[i])) isCorrect = true;
@@ -142,36 +146,27 @@ namespace VocabTrainer.ViewModels {
 
                 if (isPartyCorrect) {
                     if (FirstWordWritable) FirstWordForeground = Brushes.Orange;
-                    else  SecondWordForeground = Brushes.Orange;
-                    _parent.Entries[_counter].Seen = true;
+                    else SecondWordForeground = Brushes.Orange;
+                    entries[index].Seen = true;
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
+                    VocabularyEntry.RemoveEntry("NotSeen", entries[index]);
+                    VocabularyEntry.AddEntry("Seen", entries[index]);
+                    VocabularyEntry.WriteData(tempEntry, entries);
                 } else if (isCorrect && !isWrong) {
                     if (FirstWordWritable) FirstWordForeground = Brushes.Green;
                     else SecondWordForeground = Brushes.Green;
-                    _parent.Entries[_counter].Seen = true;
-                    _parent.Entries[_counter].Repeated += 1;
-                    _parent.Entries[_counter].LastTimeWrong = false;
+                    VocabularyEntry.CheckAnswer(entries[index], entries[index]);
                     VocabularyEntry.RemoveEntry("LastTimeWrong", _parent.Entries[_counter]);
                 } else if (isWrong && !isCorrect) { 
                     if (FirstWordWritable) FirstWordForeground = Brushes.Red;
                     else SecondWordForeground = Brushes.Red;
-                    _parent.Entries[_counter].Seen = true;
-                    _parent.Entries[_counter].Repeated = 0;
-                    _parent.Entries[_counter].LastTimeWrong = true;
-                    VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[_counter]);
+                    VocabularyEntry.CheckAnswer(entries[index], new VocabularyEntry());
+                    VocabularyEntry.AddEntry("LastTimeWrong", entries[index]);
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
                 }
-
-                VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
-                VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
+                
                 FirstWordWritable = false;
                 SecondWordWritable = false;
-                VocabularyEntry tempEntry = new VocabularyEntry() {
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}",
-                    FirstLanguage = _parent.Entries[_parent.Counter].FirstLanguage,
-                    SecondLanguage = _parent.Entries[_parent.Counter].SecondLanguage,
-                };
-                VocabularyEntry.WriteData(tempEntry, _parent.Entries);
                 ButtonText = _nextText;
             } else { 
                 _parent.ShowLearnMode();

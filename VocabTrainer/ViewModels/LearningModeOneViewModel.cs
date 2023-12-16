@@ -65,16 +65,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand NextWordCommand => new RelayCommand(NextWord, CanExecuteCommand);
         private void NextWord(object obj) {
-            VocabularyEntry.RemoveEntry("NotSeen", _parent.Entries[_counter]);
-            VocabularyEntry.AddEntry("Seen", _parent.Entries[_counter]);
-            _parent.Entries[_counter].Seen = true;
-            _parent.Entries[_counter].Repeated += 1;
-            VocabularyEntry tempEntry = new VocabularyEntry() {
-                FilePath = $"{VocabularyEntry.FirstPartFilePath}{_parent.Entries[_counter].WordList}{VocabularyEntry.SecondPartFilePath}",
-                FirstLanguage = _parent.Entries[_counter].FirstLanguage,
-                SecondLanguage = _parent.Entries[_counter].SecondLanguage,
-            };
-            VocabularyEntry.WriteData(tempEntry, _parent.Entries);
+            VocabularyEntry.CheckAnswer(_parent.Entries[_counter], _parent.Entries[_counter]);
             _parent.ShowLearnMode();
         }
 

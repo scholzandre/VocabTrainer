@@ -155,30 +155,14 @@ namespace VocabTrainer.ViewModels {
         }
         private async void CheckAnswer(string field) {
             if (_question.Item1 != string.Empty && _answer.Item1 != string.Empty) {
-                bool isCorrect = false;
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
                     German = (_language == 1) ? _answer.Item1 : _question.Item1,
                     English = (_language == 1) ? _question.Item1 : _answer.Item1,
                     WordList = _questions[_question.Item1]
                 };
                 int indexEntries = _entries.IndexOf(tempAnswerEntry);
-                if (_parent.Entries.Contains(tempAnswerEntry)) {
-                    isCorrect = true;
-                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Seen = true;
-                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].Repeated += 1;
-                    _parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])].LastTimeWrong = false;
-                    VocabularyEntry.RemoveEntry("LastTimeWrong", tempAnswerEntry);
-                } else {
-                    for (int i = 0; i < _parent.Entries.Count; i++) {
-                        if (_language == 1 && _parent.Entries[i].English == _question.Item1 || _language == 2 && _parent.Entries[i].German == _question.Item1) {
-                            _parent.Entries[i].Seen = true;
-                            _parent.Entries[i].LastTimeWrong = true;
-                            _parent.Entries[i].Repeated = 0;
-                            VocabularyEntry.AddEntry("LastTimeWrong", _parent.Entries[i]);
-                            break;
-                        }
-                    }
-                }
+                bool isCorrect = (indexEntries >= 0)? VocabularyEntry.CheckAnswer(_parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])], tempAnswerEntry) : false;
+
                 List<bool> tempListAnswersClickable = new List<bool>(AnswersClickable);
                 List<bool> tempListQuestionsClickable = new List<bool>(QuestionsClickable);
 
@@ -192,13 +176,6 @@ namespace VocabTrainer.ViewModels {
                     SetAnswerBackground(Brushes.Red);
                     SetQuestionBackground(Brushes.Red);
                 }
-
-                VocabularyEntry tempEntry = new VocabularyEntry() {
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
-                };
-                VocabularyEntry.WriteData(tempEntry, _parent.Entries);
-                VocabularyEntry.RemoveEntry("NotSeen", tempAnswerEntry);
-                VocabularyEntry.AddEntry("Seen", tempAnswerEntry);
                 _answer = (string.Empty, 0);
                 _question = (string.Empty, 0);
                 if (_counter > 5) {
