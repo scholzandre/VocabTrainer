@@ -12,7 +12,8 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent"
         AllowsTransparency="True"
-        MouseDown="Windows_MouseDown">
+        MouseDown="Windows_MouseDown"
+        Icon="{Binding IconFilePath}">
     <Window.DataContext>
         <viewmodels:MainViewModel/>
     </Window.DataContext>
