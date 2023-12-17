@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -74,6 +75,14 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ListWordlist));
             }
         }
+        private string _iconFilePath = VocabularyEntry.GeneralFilePath + "Pictures\\icon.png";
+        public string IconFilePath {
+            get => _iconFilePath;
+            set {
+                _iconFilePath = value;
+                OnPropertyChanged(nameof(IconFilePath));    
+            }
+        }
         private readonly static List<bool> _defaultEnabled = new List<bool> {
             true,
             true,
@@ -94,6 +103,7 @@ namespace VocabTrainer.ViewModels {
         }
 
         public MainViewModel() {
+            if (File.Exists(IconFilePath)) Console.WriteLine("yes");
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
             OpenAnalysisView(new object());
