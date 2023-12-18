@@ -37,9 +37,8 @@ namespace VocabTrainer.ViewModels {
             AllWordlists = new List<WordlistsList>();
             Wordlists = new ObservableCollection<ManageWordlistViewModel>();
             AllWordlists = WordlistsList.GetWordlistsList();
-            foreach (WordlistsList wordlist in AllWordlists) {
+            foreach (WordlistsList wordlist in AllWordlists) 
                 Wordlists.Add(new ManageWordlistViewModel(wordlist, AllWordlists, Wordlists));
-            }
         }
 
         private bool CanExecuteCommand(object arg) {

@@ -71,11 +71,11 @@ namespace VocabTrainer.ViewModels {
                 }
             }
 
-            if (!EnoughWords(5)) {
+            if (!EnoughWords(5)) 
                 for (int i = 4; i < 6; i++) _settings[i].IsTrue = false;
-            } else if (!EnoughWords(1)) {
+            else if (!EnoughWords(1)) 
                 for (int i = 0; i < 6; i++) _settings[i].IsTrue = false;
-            } 
+            
             WordlistsList.WriteWordlistsList(_wordlists);
             Settings.WriteSettings(_settings);
             _settingsViewModel.FillCollection();
@@ -83,14 +83,13 @@ namespace VocabTrainer.ViewModels {
         private bool EnoughWords(int minNumber) {
             int counter = 0;
             List<WordlistsList> wordlists = _wordlists;
-            for (int i = 0; i < _wordlists.Count; i++) {
+            for (int i = 0; i < _wordlists.Count; i++) 
                 if (_wordlists[i].IsTrue) {
                     VocabularyEntry entry = new VocabularyEntry() {
                         FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                     };
                     counter += VocabularyEntry.GetData(entry).Count;
                 }
-            }
             return (counter >= minNumber);
         }
     }

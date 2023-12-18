@@ -103,7 +103,6 @@ namespace VocabTrainer.ViewModels {
         }
 
         public MainViewModel() {
-            if (File.Exists(IconFilePath)) Console.WriteLine("yes");
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
             OpenAnalysisView(new object());

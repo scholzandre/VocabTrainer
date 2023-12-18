@@ -183,11 +183,10 @@ namespace VocabTrainer.ViewModels {
                     _parent.ShowLearnMode();
                 }
             } else {
-                if (field == "answer") {
+                if (field == "answer") 
                     SetAnswerBackground(_clickColor);
-                } else {
+                else 
                     SetQuestionBackground(_clickColor);
-                }
             }
         }
 

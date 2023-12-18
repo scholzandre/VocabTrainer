@@ -27,13 +27,12 @@ namespace VocabTrainer {
         }
         public static (bool, int) AlreadyThere(string name, string firstLanguage, string secondLanguage) {
             List<WordlistsList> wordlistsList = GetWordlistsList();
-            for (int i = 0; i < wordlistsList.Count(); i++) {
+            for (int i = 0; i < wordlistsList.Count(); i++) 
                 if (wordlistsList[i].WordlistName.ToLower() == name.ToLower() &&
                     wordlistsList[i].FirstLanguage.ToLower() == firstLanguage.ToLower() &&
                     wordlistsList[i].SecondLanguage.ToLower() == secondLanguage.ToLower()) {
                     return (true, i);
                 }
-            }
             return (false, -1);
         }
         public List<(VocabularyEntry, string, string, string)> GetAllWords() {
@@ -44,18 +43,18 @@ namespace VocabTrainer {
                 VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}_{checkedLists[i].FirstLanguage}_{checkedLists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}" };
                 List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(checkedList);
 
-                foreach (VocabularyEntry entry in vocabulary) {
+                foreach (VocabularyEntry entry in vocabulary) 
                     words.Add((entry, checkedLists[i].FirstLanguage, checkedLists[i].SecondLanguage, checkedLists[i].WordlistName));
-                }
+                
             }
             return (words);
         }
 
         public List<WordlistsList> GetCheckedLists() {
             List<WordlistsList> list = GetWordlistsList();
-            for (int i = list.Count - 1; i >= 0; i--) {
-                if (!list[i].IsTrue) list.Remove(list[i]);
-            }
+            for (int i = list.Count - 1; i >= 0; i--) 
+                if (!list[i].IsTrue) 
+                    list.Remove(list[i]);
             return list;
         }
 
@@ -66,7 +65,7 @@ namespace VocabTrainer {
             string file = string.Empty;
             string wordlistName = string.Empty;
 
-            for (int i = 0; i < filenameList.Count; i++) {
+            for (int i = 0; i < filenameList.Count; i++) 
                 if (filenameList[i].Contains("_")) {
                     file = filenameList[i].Substring(VocabularyEntry.FirstPartFilePath.Length);
                     wordlistName = file.Substring(0, file.IndexOf("_"));
@@ -87,20 +86,17 @@ namespace VocabTrainer {
                             List<VocabularyEntry> notSeen = VocabularyEntry.GetData(entry);
                             notSeen.AddRange(VocabularyEntry.GetData(tempEntry));
                             VocabularyEntry.WriteData(entry, notSeen);
-                        } else {
+                        } else 
                             File.Delete(filenameList[i]);
-                        }
                     }
                 }
-            }
 
-            for (int i = 0; i < allWordLists.Count; i++) {
-                if(allWordLists[i].FirstLanguage != "-" && allWordLists[i].SecondLanguage != "-")
+            for (int i = 0; i < allWordLists.Count; i++) 
+                if (allWordLists[i].FirstLanguage != "-" && allWordLists[i].SecondLanguage != "-")
                     if (!File.Exists($"{VocabularyEntry.FirstPartFilePath}{allWordLists[i].WordlistName}_{allWordLists[i].FirstLanguage}_{allWordLists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}")) {
                         allWordLists.Remove(allWordLists[i]);
                         i--;
                     }
-            }
 
             WriteWordlistsList(allWordLists);
         }

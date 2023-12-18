@@ -143,20 +143,18 @@ namespace VocabTrainer.ViewModels {
                 Wordlist.WordlistName = WordlistName;
                 Wordlist.FirstLanguage = FirstLanguage;
                 Wordlist.SecondLanguage = SecondLanguage;
-                for (int i = 0; i < AllWordlists.Count; i++) {
+                for (int i = 0; i < AllWordlists.Count; i++) 
                     if (AllWordlists[i] == _original) {
                         AllWordlists[i] = Wordlist;
                         break;
                     }
-                }
-                for (int i = 0; i < _views.Count; i++) {
+                for (int i = 0; i < _views.Count; i++) 
                     if (_views[i].Wordlist.WordlistName == _original.WordlistName &&
                         _views[i].Wordlist.FirstLanguage == _original.FirstLanguage &&
                         _views[i].Wordlist.SecondLanguage == _original.SecondLanguage) {
                         _views[i].Wordlist = Wordlist;
                         break;
                     }
-                }
             } else {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
@@ -171,7 +169,7 @@ namespace VocabTrainer.ViewModels {
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
-                for (int i = 0; i < _views.Count; i++) {
+                for (int i = 0; i < _views.Count; i++) 
                     if (_views[i].Wordlist.WordlistName == _original.WordlistName &&
                         _views[i].Wordlist.FirstLanguage == _original.FirstLanguage &&
                         _views[i].Wordlist.SecondLanguage == _original.SecondLanguage) {
@@ -179,7 +177,6 @@ namespace VocabTrainer.ViewModels {
                         AllWordlists.Remove(_original);
                         break;
                     }
-                }
                 if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"))
                     File.Delete($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
             } else {

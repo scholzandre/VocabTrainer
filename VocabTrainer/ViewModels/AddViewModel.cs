@@ -56,7 +56,7 @@ namespace VocabTrainer.ViewModels {
         }
         public AddViewModel() {
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
-            foreach (WordlistsList temp in tempWordlists) {
+            foreach (WordlistsList temp in tempWordlists) 
                 if (temp.WordlistName != "Marked" &&
                     temp.WordlistName != "Seen" &&
                     temp.WordlistName != "LastTimeWrong" &&
@@ -65,7 +65,6 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
                 }
-            }
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
@@ -82,12 +81,11 @@ namespace VocabTrainer.ViewModels {
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             bool contains = false;
-            foreach (VocabularyEntry tempEntry in entries) {
+            foreach (VocabularyEntry tempEntry in entries) 
                 if (tempEntry.German == entry.German || tempEntry.English == entry.English) {
                     contains = true;
                     break;
                 }
-            }
             if (!contains) {
                 entries.Add(entry);
                 VocabularyEntry.WriteData(entry, entries);
@@ -96,9 +94,8 @@ namespace VocabTrainer.ViewModels {
                 SecondWord = string.Empty;
 
                 VocabularyEntry.AddEntry("NotSeen", entry);
-            } else {
+            } else 
                 InfoText = "This entry already exists.";
-            }
         }
     }
 }

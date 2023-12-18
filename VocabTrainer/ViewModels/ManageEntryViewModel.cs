@@ -101,20 +101,18 @@ namespace VocabTrainer.ViewModels {
                 SecondWordWritable = false;
                 bool alreadyExists = false;
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
-                foreach (VocabularyEntry entry in entries) {
+                foreach (VocabularyEntry entry in entries) 
                     if ((entry.German == FirstWord && FirstWord != _entry.German) || (entry.English == SecondWord && SecondWord != _entry.English)) {
                         alreadyExists = true;
                         break;
                     }
-                }
                 if (!alreadyExists) {
-                    for (int i = 0; i < entries.Count; i++) {
+                    for (int i = 0; i < entries.Count; i++) 
                         if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
                             entries[i].German = FirstWord;
                             entries[i].English = SecondWord;
                             break;
                         }
-                    }
                     VocabularyEntry.WriteData(_entry, entries);
 
                     for (int i = 0; i < filePathsSpecialLists.Count; i++) {
@@ -122,13 +120,12 @@ namespace VocabTrainer.ViewModels {
                             FilePath = filePathsSpecialLists[i]
                         };
                         List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
-                        for (int j = 0; j < tempEntries.Count; j++) {
+                        for (int j = 0; j < tempEntries.Count; j++) 
                             if (tempEntries[j].German == _entry.German && tempEntries[j].English == _entry.English) {
                                 tempEntries[j].German = FirstWord;
                                 tempEntries[j].English = SecondWord;
                                 break;
                             }
-                        }
                         VocabularyEntry.WriteData(tempEntry, tempEntries);
                     }
                     _entry.German = FirstWord;
@@ -165,7 +162,7 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
 
-                if (_selectedItem.WordlistName != "Marked_-_-") { 
+                if (_selectedItem.WordlistName != "Marked_-_-") 
                     for (int i = 0; i < filePathsSpecialLists.Count; i++) {
                         VocabularyEntry tempEntry = new VocabularyEntry() {
                             FilePath = filePathsSpecialLists[i]
@@ -174,7 +171,6 @@ namespace VocabTrainer.ViewModels {
                         if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
                         VocabularyEntry.WriteData(tempEntry, tempEntries);    
                     }
-                }
             } else {
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);

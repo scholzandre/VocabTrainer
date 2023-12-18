@@ -153,12 +153,11 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             if (entries.Count > 0) {
                 bool alreadyExists = false;
-                foreach (VocabularyEntry tempEntry in entries) {
+                foreach (VocabularyEntry tempEntry in entries) 
                     if (tempEntry.German.Contains(FirstLanguageWord) || tempEntry.English.Contains(SecondLanguageWord)) {
                         alreadyExists = true;
                         break;
                     }
-                }
                 if (alreadyExists) {
                     InfoText = "Entry already exists.";
                 } else {
@@ -180,11 +179,10 @@ namespace VocabTrainer.ViewModels {
                 if (response.IsSuccessStatusCode) {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<MyMemoryApiResponse>(responseContent);
-                    if (result != null && result.ResponseData != null) {
+                    if (result != null && result.ResponseData != null) 
                         return result.ResponseData.TranslatedText;
-                    } else {
+                    else 
                         return "You're out of tokens";
-                    }
                 } else {
                     return "";
                 }

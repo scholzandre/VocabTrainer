@@ -232,7 +232,7 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry entry = new VocabularyEntry();
 
             if (Wordlist == string.Empty) {
-                for (int i = 0; i < wordlistsList.Count; i++) {
+                for (int i = 0; i < wordlistsList.Count; i++) 
                     if (wordlistsList[i].WordlistName != "Marked" &&
                         wordlistsList[i].WordlistName != "Seen" &&
                         wordlistsList[i].WordlistName != "NotSeen" &&
@@ -241,7 +241,6 @@ namespace VocabTrainer.ViewModels {
                         words = VocabularyEntry.GetData(entry);
                         AddCounters(words);
                     }
-                }
             } else {
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                 words = VocabularyEntry.GetData(entry);

@@ -67,20 +67,19 @@ namespace VocabTrainer.ViewModels {
                 SecondLanguage = SecondLanguage
             };
             bool alreadyExists = false;
-            for(int i = 0; i < _forbiddenCharacters.Count; i++) {
+            for (int i = 0; i < _forbiddenCharacters.Count; i++) 
                 if (WordlistName.Contains(_forbiddenCharacters[i].ToString()) ||
                     FirstLanguage.Contains(_forbiddenCharacters[i].ToString()) ||
                     SecondLanguage.Contains(_forbiddenCharacters[i].ToString())) {
                     InfoText = $"Don't use the following characters: {string.Join(" ", _forbiddenCharacters.Where(x => x != ' '))}";
                     return;
                 }
-            }
-            for (int i = 0; i < wordlists.Count; i++) {
+            for (int i = 0; i < wordlists.Count; i++) 
                 if (wordlists[i].WordlistName == WordlistName &&
                     wordlists[i].FirstLanguage == FirstLanguage &&
                     wordlists[i].SecondLanguage == SecondLanguage)
                     alreadyExists = true;
-            }
+            
             if (!alreadyExists) {
                 wordlists.Add(wordlist);
                 VocabularyEntry.WriteData(new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlist.WordlistName}_{wordlist.FirstLanguage}_{wordlist.SecondLanguage}{VocabularyEntry.SecondPartFilePath}" }, new List<VocabularyEntry>());

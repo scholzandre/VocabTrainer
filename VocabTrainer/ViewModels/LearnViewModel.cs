@@ -82,18 +82,16 @@ namespace VocabTrainer.ViewModels {
 
         private void GetSettings() {
             _settings = Settings.GetSettings();
-            for (int i = 2; i < 6; i++) {
-                if (_settings[i].LearningMode > 0 && _settings[i].IsTrue) {
+            for (int i = 2; i < 6; i++) 
+                if (_settings[i].LearningMode > 0 && _settings[i].IsTrue) 
                     _learningModes.Add(_settings[i]);
-                }
-            }
         }
 
         private void GetEntries() {
             Entries = new List<VocabularyEntry>();
             List<WordlistsList> tempWordlist = WordlistsList.GetWordlistsList();
             List<VocabularyEntry> tempEntries = new List<VocabularyEntry>();
-            for (int i = 0; i < tempWordlist.Count; i++) {
+            for (int i = 0; i < tempWordlist.Count; i++) 
                 if (tempWordlist[i].IsTrue) {
                     _wordlists.Add(tempWordlist[i]);
                     tempEntries.AddRange(
@@ -104,7 +102,6 @@ namespace VocabTrainer.ViewModels {
                         )
                     );
                 }
-            }
             if (_settings[0].IsTrue) {
                 while (tempEntries.Count > 0) { 
                     int index = Random.Next(tempEntries.Count);

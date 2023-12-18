@@ -69,7 +69,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ManageViewModel() {
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
-            foreach (WordlistsList temp in tempWordlists) {
+            foreach (WordlistsList temp in tempWordlists) 
                 if (temp.WordlistName != "Seen" &&
                     temp.WordlistName != "LastTimeWrong" &&
                     temp.WordlistName != "NotSeen") {
@@ -77,7 +77,6 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
                 }
-            }
             SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
@@ -96,11 +95,11 @@ namespace VocabTrainer.ViewModels {
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
             VocabularyEntry entry = new VocabularyEntry();
-            if (ComboBoxWordlists[SelectedItem].WordlistName != "Marked") {
+            if (ComboBoxWordlists[SelectedItem].WordlistName != "Marked") 
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
-            } else {
+            else 
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}{VocabularyEntry.SecondPartFilePath}";
-            }
+            
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             foreach (VocabularyEntry tempEntry in entries) {
                 WordlistsList tempWordlist = new WordlistsList() {
