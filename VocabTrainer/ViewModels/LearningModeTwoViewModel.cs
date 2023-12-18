@@ -144,7 +144,7 @@ namespace VocabTrainer.ViewModels {
                 }
                 if (isCorrect && isWrong) isPartyCorrect = true;
 
-                if (isPartyCorrect) {
+                if (isPartyCorrect || _hints > 3) {
                     if (FirstWordWritable) FirstWordForeground = Brushes.Orange;
                     else SecondWordForeground = Brushes.Orange;
                     entries[index].Seen = true;
