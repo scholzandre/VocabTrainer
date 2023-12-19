@@ -85,9 +85,15 @@ namespace VocabTrainer.ViewModels {
             List<WordlistsList> wordlists = _wordlists;
             for (int i = 0; i < _wordlists.Count; i++) 
                 if (_wordlists[i].IsTrue) {
-                    VocabularyEntry entry = new VocabularyEntry() {
-                        FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
-                    };
+                    VocabularyEntry entry = new VocabularyEntry();
+                    if (wordlists[i].WordlistName == "Marked" ||
+                        wordlists[i].WordlistName == "Seen" ||
+                        wordlists[i].WordlistName == "NotSeen" ||
+                        wordlists[i].WordlistName == "LastTimeWrong") {
+                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                    } else {
+                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+                    }
                     counter += VocabularyEntry.GetData(entry).Count;
                 }
             return (counter >= minNumber);
