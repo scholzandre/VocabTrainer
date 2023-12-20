@@ -40,7 +40,15 @@ namespace VocabTrainer {
             List<WordlistsList> checkedLists = GetCheckedLists();
 
             for (int i = 0; i < checkedLists.Count; i++) {
-                VocabularyEntry checkedList = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}_{checkedLists[i].FirstLanguage}_{checkedLists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}" };
+                VocabularyEntry checkedList = new VocabularyEntry();
+                if (checkedLists[i].WordlistName != "Marked" &&
+                    checkedLists[i].WordlistName != "Seen" &&
+                    checkedLists[i].WordlistName != "NotSeen" &&
+                    checkedLists[i].WordlistName != "LastTimeWrong") {
+                    checkedList.FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}_{checkedLists[i].FirstLanguage}_{checkedLists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+                } else { 
+                    checkedList.FilePath = $"{VocabularyEntry.FirstPartFilePath}{checkedLists[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                }
                 List<VocabularyEntry> vocabulary = VocabularyEntry.GetData(checkedList);
 
                 foreach (VocabularyEntry entry in vocabulary) 
