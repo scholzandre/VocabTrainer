@@ -82,7 +82,7 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _selectedItem = selectedItem;
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
-            _entry.FilePath = VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
+            _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
