@@ -134,9 +134,9 @@ namespace VocabTrainer.ViewModels {
                 string[] answers = SplitAnswer((FirstWordWritable) ? FirstWordAnswer : SecondWordAnswer);
                 string[] correctAnswers = SplitAnswer((FirstWordWritable) ? _firstWord : _secondWord);
                 VocabularyEntry tempEntry = _parent.Entries[_counter];
-                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempEntry.WordList}{VocabularyEntry.SecondPartFilePath}";
-                List<VocabularyEntry> entries = VocabularyEntry.GetData(_parent.Entries[_counter]);
-                int index = entries.IndexOf(_parent.Entries[_counter]);
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempEntry.WordList}_{tempEntry.FirstLanguage}_{tempEntry.SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(tempEntry);
+                int index = entries.IndexOf(tempEntry);
                 if (answers.Length > correctAnswers.Length) isPartyCorrect = true;
                 for (int i = 0; i < answers.Length; i++) { 
                     if (correctAnswers.Contains(answers[i])) isCorrect = true;
