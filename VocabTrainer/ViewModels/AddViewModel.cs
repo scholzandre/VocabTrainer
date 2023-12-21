@@ -77,6 +77,7 @@ namespace VocabTrainer.ViewModels {
                 English = SecondWord,
                 FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
                 SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
+                WordList = ComboBoxWordlists[SelectedItem].WordlistName,
                 FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
