@@ -31,16 +31,6 @@ namespace VocabTrainer.Views {
             return vocabulary;
         }
         public static void WriteData(VocabularyEntry entry, List<VocabularyEntry> vocabulary) {
-            for (int i = 0; i < vocabulary.Count; i++) {
-                if (entry.WordList != "Marked_-_-" &&
-                    entry.WordList != "Seen_-_-" &&
-                    entry.WordList != "NotSeen_-_-" &&
-                    entry.WordList != "LastTimeWrong_-_-") { 
-                    vocabulary[i].WordList = entry.WordList;
-                    vocabulary[i].FirstLanguage = entry.FirstLanguage;
-                    vocabulary[i].SecondLanguage = entry.SecondLanguage;
-                }
-            }
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
             File.WriteAllText(entry.FilePath, json);
         }
@@ -84,7 +74,7 @@ namespace VocabTrainer.Views {
 
         public static bool CheckAnswer(VocabularyEntry entry, VocabularyEntry answer) {
             bool isCorrect = false;
-            entry.FilePath = $"{FirstPartFilePath}{entry.WordList}{SecondPartFilePath}";
+            entry.FilePath = $"{FirstPartFilePath}{entry.WordList}_{entry.FirstLanguage}_{entry.SecondLanguage}{SecondPartFilePath}";
             List<VocabularyEntry> entries = GetData(entry);
             RemoveEntry("NotSeen", entry);
             AddEntry("Seen", entry);
