@@ -24,11 +24,11 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Margin="10,0,10,0">
                 <StackPanel Margin="0,55,0,0">
-                    <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24"/>
+                    <TextBlock x:Name="firstLanguage" Foreground="white" FontSize="24" Text="{Binding FirstLanguage}"/>
                     <TextBox x:Name="germanWord" FontSize="24" Margin="5,0,5,0" Text="{Binding FirstWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Margin="0,25,0,30">
-                    <TextBlock x:Name="secondLanguage" Foreground="White" FontSize="24"/>
+                    <TextBlock x:Name="secondLanguage" Foreground="White" FontSize="24" Text="{Binding SecondLanguage}"/>
                     <TextBox x:Name="englishWord" FontSize="24" Margin="5,0,5,0" Text="{Binding SecondWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <Button Width="180" Height="30" FontSize="18" Content="Add words" Command="{Binding AddEntryCommand}"/> 
