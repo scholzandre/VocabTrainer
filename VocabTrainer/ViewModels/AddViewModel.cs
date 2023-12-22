@@ -11,6 +11,8 @@ namespace VocabTrainer.ViewModels {
             get => _selectedItem;
             set {
                 _selectedItem = value;
+                FirstLanguage = ComboBoxWordlists[value].FirstLanguage;
+                SecondLanguage = ComboBoxWordlists[value].SecondLanguage;
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
@@ -44,6 +46,22 @@ namespace VocabTrainer.ViewModels {
             set {
                 _secondWord = value;
                 OnPropertyChanged(nameof(SecondWord));
+            }
+        }
+        private string _firstLanguage = string.Empty;
+        public string FirstLanguage {
+            get => _firstLanguage;
+            set {
+                _firstLanguage = value;
+                OnPropertyChanged(nameof(FirstLanguage));
+            }
+        }
+        private string _secondLanguage = string.Empty;
+        public string SecondLanguage {
+            get => _secondLanguage;
+            set {
+                _secondLanguage = value;
+                OnPropertyChanged(nameof(SecondLanguage));
             }
         }
         private string _infoText = string.Empty;
