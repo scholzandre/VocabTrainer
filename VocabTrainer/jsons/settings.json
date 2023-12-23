@@ -8,8 +8,7 @@
     "Condition": "random order",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -18,10 +17,9 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "intelligent order",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -30,10 +28,9 @@
     "BorderBackground": null,
     "NavBarBackground": null,
     "Condition": "Learning Mode One",
-    "IsTrue": false,
+    "IsTrue": true,
     "LearningMode": 1,
-    "IsLearningMode": true,
-    "APIKey": null
+    "IsLearningMode": true
   },
   {
     "ButtonsForeground": null,
@@ -44,8 +41,7 @@
     "Condition": "Learning Mode Two",
     "IsTrue": false,
     "LearningMode": 2,
-    "IsLearningMode": true,
-    "APIKey": null
+    "IsLearningMode": true
   },
   {
     "ButtonsForeground": null,
@@ -56,8 +52,7 @@
     "Condition": "Learning Mode Three",
     "IsTrue": false,
     "LearningMode": 3,
-    "IsLearningMode": true,
-    "APIKey": null
+    "IsLearningMode": true
   },
   {
     "ButtonsForeground": null,
@@ -68,8 +63,7 @@
     "Condition": "Learning Mode Four",
     "IsTrue": false,
     "LearningMode": 4,
-    "IsLearningMode": true,
-    "APIKey": null
+    "IsLearningMode": true
   },
   {
     "ButtonsForeground": "#FFFFFF",
@@ -80,8 +74,7 @@
     "Condition": "Buttons foreground",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -92,8 +85,7 @@
     "Condition": "Buttons background",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -104,8 +96,7 @@
     "Condition": "Border color",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -116,8 +107,7 @@
     "Condition": "Background",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   },
   {
     "ButtonsForeground": null,
@@ -128,7 +118,6 @@
     "Condition": "Navigationbar Background",
     "IsTrue": false,
     "LearningMode": 0,
-    "IsLearningMode": false,
-    "APIKey": null
+    "IsLearningMode": false
   }
 ]
