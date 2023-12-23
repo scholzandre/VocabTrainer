@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -103,6 +102,7 @@ namespace VocabTrainer.ViewModels {
         }
 
         public MainViewModel() {
+            WordlistsList.CheckSpecialWordlists();
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
             OpenAnalysisView(new object());
