@@ -108,5 +108,11 @@ namespace VocabTrainer {
 
             WriteWordlistsList(allWordLists);
         }
+
+
+        public static void CheckSpecialWordlists() {
+            // check for existence of special wordlist files 
+            // if not, add them
+        }
     }
 }
