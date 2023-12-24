@@ -11,19 +11,25 @@ namespace VocabTrainer {
         public string FirstLanguage { get; set; }
         public string SecondLanguage { get; set; }
         public bool IsTrue { get; set; }
-        private static string filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
+        private static string _filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
+        private static List<string> _specialWordlists = new List<string>() { 
+            "Marked",
+            "NotSeen",
+            "Seen",
+            "LastTimeWrong"
+        };
 
         public static List<WordlistsList> GetWordlistsList() {
             List<WordlistsList> wordlists = new List<WordlistsList>();
-            if (File.Exists(filePath)) {
-                string jsonData = File.ReadAllText(filePath);
+            if (File.Exists(_filePath)) {
+                string jsonData = File.ReadAllText(_filePath);
                 wordlists = JsonConvert.DeserializeObject<List<WordlistsList>>(jsonData);
             }
             return wordlists;
         }
         public static void WriteWordlistsList(List<WordlistsList> wordlistsList) {
             string json = JsonConvert.SerializeObject(wordlistsList, Formatting.Indented);
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(_filePath, json);
         }
         public static (bool, int) AlreadyThere(string name, string firstLanguage, string secondLanguage) {
             List<WordlistsList> wordlistsList = GetWordlistsList();
@@ -111,8 +117,29 @@ namespace VocabTrainer {
 
 
         public static void CheckSpecialWordlists() {
-            // check for existence of special wordlist files 
-            // if not, add them
+            string filePathWordlists = VocabularyEntry.FirstPartFilePath;
+            List<string> allFiles = Directory.GetFiles(filePathWordlists).ToList();
+            for (int i = 0; i < allFiles.Count; i++) { 
+                string fileName = allFiles[i].Substring(allFiles[i].LastIndexOf("\\")+1);
+                allFiles[i] = fileName;
+            }
+
+            for (int i = 0; i < _specialWordlists.Count; i++) {
+                if (!allFiles.Contains(_specialWordlists[i])) {
+                    File.Create(VocabularyEntry.FirstPartFilePath + _specialWordlists + "\\");
+                    WordlistsList wordlist = new WordlistsList() {
+                        WordlistName = _specialWordlists[i],
+                        FirstLanguage = "-",
+                        SecondLanguage = "-",
+                        IsTrue = false
+                    };
+                    List<WordlistsList> wordlistsLists = WordlistsList.GetWordlistsList();
+                    if (!wordlistsLists.Contains(wordlist)) {
+                        wordlistsLists.Add(wordlist);
+                        WriteWordlistsList(wordlistsLists);
+                    }
+                }
+            }
         }
     }
 }
