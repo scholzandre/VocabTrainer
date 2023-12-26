@@ -14,8 +14,8 @@ namespace VocabTrainer {
         private static string _filePath = $"{VocabularyEntry.FirstPartFilePath}wordlists{VocabularyEntry.SecondPartFilePath}";
         private static List<string> _specialWordlists = new List<string>() {
             "Marked",
-            "NotSeen",
             "Seen",
+            "NotSeen",
             "LastTimeWrong"
         };
 
@@ -140,6 +140,28 @@ namespace VocabTrainer {
                     if (!wordlistsLists.Contains(wordlist)) {
                         wordlistsLists.Add(wordlist);
                         WriteWordlistsList(wordlistsLists);
+                    }
+
+                    if (_specialWordlists[i] == "NotSeen") {
+                        VocabularyEntry seen = new VocabularyEntry() { 
+                            FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}"
+                        };
+                        VocabularyEntry notSeen = new VocabularyEntry() {
+                            FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}"
+                        };
+                        List<VocabularyEntry> tempSeenEntries = VocabularyEntry.GetData(seen);
+                        List<VocabularyEntry> tempNotSeenEntries = new List<VocabularyEntry>();
+                        List<WordlistsList> wordlists = GetWordlistsList();
+                        for (int j = 0; j < wordlists.Count; j++) {
+                            List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(new VocabularyEntry() {
+                                FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[j].WordlistName}" +
+                                $"_{wordlists[j].FirstLanguage}_{wordlists[j].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                            });
+                            for (int z = 0; z < tempEntries.Count; z++) 
+                                if (!tempSeenEntries.Contains(tempEntries[z]))
+                                    tempNotSeenEntries.Add(tempEntries[z]);
+                        }
+                        VocabularyEntry.WriteData(notSeen, tempNotSeenEntries);
                     }
                 }
             }
