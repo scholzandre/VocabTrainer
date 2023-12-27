@@ -10,10 +10,12 @@ namespace VocabTrainer.ViewModels {
         public string SelectedItem {
             get => _selectedItem;
             set {
-                _selectedItem = value;
-                FirstLanguage = ComboBoxWordlists[value].FirstLanguage;
-                SecondLanguage = ComboBoxWordlists[value].SecondLanguage;
-                OnPropertyChanged(nameof(SelectedItem));
+                if (ComboBoxWordlists.Count > 0) { 
+                    _selectedItem = value;
+                    FirstLanguage = ComboBoxWordlists[value].FirstLanguage;
+                    SecondLanguage = ComboBoxWordlists[value].SecondLanguage;
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
             }
         }
         private ObservableCollection<string> _comboBoxEntries = new ObservableCollection<string>();
