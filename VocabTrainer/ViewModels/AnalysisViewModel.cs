@@ -196,23 +196,23 @@ namespace VocabTrainer.ViewModels {
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
-                    entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
-                    entries = VocabularyEntry.GetData(entry);
-                    for (int j = 0; j < entries.Count; j++) {
-                        entries[j].Seen = false;
-                        entries[j].LastTimeWrong = false;
-                        entries[j].Repeated = 0;
-                    }
                     if (wordlists[i].WordlistName != "Marked" &&
                         wordlists[i].WordlistName != "Seen" &&
                         wordlists[i].WordlistName != "NotSeen" &&
                         wordlists[i].WordlistName != "LastTimeWrong") {
+                        entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
+                        entries = VocabularyEntry.GetData(entry);
+                        for (int j = 0; j < entries.Count; j++) {
+                            entries[j].Seen = false;
+                            entries[j].LastTimeWrong = false;
+                            entries[j].Repeated = 0;
+                        }
                         VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
                         List<VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
                         for (int j = 0; j < entries.Count; j++) if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
                         VocabularyEntry.WriteData(notSeenVar, notSeen);
+                        VocabularyEntry.WriteData(entry, entries);
                     }
-                    VocabularyEntry.WriteData(entry, entries);
                 }
             }
             GetPercentages();
