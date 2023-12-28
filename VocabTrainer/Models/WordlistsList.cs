@@ -165,7 +165,12 @@ namespace VocabTrainer {
                     }
                 }
             }
+        }
 
+        public static void CheckJsonFolder() {
+            if (!Directory.Exists(VocabularyEntry.FirstPartFilePath)) { 
+                Directory.CreateDirectory(VocabularyEntry.FirstPartFilePath);
+            }
         }
 
         public override bool Equals(object obj) {
