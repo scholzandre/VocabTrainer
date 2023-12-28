@@ -102,6 +102,8 @@ namespace VocabTrainer.ViewModels {
         }
 
         public MainViewModel() {
+            WordlistsList.CheckJsonFolder();
+            Settings.CheckSettingsFile();
             WordlistsList.CheckSpecialWordlists();
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
