@@ -75,11 +75,11 @@
                     <Border BorderBrush="White" BorderThickness="2">
                         <StackPanel>
                             <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[0]}" Command="{Binding OpenLearnViewCommand}" Content="Learn"/>
-                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[1]}" Command="{Binding OpenAddWordlistViewCommand}" Content="Add wordlist"/>
-                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[2]}" Command="{Binding OpenManageWordlistsViewCommand}" Content="Manage lists"/>
-                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[3]}" Command="{Binding OpenAddWordsViewCommand}" Content="Add words"/>
-                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[4]}" Command="{Binding OpenManageWordsViewCommand}" Content="Manage"/>
                             <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[5]}" Command="{Binding OpenAnalysisViewCommand}" Content="Analysis"/>
+                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[3]}" Command="{Binding OpenAddWordsViewCommand}" Content="Add words"/>
+                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[4]}" Command="{Binding OpenManageWordsViewCommand}" Content="Manage words"/>
+                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[1]}" Command="{Binding OpenAddWordlistViewCommand}" Content="Add list"/>
+                            <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[2]}" Command="{Binding OpenManageWordlistsViewCommand}" Content="Manage lists"/>
                             <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[6]}" Command="{Binding OpenTranslatorViewCommand}" Content="Translator"/>
                             <Button Style="{StaticResource ButtonStyle}" IsEnabled="{Binding Enabled[7]}" Command="{Binding OpenSettingsViewCommand}" Content="Settings"/>
                         </StackPanel>
