@@ -144,13 +144,22 @@ namespace VocabTrainer.ViewModels {
 
         private void AddWord(object obj) {
             VocabularyEntry entry = new VocabularyEntry() {
-                German = FirstLanguageWord,
-                English = SecondLanguageWord,
                 FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
                 SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
                 WordList = ComboBoxWordlists[SelectedItem].WordlistName,
                 FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
             };
+
+            if (SelectedItemFirstLanguage.ToLower() == ComboBoxWordlists[SelectedItem].SecondLanguage.ToLower()) 
+                entry.German = SecondLanguageWord;
+            else 
+                entry.German = FirstLanguageWord;
+            
+            if (SelectedItemSecondLanguage.ToLower() == ComboBoxWordlists[SelectedItem].FirstLanguage.ToLower()) 
+                entry.English = FirstLanguageWord;
+            else 
+                entry.English = SecondLanguageWord;
+            
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             if (entries.Count > 0) {
                 bool alreadyExists = false;
