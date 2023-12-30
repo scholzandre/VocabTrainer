@@ -148,6 +148,7 @@ namespace VocabTrainer.ViewModels {
                 English = SecondLanguageWord,
                 FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
                 SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
+                WordList = ComboBoxWordlists[SelectedItem].WordlistName,
                 FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
             };
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
@@ -159,14 +160,14 @@ namespace VocabTrainer.ViewModels {
                         break;
                     }
                 if (alreadyExists) {
-                    InfoText = "Entry already exists.";
+                    InfoText = $"{FirstLanguageWord}, {SecondLanguageWord} already exists.";
                 } else {
                     entries.Add(entry);
-                    InfoText = "Entry has been added.";
+                    InfoText = $"{FirstLanguageWord}, {SecondLanguageWord} has been added.";
                 }
             } else {
                 entries.Add(entry);
-                InfoText = "Entry has been added.";
+                InfoText = $"{FirstLanguageWord}, {SecondLanguageWord} has been added.";
             }
             VocabularyEntry.AddEntry("NotSeen", entry);
             VocabularyEntry.WriteData(entry, entries);
