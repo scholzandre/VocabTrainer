@@ -92,7 +92,7 @@ namespace VocabTrainer.ViewModels {
             QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
             List<VocabularyEntry> tempEntry2 = new List<VocabularyEntry>(tempEntry);
             for (int i = 0; i < tempEntry.Count; i++) {
-                _questions.Add((_language == 1) ? tempEntry[i].English : tempEntry[i].German, tempEntry[i].WordList);
+                _questions.Add((_language == 1) ? tempEntry[i].English : tempEntry[i].German, $"{tempEntry[i].WordList}_{tempEntry[i].FirstLanguage}_{tempEntry[i].SecondLanguage}");
                 int random = _parent.Random.Next(0, tempEntry2.Count);
                 _answers.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English, tempEntry2[random].WordList);
                 AnswerText.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English);
@@ -158,10 +158,22 @@ namespace VocabTrainer.ViewModels {
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
                     German = (_language == 1) ? _answer.Item1 : _question.Item1,
                     English = (_language == 1) ? _question.Item1 : _answer.Item1,
-                    WordList = _questions[_question.Item1]
+                    WordList = _answers[_answer.Item1]
                 };
-                int indexEntries = _entries.IndexOf(tempAnswerEntry);
-                bool isCorrect = (indexEntries >= 0)? VocabularyEntry.CheckAnswer(_parent.Entries[_parent.Entries.IndexOf(_entries[indexEntries])], tempAnswerEntry) : false;
+                VocabularyEntry tempQuestionEntry = new VocabularyEntry() {
+                    German = (_language == 1) ? _question.Item1 : "",
+                    English = (_language == 1) ? "" : _question.Item1,
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
+                };
+                List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempQuestionEntry);
+                int index = 0;
+                for (int i = 0; i < tempEntries.Count; i++) {
+                    if (tempEntries[i].German == tempQuestionEntry.German || tempEntries[i].English == tempQuestionEntry.English) { 
+                        index = i;
+                        break;
+                    }
+                }
+                bool isCorrect = VocabularyEntry.CheckAnswer(tempEntries[index], tempAnswerEntry);
 
                 List<bool> tempListAnswersClickable = new List<bool>(AnswersClickable);
                 List<bool> tempListQuestionsClickable = new List<bool>(QuestionsClickable);
