@@ -84,10 +84,13 @@ namespace VocabTrainer.ViewModels {
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
-        private bool CanExecuteCommand(object arg) {
+        private bool CanDeleteEntry(object arg) {
             return true;
         }
-        public ICommand ChangeTextCommand => new RelayCommand(ChangeText, CanExecuteCommand);
+        private bool CanChangeEntry(object arg) {
+            return FirstWord != "" && SecondWord != "";
+        }
+        public ICommand ChangeTextCommand => new RelayCommand(ChangeText, CanChangeEntry);
         private void ChangeText(object obj) {
             if (EditButtonText == ButtonIcons.GetIconString(IconType.Edit)) {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Save);
@@ -140,7 +143,7 @@ namespace VocabTrainer.ViewModels {
                 Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             }
         }
-        public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
+        public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanDeleteEntry);
         private void DeleteEntry(object obj) {
             if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
                 Editable = true;
