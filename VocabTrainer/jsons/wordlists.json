@@ -21,12 +21,6 @@
     "WordlistName": "Marked",
     "FirstLanguage": "-",
     "SecondLanguage": "-",
-    "IsTrue": true
-  },
-  {
-    "WordlistName": "words_German_English",
-    "FirstLanguage": "German",
-    "SecondLanguage": "English",
     "IsTrue": false
   }
 ]
