@@ -165,13 +165,24 @@ namespace VocabTrainer.ViewModels {
                         }
                     }
                 }
-
                 for (int i = 0; i < _entrySpecialLists.Count; i++)
                     VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
 
                 Wordlist.WordlistName = WordlistName;
                 Wordlist.FirstLanguage = FirstLanguage;
                 Wordlist.SecondLanguage = SecondLanguage;
+
+                VocabularyEntry entry = new VocabularyEntry() { 
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                };
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+                for (int i = 0; i < entries.Count; i++) {
+                    entries[i].WordList = WordlistName;
+                    entries[i].FirstLanguage = FirstLanguage;
+                    entries[i].SecondLanguage = SecondLanguage;
+                }
+                VocabularyEntry.WriteData(entry, entries);
+                
                 for (int i = 0; i < AllWordlists.Count; i++) 
                     if (AllWordlists[i] == _original) {
                         AllWordlists[i] = Wordlist;
@@ -184,11 +195,12 @@ namespace VocabTrainer.ViewModels {
                         _views[i].Wordlist = Wordlist;
                         break;
                     }
+
+                WordlistsList.WriteWordlistsList(AllWordlists);
             } else {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
             }
-            WordlistsList.WriteWordlistsList(AllWordlists);
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
