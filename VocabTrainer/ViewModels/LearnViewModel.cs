@@ -43,23 +43,28 @@ namespace VocabTrainer.ViewModels {
 
         public void ShowLearnMode() {
             int learningMode = Random.Next(_learningModes.Count);
-            if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 1 && Entries.Count > 1) {
+            InfoText = "Learn words";
+            if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 1 && Entries.Count >= 1 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeOneView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
                 UserControl.DataContext = new LearningModeOneViewModel(this);
-            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 2 && Entries.Count > 1) {
+            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 2 && Entries.Count >= 1 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeTwoView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
                 UserControl.DataContext = new LearningModeTwoViewModel(this);
-            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 3 && Entries.Count > 5) {
+            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 3 && Entries.Count >= 5 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeThreeView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
                 UserControl.DataContext = new LearningModeThreeViewModel(this);
-            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 4 && Entries.Count > 5) {
+            } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 4 && Entries.Count >= 5 && Entries.Count > Counter) {
                 List<VocabularyEntry> tempEntires = new List<VocabularyEntry>();
                 for (int i = 0; i < 5; i++) {
-                    if (Counter >= Entries.Count()) {
+                    if (Counter < Entries.Count() && tempEntires.Contains(Entries[Counter])) {
+                        i--;
+                        Counter++;
+                    } else if (Counter >= Entries.Count()) {
                         Counter = 0;
+                        GetEntries();
                         tempEntires.Add(Entries[Counter]);
                     } else {
                         tempEntires.Add(Entries[Counter]);
@@ -72,11 +77,12 @@ namespace VocabTrainer.ViewModels {
             } else
                 InfoText = "Not enough word available";
 
-            if (Counter < Entries.Count-1) {
+            if (Counter < Entries.Count) {
                 Counter++;
             } else {
                 Counter = 0;
                 GetEntries();
+                ShowLearnMode();
             }
         }
 
