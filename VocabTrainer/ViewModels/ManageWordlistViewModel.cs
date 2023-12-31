@@ -154,6 +154,21 @@ namespace VocabTrainer.ViewModels {
                     File.Move($"{VocabularyEntry.FirstPartFilePath}{_original.WordlistName}_{_original.FirstLanguage}_{_original.SecondLanguage}{VocabularyEntry.SecondPartFilePath}",
                               $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
                 }
+                for (int i = 0; i < _entriesSpecialLists.Count; i++) {
+                    for (int j = 0; j < _entriesSpecialLists[i].Count; j++) {
+                        if (_entriesSpecialLists[i][j].WordList == Wordlist.WordlistName &&
+                            _entriesSpecialLists[i][j].FirstLanguage == Wordlist.FirstLanguage &&
+                            _entriesSpecialLists[i][j].SecondLanguage == Wordlist.SecondLanguage) {
+                            _entriesSpecialLists[i][j].WordList = WordlistName;
+                            _entriesSpecialLists[i][j].FirstLanguage = FirstLanguage;
+                            _entriesSpecialLists[i][j].SecondLanguage = SecondLanguage;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < _entrySpecialLists.Count; i++)
+                    VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
+
                 Wordlist.WordlistName = WordlistName;
                 Wordlist.FirstLanguage = FirstLanguage;
                 Wordlist.SecondLanguage = SecondLanguage;
