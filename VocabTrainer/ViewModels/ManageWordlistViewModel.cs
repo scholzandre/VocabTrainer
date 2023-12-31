@@ -96,6 +96,20 @@ namespace VocabTrainer.ViewModels {
         }
         private WordlistsList _original;
         ObservableCollection<ManageWordlistViewModel> _views;
+        private static readonly List<VocabularyEntry> _entrySpecialLists = new List<VocabularyEntry> {
+            new VocabularyEntry() { FilePath =  $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry() { FilePath =  $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry() { FilePath =  $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry() { FilePath =  $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}" }
+        };
+
+        private readonly List<List<VocabularyEntry>> _entriesSpecialLists = new List<List<VocabularyEntry>> {
+            VocabularyEntry.GetData(_entrySpecialLists[0]),
+            VocabularyEntry.GetData(_entrySpecialLists[1]),
+            VocabularyEntry.GetData(_entrySpecialLists[2]),
+            VocabularyEntry.GetData(_entrySpecialLists[3])
+        };
+
         public ManageWordlistViewModel(WordlistsList wordlist, List<WordlistsList> allWordlists, ObservableCollection<ManageWordlistViewModel> views) {
             _original = wordlist;
             Wordlist = wordlist;
@@ -177,6 +191,16 @@ namespace VocabTrainer.ViewModels {
                         AllWordlists.Remove(_original);
                         break;
                     }
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(new VocabularyEntry() { 
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                });
+                for (int i = 0; i < entries.Count; i++) 
+                    for (int j = 0; j < _entriesSpecialLists.Count; j++) 
+                        _entriesSpecialLists[j].Remove(entries[i]);
+
+                for (int i = 0; i < _entrySpecialLists.Count; i++)
+                    VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
+                
                 if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"))
                     File.Delete($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
             } else {
