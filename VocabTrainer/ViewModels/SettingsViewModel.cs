@@ -27,6 +27,7 @@ namespace VocabTrainer.ViewModels {
         private MainViewModel _parent;
         public SettingsViewModel(MainViewModel parent) {
             _parent = parent;
+            _parent.ListWordlist = WordlistsList.GetWordlistsList();
             _settings = _parent.SettingsList;
             _wordlists = _parent.ListWordlist;
             FillCollection();
