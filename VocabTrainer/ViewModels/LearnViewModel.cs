@@ -79,7 +79,7 @@ namespace VocabTrainer.ViewModels {
 
             if (Counter < Entries.Count) {
                 Counter++;
-            } else {
+            } else if (Entries.Count > 0) {
                 Counter = 0;
                 GetEntries();
                 ShowLearnMode();
