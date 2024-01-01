@@ -208,9 +208,15 @@ namespace VocabTrainer.ViewModels {
                             entries[j].Repeated = 0;
                         }
                         VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
+                        VocabularyEntry seenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" };
                         List<VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
-                        for (int j = 0; j < entries.Count; j++) if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
+                        List<VocabularyEntry> seen = VocabularyEntry.GetData(seenVar);
+                        for (int j = 0; j < entries.Count; j++) { 
+                            if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
+                            if (seen.Contains(entries[j])) seen.Remove(entries[j]);
+                        }
                         VocabularyEntry.WriteData(notSeenVar, notSeen);
+                        VocabularyEntry.WriteData(seenVar, seen);
                         VocabularyEntry.WriteData(entry, entries);
                     }
                 }
