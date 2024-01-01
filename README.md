@@ -12,6 +12,8 @@ Long story short:
 
 You can create multiple lists in which you can enter and learn your vocabulary. In addition to creating these lists and entries, you can also manage and delete them. 
 
+If a word has multiple meanings, you can enter them separated by a comma.
+
 You can learn your vocabulary in four different learning modes:
 - simple repetition of entries (reading)
 - enter the corresponding translation
@@ -19,6 +21,8 @@ You can learn your vocabulary in four different learning modes:
 - multiple choice, where five entries are given and you have to connect the correct ones
 
 One entry is required for the first two learning modes and at least five for the last two.
+
+If you use entries separated by commas, you can enter as many as there are in the second learning mode.
 
 To track your progress, there is also an analysis window where you can see how many entries you have seen at least once, how many you already know and how many you have answered incorrectly.
 
