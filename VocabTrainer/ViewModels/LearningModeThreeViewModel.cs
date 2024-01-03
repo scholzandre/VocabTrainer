@@ -108,19 +108,19 @@ namespace VocabTrainer.ViewModels {
             _positionCorrectItem = _parent.Random.Next(0, 5);
             _entries.Insert(_positionCorrectItem, _parent.Entries[_counter]);
             if (language == 1) {
-                FirstWord = _parent.Entries[_counter].German;
-                FirstAnswer = _entries[0].English;
-                SecondAnswer = _entries[1].English;
-                ThirdAnswer = _entries[2].English;
-                FourthAnswer = _entries[3].English;
-                FifthAnswer = _entries[4].English;
+                FirstWord = _parent.Entries[_counter].SecondWord;
+                FirstAnswer = _entries[0].FirstWord;
+                SecondAnswer = _entries[1].FirstWord;
+                ThirdAnswer = _entries[2].FirstWord;
+                FourthAnswer = _entries[3].FirstWord;
+                FifthAnswer = _entries[4].FirstWord;
             } else {
-                FirstWord = _parent.Entries[_counter].English;
-                FirstAnswer = _entries[0].German;
-                SecondAnswer = _entries[1].German;
-                ThirdAnswer = _entries[2].German;
-                FourthAnswer = _entries[3].German;
-                FifthAnswer = _entries[4].German;
+                FirstWord = _parent.Entries[_counter].FirstWord;
+                FirstAnswer = _entries[0].SecondWord;
+                SecondAnswer = _entries[1].SecondWord;
+                ThirdAnswer = _entries[2].SecondWord;
+                FourthAnswer = _entries[3].SecondWord;
+                FifthAnswer = _entries[4].SecondWord;
             }
         }
         private bool CanExecuteCommand(object arg) {
@@ -148,9 +148,9 @@ namespace VocabTrainer.ViewModels {
         }
         private async Task CheckInput(VocabularyEntry choice, int answer) {
             if (_language == 1) 
-                choice.German = FirstWord;
+                choice.SecondWord = FirstWord;
             else 
-                choice.English = FirstWord;
+                choice.FirstWord = FirstWord;
             
             List<Brush> tempList = new List<Brush>(BackgroundColors);
             int awaitTime = 1500;

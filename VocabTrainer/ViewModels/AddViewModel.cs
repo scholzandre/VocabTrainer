@@ -93,8 +93,8 @@ namespace VocabTrainer.ViewModels {
         public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteCommand);
         private void AddEntry(object obj) {
             VocabularyEntry entry = new VocabularyEntry() {
-                German = FirstWord,
-                English = SecondWord,
+                SecondWord = FirstWord,
+                FirstWord = SecondWord,
                 FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
                 SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
                 WordList = ComboBoxWordlists[SelectedItem].WordlistName,
@@ -103,7 +103,7 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             bool contains = false;
             foreach (VocabularyEntry tempEntry in entries) 
-                if (tempEntry.German == entry.German || tempEntry.English == entry.English) {
+                if (tempEntry.SecondWord == entry.SecondWord || tempEntry.FirstWord == entry.FirstWord) {
                     contains = true;
                     break;
                 }

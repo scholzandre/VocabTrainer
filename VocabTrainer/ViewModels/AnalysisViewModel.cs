@@ -166,7 +166,7 @@ namespace VocabTrainer.ViewModels {
             SearchingWords = new List<VocabularyEntry>(AllWords);
             if (SearchingWord != "" && SearchingWord != "Searching...")
                 for (int i = 0; i < SearchingWords.Count; i++)
-                    if (!SearchingWords[i].German.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].English.ToLower().Contains(SearchingWord.ToLower())) {
+                    if (!SearchingWords[i].SecondWord.ToLower().Contains(SearchingWord.ToLower()) && !SearchingWords[i].FirstWord.ToLower().Contains(SearchingWord.ToLower())) {
                         SearchingWords.Remove(SearchingWords[i]);
                         i--;
                     }

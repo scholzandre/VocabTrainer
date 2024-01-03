@@ -151,20 +151,20 @@ namespace VocabTrainer.ViewModels {
             };
 
             if (SelectedItemFirstLanguage.ToLower() == ComboBoxWordlists[SelectedItem].SecondLanguage.ToLower()) 
-                entry.German = SecondLanguageWord;
+                entry.SecondWord = SecondLanguageWord;
             else 
-                entry.German = FirstLanguageWord;
+                entry.SecondWord = FirstLanguageWord;
             
             if (SelectedItemSecondLanguage.ToLower() == ComboBoxWordlists[SelectedItem].FirstLanguage.ToLower()) 
-                entry.English = FirstLanguageWord;
+                entry.FirstWord = FirstLanguageWord;
             else 
-                entry.English = SecondLanguageWord;
+                entry.FirstWord = SecondLanguageWord;
             
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             if (entries.Count > 0) {
                 bool alreadyExists = false;
                 foreach (VocabularyEntry tempEntry in entries) 
-                    if (tempEntry.German.Contains(FirstLanguageWord) || tempEntry.English.Contains(SecondLanguageWord)) {
+                    if (tempEntry.SecondWord.Contains(FirstLanguageWord) || tempEntry.FirstWord.Contains(SecondLanguageWord)) {
                         alreadyExists = true;
                         break;
                     }

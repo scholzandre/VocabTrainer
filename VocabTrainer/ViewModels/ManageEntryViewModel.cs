@@ -75,8 +75,8 @@ namespace VocabTrainer.ViewModels {
         private ManageViewModel _parent;
         private WordlistsList _selectedItem;
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem) {
-            FirstWord = entry.German;
-            SecondWord = entry.English;
+            FirstWord = entry.SecondWord;
+            SecondWord = entry.FirstWord;
             _entry = entry;
             _views = views;
             _parent = parent;
@@ -105,15 +105,15 @@ namespace VocabTrainer.ViewModels {
                 bool alreadyExists = false;
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 foreach (VocabularyEntry entry in entries) 
-                    if ((entry.German == FirstWord && FirstWord != _entry.German) || (entry.English == SecondWord && SecondWord != _entry.English)) {
+                    if ((entry.SecondWord == FirstWord && FirstWord != _entry.SecondWord) || (entry.FirstWord == SecondWord && SecondWord != _entry.FirstWord)) {
                         alreadyExists = true;
                         break;
                     }
                 if (!alreadyExists) {
                     for (int i = 0; i < entries.Count; i++) 
-                        if (entries[i].German == _entry.German && entries[i].English == _entry.English) {
-                            entries[i].German = FirstWord;
-                            entries[i].English = SecondWord;
+                        if (entries[i].SecondWord == _entry.SecondWord && entries[i].FirstWord == _entry.FirstWord) {
+                            entries[i].SecondWord = FirstWord;
+                            entries[i].FirstWord = SecondWord;
                             break;
                         }
                     VocabularyEntry.WriteData(_entry, entries);
@@ -124,18 +124,18 @@ namespace VocabTrainer.ViewModels {
                         };
                         List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
                         for (int j = 0; j < tempEntries.Count; j++) 
-                            if (tempEntries[j].German == _entry.German && tempEntries[j].English == _entry.English) {
-                                tempEntries[j].German = FirstWord;
-                                tempEntries[j].English = SecondWord;
+                            if (tempEntries[j].SecondWord == _entry.SecondWord && tempEntries[j].FirstWord == _entry.FirstWord) {
+                                tempEntries[j].SecondWord = FirstWord;
+                                tempEntries[j].FirstWord = SecondWord;
                                 break;
                             }
                         VocabularyEntry.WriteData(tempEntry, tempEntries);
                     }
-                    _entry.German = FirstWord;
-                    _entry.English = SecondWord;
+                    _entry.SecondWord = FirstWord;
+                    _entry.FirstWord = SecondWord;
                 } else { 
-                    FirstWord = _entry.German;
-                    SecondWord = _entry.English;
+                    FirstWord = _entry.SecondWord;
+                    SecondWord = _entry.FirstWord;
                 } 
             } else { 
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
@@ -179,8 +179,8 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 FirstWordWritable = false;
                 SecondWordWritable = false;
-                FirstWord = _entry.German;
-                SecondWord = _entry.English;
+                FirstWord = _entry.SecondWord;
+                SecondWord = _entry.FirstWord;
             }
         }
         public override int GetHashCode() {

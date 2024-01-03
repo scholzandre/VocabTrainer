@@ -89,13 +89,13 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
-            QuestionText = (_language == 1) ? tempEntry.Select(x => x.English).ToList() : tempEntry.Select(x => x.German).ToList();
+            QuestionText = (_language == 1) ? tempEntry.Select(x => x.FirstWord).ToList() : tempEntry.Select(x => x.SecondWord).ToList();
             List<VocabularyEntry> tempEntry2 = new List<VocabularyEntry>(tempEntry);
             for (int i = 0; i < tempEntry.Count; i++) {
-                _questions.Add((_language == 1) ? tempEntry[i].English : tempEntry[i].German, $"{tempEntry[i].WordList}_{tempEntry[i].FirstLanguage}_{tempEntry[i].SecondLanguage}");
+                _questions.Add((_language == 1) ? tempEntry[i].FirstWord : tempEntry[i].SecondWord, $"{tempEntry[i].WordList}_{tempEntry[i].FirstLanguage}_{tempEntry[i].SecondLanguage}");
                 int random = _parent.Random.Next(0, tempEntry2.Count);
-                _answers.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English, tempEntry2[random].WordList);
-                AnswerText.Add((_language == 1) ? tempEntry2[random].German : tempEntry2[random].English);
+                _answers.Add((_language == 1) ? tempEntry2[random].SecondWord : tempEntry2[random].FirstWord, tempEntry2[random].WordList);
+                AnswerText.Add((_language == 1) ? tempEntry2[random].SecondWord : tempEntry2[random].FirstWord);
                 tempEntry2.Remove(tempEntry2[random]);
             }
         }
@@ -156,19 +156,19 @@ namespace VocabTrainer.ViewModels {
         private async void CheckAnswer(string field) {
             if (_question.Item1 != string.Empty && _answer.Item1 != string.Empty) {
                 VocabularyEntry tempAnswerEntry = new VocabularyEntry() {
-                    German = (_language == 1) ? _answer.Item1 : _question.Item1,
-                    English = (_language == 1) ? _question.Item1 : _answer.Item1,
+                    SecondWord = (_language == 1) ? _answer.Item1 : _question.Item1,
+                    FirstWord = (_language == 1) ? _question.Item1 : _answer.Item1,
                     WordList = _answers[_answer.Item1]
                 };
                 VocabularyEntry tempQuestionEntry = new VocabularyEntry() {
-                    German = (_language == 1) ? _question.Item1 : "",
-                    English = (_language == 1) ? "" : _question.Item1,
+                    SecondWord = (_language == 1) ? _question.Item1 : "",
+                    FirstWord = (_language == 1) ? "" : _question.Item1,
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{_questions[_question.Item1]}{VocabularyEntry.SecondPartFilePath}"
                 };
                 List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempQuestionEntry);
                 int index = 0;
                 for (int i = 0; i < tempEntries.Count; i++) {
-                    if (tempEntries[i].German == tempQuestionEntry.German || tempEntries[i].English == tempQuestionEntry.English) { 
+                    if (tempEntries[i].SecondWord == tempQuestionEntry.SecondWord || tempEntries[i].FirstWord == tempQuestionEntry.FirstWord) { 
                         index = i;
                         break;
                     }

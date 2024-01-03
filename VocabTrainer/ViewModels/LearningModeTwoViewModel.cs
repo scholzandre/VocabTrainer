@@ -108,8 +108,8 @@ namespace VocabTrainer.ViewModels {
         public LearningModeTwoViewModel(LearnViewModel parent) {
             _parent = parent;
             _counter = _parent.Counter;
-            _firstWord = _parent.Entries[_counter].German;
-            _secondWord = _parent.Entries[_counter].English;
+            _firstWord = _parent.Entries[_counter].SecondWord;
+            _secondWord = _parent.Entries[_counter].FirstWord;
             FirstLanguage = _parent.Entries[_counter].FirstLanguage;
             SecondLanguage = _parent.Entries[_counter].SecondLanguage;
             Star = (markedEntries.Contains(_parent.Entries[_counter])) ? "★" : "☆";

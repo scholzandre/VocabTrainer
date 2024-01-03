@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System;
 
 namespace VocabTrainer.Views {
     public class VocabularyEntry {
-        public string English { get; set; }
-        public string German { get; set; }
+        public string FirstWord { get; set; }
+        public string SecondWord { get; set; }
         public bool Seen { get; set; }
         public bool LastTimeWrong { get; set; }
         public int Repeated { get; set; }
@@ -42,14 +40,14 @@ namespace VocabTrainer.Views {
 
             VocabularyEntry otherEntry = (VocabularyEntry)obj;
             return this.WordList == otherEntry.WordList &&
-                   this.German == otherEntry.German &&
-                   this.English == otherEntry.English;
+                   this.SecondWord == otherEntry.SecondWord &&
+                   this.FirstWord == otherEntry.FirstWord;
         }
         public override int GetHashCode() {
             int hash = 17;
             hash = hash * 31 + WordList.GetHashCode();
-            hash = hash * 31 + (German ?? "").GetHashCode();
-            hash = hash * 31 + (English ?? "").GetHashCode();
+            hash = hash * 31 + (SecondWord ?? "").GetHashCode();
+            hash = hash * 31 + (FirstWord ?? "").GetHashCode();
             return hash;
         }
         public static void AddEntry(string fileName, VocabularyEntry entry) {
@@ -57,7 +55,7 @@ namespace VocabTrainer.Views {
             VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}" };
             List<VocabularyEntry> list = VocabularyEntry.GetData(tempEntry);
             for (int i = 0; i < list.Count; i++)
-                if (list[i].English == entry.English && list[i].German == entry.German && list[i].WordList == entry.WordList)
+                if (list[i].FirstWord == entry.FirstWord && list[i].SecondWord == entry.SecondWord && list[i].WordList == entry.WordList)
                     alreadyExists = true;
             if (!alreadyExists) { 
                 list.Add(entry);
