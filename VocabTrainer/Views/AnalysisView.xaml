@@ -67,8 +67,8 @@
             </StackPanel>
             <DataGrid ItemsSource="{Binding SearchingWords}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" MaxHeight="300" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" Header="German" Binding="{Binding German}" MinWidth="221"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="English" Binding="{Binding English}" MinWidth="221"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="FirstWord" Binding="{Binding FirstWord}" MinWidth="221"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="SecondWord" Binding="{Binding SecondWord}" MinWidth="221"/>
                     <DataGridCheckBoxColumn IsReadOnly="True" Header="Seen" Binding="{Binding Seen}"/>
                     <DataGridCheckBoxColumn IsReadOnly="True" Header="Ltw" Binding="{Binding LastTimeWrong}"/>
                     <DataGridTextColumn IsReadOnly="True" Header="Repeated" Binding="{Binding Repeated}"/>
