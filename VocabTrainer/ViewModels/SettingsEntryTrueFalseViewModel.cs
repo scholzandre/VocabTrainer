@@ -33,13 +33,15 @@ namespace VocabTrainer.ViewModels {
         private List<Settings> _settings;
         private List<WordlistsList> _wordlists;
         private SettingsViewModel _settingsViewModel;
-        public SettingsEntryTrueFalseViewModel(string condition, bool isTrue, List<Settings> settings, SettingsViewModel settingsViewModel, List<WordlistsList> wordlists, string text) {
+        private MainViewModel _parent;
+        public SettingsEntryTrueFalseViewModel(string condition, bool isTrue, List<Settings> settings, SettingsViewModel settingsViewModel, List<WordlistsList> wordlists, string text, MainViewModel parent) {
             Condition = condition;
             Text = text;
             IsTrue = isTrue;
             _wordlists = wordlists;
             _settings = settings;
             _settingsViewModel = settingsViewModel;
+            _parent = parent;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
@@ -79,6 +81,7 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.WriteWordlistsList(_wordlists);
             Settings.WriteSettings(_settings);
             _settingsViewModel.FillCollection();
+            _parent.LearnEntryViewModel = new LearnViewModel();
         }
         private bool EnoughWords(int minNumber) {
             int counter = 0;
