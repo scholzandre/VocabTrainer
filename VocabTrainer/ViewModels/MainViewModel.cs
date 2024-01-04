@@ -102,7 +102,15 @@ namespace VocabTrainer.ViewModels {
         }
         
         private Type _learnEntryViewType = typeof(LearnView);
-        private LearnViewModel _LearnEntryViewModel = new LearnViewModel();
+
+        private LearnViewModel _learnEntryViewModel = new LearnViewModel();
+        public LearnViewModel LearnEntryViewModel {
+            get => _learnEntryViewModel;
+            set {
+                _learnEntryViewModel = value;
+                OnPropertyChanged(nameof(LearnEntryViewModel)); 
+            }
+        }
 
         private Type _analysisViewType = typeof(AnalysisView);
         private AnalysisViewModel _analysisViewModel = new AnalysisViewModel();
@@ -153,7 +161,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenLearnView(object obj) {
             SetEnabled(0);
             UserControl = (UserControl)Activator.CreateInstance(_learnEntryViewType);
-            UserControl.DataContext = _LearnEntryViewModel;
+            UserControl.DataContext = _learnEntryViewModel;
         }
         public ICommand OpenAddWordlistViewCommand => new RelayCommand(OpenAddWordlistView, CanExecuteCommand);
         private void OpenAddWordlistView(object obj) {
