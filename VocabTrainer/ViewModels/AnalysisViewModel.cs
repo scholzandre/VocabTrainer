@@ -96,6 +96,7 @@ namespace VocabTrainer.ViewModels {
                 _selectedItem = value;
                 if (SelectedItem == "All words") Wordlist = string.Empty;
                 else Wordlist = SelectedItem;
+                _parent.OpenedWordlist = SelectedItem;
                 GetPercentages();
                 CreateDiagram();
                 SetStrings();
@@ -143,7 +144,11 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxWordlists));
             }
         }
-        public AnalysisViewModel() {
+        private MainViewModel _parent;
+        private string _openedWordlist;
+        public AnalysisViewModel(MainViewModel parent, string openedWordlist) {
+            _parent = parent;
+            _openedWordlist = openedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
             foreach (WordlistsList temp in tempWordlists) {
                 if (temp.WordlistName != "Marked" &&
@@ -156,7 +161,11 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             ComboBoxEntries.Add("All words");
-            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count-1] : null;
+            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist)) { 
+                SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
+            }
+            else
+                SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count-1] : null;
         }
         private bool CanExecuteCommand(object arg) {
             return true;
