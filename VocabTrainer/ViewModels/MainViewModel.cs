@@ -113,7 +113,6 @@ namespace VocabTrainer.ViewModels {
         }
 
         private Type _analysisViewType = typeof(AnalysisView);
-        private AnalysisViewModel _analysisViewModel = new AnalysisViewModel();
 
         private Type _addEntryViewType = typeof(AddView);
         private AddViewModel _addEntryViewModel = new AddViewModel();
@@ -191,7 +190,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenAnalysisView(object obj) {
             SetEnabled(5);
             UserControl = (UserControl)Activator.CreateInstance(_analysisViewType);
-            UserControl.DataContext = _analysisViewModel;
+            UserControl.DataContext = new AnalysisViewModel();
         }
         public ICommand OpenTranslatorViewCommand => new RelayCommand(OpenTranslatorView, CanExecuteCommand);
         private void OpenTranslatorView(object obj) {
