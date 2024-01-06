@@ -20,6 +20,7 @@ namespace VocabTrainer.ViewModels {
             set {
                 if (_selectedItem != value) {
                     _selectedItem = value;
+                    _parent.ManageEntryOpenedWordlist = SelectedItem;
                     OnPropertyChanged(nameof(SelectedItem));
                     FillEntriesCollection();
                     AllEntriesCounter = SearchingWords.Count;
@@ -67,7 +68,11 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxWordlists));
             }
         }
-        public ManageViewModel() {
+        private MainViewModel _parent;
+        private string _openedWordlist;
+        public ManageViewModel(MainViewModel parent, string openedWordlist) {
+            _parent = parent;
+            _openedWordlist = openedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
             foreach (WordlistsList temp in tempWordlists) 
                 if (temp.WordlistName != "Seen" &&
@@ -77,7 +82,10 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
                 }
-            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
+            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))
+                SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
+            else
+                SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
             return true;

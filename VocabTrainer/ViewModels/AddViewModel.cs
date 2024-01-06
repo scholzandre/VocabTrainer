@@ -12,6 +12,7 @@ namespace VocabTrainer.ViewModels {
             set {
                 if (ComboBoxWordlists.Count > 0) { 
                     _selectedItem = value;
+                    _parent.AddEntryOpenedWordlist = SelectedItem;
                     FirstLanguage = ComboBoxWordlists[value].FirstLanguage;
                     SecondLanguage = ComboBoxWordlists[value].SecondLanguage;
                     OnPropertyChanged(nameof(SelectedItem));
@@ -74,7 +75,11 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(InfoText));
             }
         }
-        public AddViewModel() {
+        private MainViewModel _parent;
+        private string _openedWordlist;
+        public AddViewModel(MainViewModel parent, string OpenedWordlist) {
+            _parent = parent;
+            _openedWordlist = OpenedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
             foreach (WordlistsList temp in tempWordlists) 
                 if (temp.WordlistName != "Marked" &&
@@ -85,7 +90,10 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
                 }
-            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
+            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))
+                SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
+            else
+                SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
             return (FirstWord != string.Empty && SecondWord != string.Empty);
