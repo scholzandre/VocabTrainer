@@ -99,6 +99,7 @@ namespace VocabTrainer.ViewModels {
                         SearchingWords.Remove(SearchingWords[i]);
                         i--;
                     }
+            AllEntriesCounter = SearchingWords.Count;
         }
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
