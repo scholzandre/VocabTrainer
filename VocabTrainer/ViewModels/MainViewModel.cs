@@ -125,13 +125,11 @@ namespace VocabTrainer.ViewModels {
         private AddWordlistViewModel _addWordlistViewModel;
 
         private Type _manageWordlistViewType = typeof(ManageWordlistsView);
-        private ManageWordlistsViewModel _manageWordlistViewModel = new ManageWordlistsViewModel();
 
         private Type _translatorViewType = typeof(TranslatorView);
         public string TranslatorOpenedWordlist = "";
 
         private Type _settingsViewType = typeof(SettingsView);
-        private SettingsViewModel _settingsViewModel;
 
         public MainViewModel() {
             WordlistsList.CheckJsonFolder();
@@ -140,7 +138,6 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
             _addWordlistViewModel = new AddWordlistViewModel(this);
-            _settingsViewModel = new SettingsViewModel(this);
             OpenAnalysisViewCommand.Execute(this);
         }
 
@@ -173,7 +170,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenManageWordlistsView(object obj) {
             SetEnabled(2);
             UserControl = (UserControl)Activator.CreateInstance(_manageWordlistViewType);
-            UserControl.DataContext = _manageWordlistViewModel;
+            UserControl.DataContext = new ManageWordlistsViewModel();
         }
         public ICommand OpenAddWordsViewCommand => new RelayCommand(OpenAddWordsView, CanExecuteCommand);
         private void OpenAddWordsView(object obj) {
@@ -203,7 +200,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenSettingsView(object obj) {
             SetEnabled(7);
             UserControl = (UserControl)Activator.CreateInstance(_settingsViewType);
-            UserControl.DataContext = _settingsViewModel;
+            UserControl.DataContext = new SettingsViewModel(this);
         }
         private void SetEnabled(int index) {
             List<bool> tempEnabled = new List<bool>(_defaultEnabled) {
