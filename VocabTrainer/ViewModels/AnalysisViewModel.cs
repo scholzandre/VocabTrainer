@@ -96,7 +96,7 @@ namespace VocabTrainer.ViewModels {
                 _selectedItem = value;
                 if (SelectedItem == "All words") Wordlist = string.Empty;
                 else Wordlist = SelectedItem;
-                _parent.OpenedWordlist = SelectedItem;
+                _parent.AnalysisOpenedWordlist = SelectedItem;
                 GetPercentages();
                 CreateDiagram();
                 SetStrings();
@@ -161,9 +161,8 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             ComboBoxEntries.Add("All words");
-            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist)) { 
+            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))  
                 SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
-            }
             else
                 SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count-1] : null;
         }

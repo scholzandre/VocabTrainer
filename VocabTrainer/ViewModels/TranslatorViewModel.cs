@@ -92,6 +92,7 @@ namespace VocabTrainer.ViewModels {
             set {
                 if (_selectedItem != value) {
                     _selectedItem = value;
+                    _parent.TranslatorOpenedWordlist = SelectedItem;
                     OnPropertyChanged(nameof(SelectedItem));
                 }
             }
@@ -104,7 +105,11 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxWordlists));
             }
         }
-        public TranslatorViewModel() {
+        private MainViewModel _parent;
+        private string _openedWordlist;
+        public TranslatorViewModel(MainViewModel parent, string openedWordlist) {
+            _parent = parent;
+            _openedWordlist = openedWordlist;
             OriginalLanguages = new List<string>() {
                 "German",
                 "English",
@@ -125,7 +130,10 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxEntries.Add(tempString);
                 }
             }
-            SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[0] : null;
+            if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))
+                SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
+            else
+                SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
             SelectedItemFirstLanguage = OriginalLanguages[0];
         }
         private bool CanExecuteTranslateCommand(object arg) {
