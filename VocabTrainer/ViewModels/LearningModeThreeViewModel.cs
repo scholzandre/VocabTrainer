@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -7,6 +8,14 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeThreeViewModel : BaseViewModel {
+        private string _questionEntry;
+        public string QuestionEntry {
+            get => _questionEntry;
+            set {
+                _questionEntry = value;
+                OnPropertyChanged(nameof(QuestionEntry));
+            }
+        }
         private string _firstWord;
         public string FirstWord {
             get => _firstWord;
@@ -108,19 +117,27 @@ namespace VocabTrainer.ViewModels {
             _positionCorrectItem = _parent.Random.Next(0, 5);
             _entries.Insert(_positionCorrectItem, _parent.Entries[_counter]);
             if (language == 1) {
-                FirstWord = _parent.Entries[_counter].SecondWord;
+                QuestionEntry = _parent.Entries[_counter].SecondWord;
                 FirstAnswer = _entries[0].FirstWord;
                 SecondAnswer = _entries[1].FirstWord;
                 ThirdAnswer = _entries[2].FirstWord;
                 FourthAnswer = _entries[3].FirstWord;
                 FifthAnswer = _entries[4].FirstWord;
             } else {
-                FirstWord = _parent.Entries[_counter].FirstWord;
+                QuestionEntry = _parent.Entries[_counter].FirstWord;
                 FirstAnswer = _entries[0].SecondWord;
                 SecondAnswer = _entries[1].SecondWord;
                 ThirdAnswer = _entries[2].SecondWord;
                 FourthAnswer = _entries[3].SecondWord;
                 FifthAnswer = _entries[4].SecondWord;
+            }
+            if (QuestionEntry.Contains(",")) {
+                string[] tempList = QuestionEntry.Split(',');
+                Random random = new Random();
+                int randInt = random.Next(tempList.Length);
+                FirstWord = tempList[randInt];
+            } else {
+                FirstWord = QuestionEntry;
             }
         }
         private bool CanExecuteCommand(object arg) {
@@ -148,9 +165,9 @@ namespace VocabTrainer.ViewModels {
         }
         private async Task CheckInput(VocabularyEntry choice, int answer) {
             if (_language == 1) 
-                choice.SecondWord = FirstWord;
+                choice.SecondWord = QuestionEntry;
             else 
-                choice.FirstWord = FirstWord;
+                choice.FirstWord = QuestionEntry;
             
             List<Brush> tempList = new List<Brush>(BackgroundColors);
             int awaitTime = 1500;
