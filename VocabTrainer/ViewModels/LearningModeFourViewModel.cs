@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -7,6 +8,14 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class LearningModeFourViewModel : BaseViewModel {
+        private List<string> _answerString = new List<string>();
+        public List<string> AnswerString {
+            get => _answerString;
+            set {
+                _answerString = value;
+                OnPropertyChanged(nameof(AnswerString));
+            }
+        }
         private List<string> _answerText = new List<string>();
         public List<string> AnswerText {
             get => _answerText;
@@ -15,15 +24,22 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(AnswerText));
             }
         }
+        private List<string> _questionString = new List<string>();
+        public List<string > QuestionString {
+            get => _questionString;
+            set {
+                _questionString = value;
+                OnPropertyChanged(nameof(QuestionString));
+            }
+        }
         private List<string> _questionText = new List<string>();
-        public List<string > QuestionText {
+        public List<string> QuestionText {
             get => _questionText;
             set {
                 _questionText = value;
                 OnPropertyChanged(nameof(QuestionText));
             }
         }
-
         private static readonly List<Brush> _standardColors = new List<Brush>() {
             Brushes.White,
             Brushes.White,
@@ -89,14 +105,32 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _entries = tempEntry;
             _language = _parent.Random.Next(1, 3);
-            QuestionText = (_language == 1) ? tempEntry.Select(x => x.FirstWord).ToList() : tempEntry.Select(x => x.SecondWord).ToList();
+            QuestionString = (_language == 1) ? tempEntry.Select(x => x.FirstWord).ToList() : tempEntry.Select(x => x.SecondWord).ToList();
             List<VocabularyEntry> tempEntry2 = new List<VocabularyEntry>(tempEntry);
             for (int i = 0; i < tempEntry.Count; i++) {
                 _questions.Add((_language == 1) ? tempEntry[i].FirstWord : tempEntry[i].SecondWord, $"{tempEntry[i].WordList}_{tempEntry[i].FirstLanguage}_{tempEntry[i].SecondLanguage}");
                 int random = _parent.Random.Next(0, tempEntry2.Count);
                 _answers.Add((_language == 1) ? tempEntry2[random].SecondWord : tempEntry2[random].FirstWord, tempEntry2[random].WordList);
-                AnswerText.Add((_language == 1) ? tempEntry2[random].SecondWord : tempEntry2[random].FirstWord);
+                AnswerString.Add((_language == 1) ? tempEntry2[random].SecondWord : tempEntry2[random].FirstWord);
                 tempEntry2.Remove(tempEntry2[random]);
+            }
+            for (int i = 0; i < AnswerString.Count; i++) {
+                if (AnswerString[i].Contains(",")) {
+                    string[] tempList = AnswerString[i].Split(',');
+                    Random random = new Random();
+                    int randInt = random.Next(tempList.Length);
+                    AnswerText.Add(tempList[randInt].Trim());
+                } else {
+                    AnswerText.Add(AnswerString[i]);
+                }
+                if (QuestionString[i].Contains(",")) {
+                    string[] tempList = QuestionString[i].Split(',');
+                    Random random = new Random();
+                    int randInt = random.Next(tempList.Length);
+                    QuestionText.Add(tempList[randInt].Trim());
+                } else {
+                    QuestionText.Add(QuestionString[i]);
+                }
             }
         }
 
@@ -105,52 +139,52 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand SetFirstQuestionCommand => new RelayCommand(SetFirstQuestion, CanExecuteCommand);
         private void SetFirstQuestion(object obj) {
-            _question = (QuestionText[0], 0);
+            _question = (QuestionString[0], 0);
             CheckAnswer("question"); 
         }
         public ICommand SetSecondQuestionCommand => new RelayCommand(SetSecondQuestion, CanExecuteCommand);
         private void SetSecondQuestion(object obj) {
-            _question = (QuestionText[1], 1);
+            _question = (QuestionString[1], 1);
             CheckAnswer("question"); 
         }
         public ICommand SetThirdQuestionCommand => new RelayCommand(SetThirdQuestion, CanExecuteCommand);
         private void SetThirdQuestion(object obj) {
-            _question = (QuestionText[2], 2);
+            _question = (QuestionString[2], 2);
             CheckAnswer("question"); 
         }
         public ICommand SetFourthQuestionCommand => new RelayCommand(SetFourthQuestion, CanExecuteCommand);
         private void SetFourthQuestion(object obj) {
-            _question = (QuestionText[3], 3);
+            _question = (QuestionString[3], 3);
             CheckAnswer("question"); 
         }
         public ICommand SetFifthQuestionCommand => new RelayCommand(SetFifthQuestion, CanExecuteCommand);
         private void SetFifthQuestion(object obj) {
-            _question = (QuestionText[4], 4);
+            _question = (QuestionString[4], 4);
             CheckAnswer("question"); 
         }
         public ICommand SetFirstAnswerCommand => new RelayCommand(SetFirstAnswer, CanExecuteCommand);
         private void SetFirstAnswer(object obj) {
-            _answer = (AnswerText[0], 0);
+            _answer = (AnswerString[0], 0);
             CheckAnswer("answer"); 
         }
         public ICommand SetSecondAnswerCommand => new RelayCommand(SetSecondAnswer, CanExecuteCommand);
         private void SetSecondAnswer(object obj) {
-            _answer = (AnswerText[1], 1);
+            _answer = (AnswerString[1], 1);
             CheckAnswer("answer"); 
         }
         public ICommand SetThirdAnswerCommand => new RelayCommand(SetThirdAnswer, CanExecuteCommand);
         private void SetThirdAnswer(object obj) {
-            _answer = (AnswerText[2], 2);
+            _answer = (AnswerString[2], 2);
             CheckAnswer("answer"); 
         }
         public ICommand SetFourthAnswerCommand => new RelayCommand(SetFourthAnswer, CanExecuteCommand);
         private void SetFourthAnswer(object obj) {
-            _answer = (AnswerText[3], 3);
+            _answer = (AnswerString[3], 3);
             CheckAnswer("answer"); 
         }
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
-            _answer = (AnswerText[4], 4);
+            _answer = (AnswerString[4], 4);
             CheckAnswer("answer");
         }
         private async void CheckAnswer(string field) {
