@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -33,6 +34,15 @@ namespace VocabTrainer.ViewModels {
             set {
                 _comboBoxWordlists = value;
                 OnPropertyChanged(nameof(ComboBoxWordlists));
+            }
+        }
+        private TextBox _firstWordTextBox;
+
+        public TextBox FirstWordTextBox {
+            get { return _firstWordTextBox; }
+            set {
+                _firstWordTextBox = value;
+                OnPropertyChanged(nameof(FirstWordTextBox));
             }
         }
         private string _firstWord = string.Empty;
@@ -95,10 +105,14 @@ namespace VocabTrainer.ViewModels {
             else
                 SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
-        private bool CanExecuteCommand(object arg) {
+        private bool CanExecuteAddCommand(object arg) {
             return (FirstWord.Trim() != string.Empty && SecondWord.Trim() != string.Empty);
         }
-        public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteCommand);
+        private bool CanExecuteCommand(object arg) {
+            return true;
+        }
+
+        public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteAddCommand);
         private void AddEntry(object obj) {
             VocabularyEntry entry = new VocabularyEntry() {
                 SecondWord = FirstWord.Trim(),
@@ -125,6 +139,7 @@ namespace VocabTrainer.ViewModels {
                 VocabularyEntry.AddEntry("NotSeen", entry);
             } else 
                 InfoText = "This entry already exists.";
+            FirstWordTextBox.Focus();
         }
     }
 }
