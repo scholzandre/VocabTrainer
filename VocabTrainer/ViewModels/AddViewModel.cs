@@ -96,13 +96,13 @@ namespace VocabTrainer.ViewModels {
                 SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteCommand(object arg) {
-            return (FirstWord != string.Empty && SecondWord != string.Empty);
+            return (FirstWord.Trim() != string.Empty && SecondWord.Trim() != string.Empty);
         }
         public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteCommand);
         private void AddEntry(object obj) {
             VocabularyEntry entry = new VocabularyEntry() {
-                SecondWord = FirstWord,
-                FirstWord = SecondWord,
+                SecondWord = FirstWord.Trim(),
+                FirstWord = SecondWord.Trim(),
                 FirstLanguage = ComboBoxWordlists[SelectedItem].FirstLanguage,
                 SecondLanguage = ComboBoxWordlists[SelectedItem].SecondLanguage,
                 WordList = ComboBoxWordlists[SelectedItem].WordlistName,
@@ -118,7 +118,7 @@ namespace VocabTrainer.ViewModels {
             if (!contains) {
                 entries.Add(entry);
                 VocabularyEntry.WriteData(entry, entries);
-                InfoText = $"{FirstWord} and {SecondWord} have been successfully added!";
+                InfoText = $"{FirstWord.Trim()} and {SecondWord.Trim()} have been successfully added!";
                 FirstWord = string.Empty;
                 SecondWord = string.Empty;
 
