@@ -1,12 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     internal class AddWordlistViewModel : BaseViewModel {
+        private TextBox _wordlistTextBox;
+        public TextBox WordlistTextBox {
+            get => _wordlistTextBox;
+            set {
+                _wordlistTextBox = value;
+                OnPropertyChanged(nameof(WordlistTextBox));
+            }
+        }
         private string _wordlistName = string.Empty;
         public string WordlistName{
             get => _wordlistName;
@@ -93,6 +102,7 @@ namespace VocabTrainer.ViewModels {
             }
             WordlistsList.WriteWordlistsList(wordlists);
             _parent.ListWordlist = WordlistsList.GetWordlistsList();
+            WordlistTextBox.Focus();
         }
     }
 }
