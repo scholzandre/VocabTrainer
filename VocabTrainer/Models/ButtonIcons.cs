@@ -3,7 +3,9 @@
     Save,
     Delete,
     Cancel,
-    Approve
+    Approve,
+    Undo,
+    Redo
 }
 
 public static class IconTypeStrings {
@@ -12,6 +14,8 @@ public static class IconTypeStrings {
     public const string Delete = "🗑";
     public const string Cancel = "🗙";
     public const string Approve = "✓";
+    public const string Undo = "↶";
+    public const string Redo = "↷";
 }
 
 namespace VocabTrainer.Models {
@@ -27,6 +31,10 @@ namespace VocabTrainer.Models {
                 case IconType.Cancel:
                     return IconTypeStrings.Cancel; 
                 case IconType.Approve:
+                    return IconTypeStrings.Approve;
+                case IconType.Undo:
+                    return IconTypeStrings.Approve;
+                case IconType.Redo:
                     return IconTypeStrings.Approve;
                 default:
                     return string.Empty;
