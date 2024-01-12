@@ -14,6 +14,22 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
+        private bool _canUndo = false;
+        public bool CanUndo {
+            get => _canUndo;
+            set {
+                _canUndo = value;
+                OnPropertyChanged(nameof(CanUndo));
+            }
+        }
+        private bool _canRedo = false;
+        public bool CanRedo {
+            get => _canRedo;
+            set {
+                _canRedo = value;
+                OnPropertyChanged(nameof(CanRedo));
+            }
+        }
         private string _selectedItem;
         public string SelectedItem {
             get => _selectedItem;

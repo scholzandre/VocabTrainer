@@ -13,6 +13,22 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(Wordlists));
             }
         }
+        private bool _canUndo = false;
+        public bool CanUndo {
+            get => _canUndo;
+            set {
+                _canUndo = value;
+                OnPropertyChanged(nameof(CanUndo));
+            }
+        }
+        private bool _canRedo = false;
+        public bool CanRedo {
+            get => _canRedo;
+            set {
+                _canRedo = value;
+                OnPropertyChanged(nameof(CanRedo));
+            }
+        }
         private List<WordlistsList> _allWordlists;
         public List<WordlistsList> AllWordlists {
             get => _allWordlists;
