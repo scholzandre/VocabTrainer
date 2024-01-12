@@ -15,8 +15,8 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="infoTextManage"  Foreground="white" FontSize="24" FontWeight="DemiBold" Margin="5,0,0,0">Manage words</TextBlock>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button IsEnabled="{Binding CanUndo}" Width="20" Height="20" Margin="0,0,5,0"/>
-            <Button IsEnabled="{Binding CanRedo}" Width="20" Height="20" Margin="0,0,5,0"/>
+            <Button Content="{Binding UndoString}" IsEnabled="{Binding CanUndo}" Width="20" Height="20" Margin="0,0,5,0"/>
+            <Button Content="{Binding RedoString}" IsEnabled="{Binding CanRedo}" Width="20" Height="20" Margin="0,0,5,0"/>
             <TextBox x:Name="searchWord" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding SearchingWord}" VerticalAlignment="Center" Width="137" Height="21"/>
             <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
         </StackPanel>
