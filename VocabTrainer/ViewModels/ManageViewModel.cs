@@ -14,6 +14,22 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
+        private string _undoString = ButtonIcons.GetIconString(IconType.Undo);
+        public string UndoString {
+            get => _undoString;
+            set {
+                _undoString = value;
+                OnPropertyChanged(nameof(UndoString));
+            }
+        }
+        private string _redoString = ButtonIcons.GetIconString(IconType.Redo);
+        public string RedoString {
+            get => _redoString;
+            set {
+                _redoString = value;
+                OnPropertyChanged(nameof(RedoString));
+            }
+        }
         private bool _canUndo = false;
         public bool CanUndo {
             get => _canUndo;
