@@ -33,9 +33,9 @@ namespace VocabTrainer.Models {
                 case IconType.Approve:
                     return IconTypeStrings.Approve;
                 case IconType.Undo:
-                    return IconTypeStrings.Approve;
+                    return IconTypeStrings.Undo;
                 case IconType.Redo:
-                    return IconTypeStrings.Approve;
+                    return IconTypeStrings.Redo;
                 default:
                     return string.Empty;
             }
