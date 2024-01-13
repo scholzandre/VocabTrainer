@@ -73,10 +73,10 @@ namespace VocabTrainer.ViewModels {
                 Wordlists.Add(new ManageWordlistViewModel(wordlist, AllWordlists, Wordlists));
         }
 
-        private bool CanExecuteCommand(object arg) {
+        private bool CanExecuteSearchCommand(object arg) {
             return true;
         }
-        public ICommand SearchCommand => new RelayCommand(Search, CanExecuteCommand);
+        public ICommand SearchCommand => new RelayCommand(Search, CanExecuteSearchCommand);
         private void Search(object obj) {
             FillList();
             if (SearchingWord != "" && SearchingWord != "Searching...")
