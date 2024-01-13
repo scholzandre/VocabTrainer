@@ -109,8 +109,11 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry.GetData(_entrySpecialLists[2]),
             VocabularyEntry.GetData(_entrySpecialLists[3])
         };
-
-        public ManageWordlistViewModel(WordlistsList wordlist, List<WordlistsList> allWordlists, ObservableCollection<ManageWordlistViewModel> views) {
+        ManageWordlistsViewModel _parent;
+        public int Index { get; set; }
+        public ManageWordlistViewModel(ManageWordlistsViewModel parent, WordlistsList wordlist, List<WordlistsList> allWordlists, ObservableCollection<ManageWordlistViewModel> views, int index) {
+            _parent = parent;
+            Index = index;
             _original = wordlist;
             Wordlist = wordlist;
             SetOriginalValues();
@@ -167,10 +170,21 @@ namespace VocabTrainer.ViewModels {
                 }
                 for (int i = 0; i < _entrySpecialLists.Count; i++)
                     VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
-
+                WordlistsList firstTempList = new WordlistsList() { 
+                    WordlistName = Wordlist.WordlistName,
+                    FirstLanguage = Wordlist.FirstLanguage,
+                    SecondLanguage = Wordlist.SecondLanguage,
+                };
+                WordlistsList secondTempList = new WordlistsList() {
+                    WordlistName = WordlistName,
+                    FirstLanguage = FirstLanguage,
+                    SecondLanguage = SecondLanguage,
+                };
                 Wordlist.WordlistName = WordlistName;
                 Wordlist.FirstLanguage = FirstLanguage;
                 Wordlist.SecondLanguage = SecondLanguage;
+                _parent.UndoList.Add((Index, firstTempList, secondTempList));
+                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after)>();
 
                 VocabularyEntry entry = new VocabularyEntry() { 
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
@@ -208,16 +222,28 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                WordlistsList tempList = new WordlistsList() {
+                    WordlistName = Wordlist.WordlistName,
+                    FirstLanguage = Wordlist.FirstLanguage,
+                    SecondLanguage = Wordlist.SecondLanguage,
+                };
+                _parent.UndoList.Add((Index, tempList, tempList));
+                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after)>();
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
+                int tempIndex = 0;
                 for (int i = 0; i < _views.Count; i++) 
                     if (_views[i].Wordlist.WordlistName == _original.WordlistName &&
                         _views[i].Wordlist.FirstLanguage == _original.FirstLanguage &&
                         _views[i].Wordlist.SecondLanguage == _original.SecondLanguage) {
+                        tempIndex = i;
                         _views.Remove(this);
                         AllWordlists.Remove(_original);
                         break;
                     }
+                for (; tempIndex < _views.Count; tempIndex++) {
+                    _views[tempIndex].Index = _views[tempIndex].Index-1;
+                }
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(new VocabularyEntry() { 
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                 });
