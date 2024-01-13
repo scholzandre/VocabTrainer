@@ -5,7 +5,7 @@ using VocabTrainer.Models;
 
 namespace VocabTrainer.ViewModels {
     public class ManageWordlistsViewModel : BaseViewModel {
-        private ObservableCollection<ManageWordlistViewModel> _wordlists = new ObservableCollection<ManageWordlistViewModel>(); 
+        private ObservableCollection<ManageWordlistViewModel> _wordlists = new ObservableCollection<ManageWordlistViewModel>();
         public ObservableCollection<ManageWordlistViewModel> Wordlists {
             get => _wordlists;
             set {
@@ -13,6 +13,23 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(Wordlists));
             }
         }
+        private List<(int index, WordlistsList, WordlistsList)> _undoList = new List<(int, WordlistsList, WordlistsList)>();
+        public List<(int index, WordlistsList before, WordlistsList after)> UndoList {
+            get => _undoList;
+            set {
+                _undoList = value;
+                OnPropertyChanged(nameof(UndoList));
+            }
+        }
+        private List<(int index, WordlistsList, WordlistsList)> _redoList = new List<(int, WordlistsList, WordlistsList)>();
+        public List<(int index, WordlistsList before, WordlistsList after)> RedoList {
+            get => _redoList;
+            set {
+                _redoList = value;
+                OnPropertyChanged(nameof(RedoList));
+            }
+        }
+
         private string _undoString = ButtonIcons.GetIconString(IconType.Undo);
         public string UndoString {
             get => _undoString;
@@ -27,22 +44,6 @@ namespace VocabTrainer.ViewModels {
             set {
                 _redoString = value;
                 OnPropertyChanged(nameof(RedoString));
-            }
-        }
-        private bool _canUndo = false;
-        public bool CanUndo {
-            get => _canUndo;
-            set {
-                _canUndo = value;
-                OnPropertyChanged(nameof(CanUndo));
-            }
-        }
-        private bool _canRedo = false;
-        public bool CanRedo {
-            get => _canRedo;
-            set {
-                _canRedo = value;
-                OnPropertyChanged(nameof(CanRedo));
             }
         }
         private List<WordlistsList> _allWordlists;
@@ -69,8 +70,11 @@ namespace VocabTrainer.ViewModels {
             AllWordlists = new List<WordlistsList>();
             Wordlists = new ObservableCollection<ManageWordlistViewModel>();
             AllWordlists = WordlistsList.GetWordlistsList();
-            foreach (WordlistsList wordlist in AllWordlists) 
-                Wordlists.Add(new ManageWordlistViewModel(wordlist, AllWordlists, Wordlists));
+            int counter = 0;
+            foreach (WordlistsList wordlist in AllWordlists) {
+                Wordlists.Add(new ManageWordlistViewModel(this, wordlist, AllWordlists, Wordlists, counter));
+                counter++;
+            }
         }
 
         private bool CanExecuteSearchCommand(object arg) {
@@ -81,7 +85,7 @@ namespace VocabTrainer.ViewModels {
             FillList();
             if (SearchingWord != "" && SearchingWord != "Searching...")
                 for (int i = 0; i < Wordlists.Count; i++)
-                    if (!Wordlists[i].WordlistName.ToLower().Contains(SearchingWord.ToLower()) && 
+                    if (!Wordlists[i].WordlistName.ToLower().Contains(SearchingWord.ToLower()) &&
                         !Wordlists[i].FirstLanguage.ToLower().Contains(SearchingWord.ToLower()) &&
                         !Wordlists[i].SecondLanguage.ToLower().Contains(SearchingWord.ToLower())) {
                         Wordlists.Remove(Wordlists[i]);
@@ -89,16 +93,38 @@ namespace VocabTrainer.ViewModels {
                     }
         }
         private bool CanExecuteUndoCommand(object arg) {
-            return true;
+            return UndoList.Count > 0;
         }
         public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
         private void Undo(object obj) {
+            if (UndoList[UndoList.Count - 1].before == UndoList[UndoList.Count - 1].after) {
+                for (int i = UndoList[UndoList.Count - 1].index; i < Wordlists.Count; i++)
+                    Wordlists[i].Index = Wordlists[i].Index + 1;
+                Wordlists.Insert(UndoList[UndoList.Count - 1].index, new ManageWordlistViewModel(this, UndoList[UndoList.Count - 1].before, AllWordlists, Wordlists, UndoList[UndoList.Count - 1].index));
+            } else {
+                Wordlists.Remove(Wordlists[UndoList[UndoList.Count - 1].index]);
+                Wordlists.Insert(UndoList[UndoList.Count - 1].index, new ManageWordlistViewModel(this, UndoList[UndoList.Count - 1].before, AllWordlists, Wordlists, UndoList[UndoList.Count - 1].index));
+
+            }
+            RedoList.Add(UndoList[UndoList.Count - 1]);
+            UndoList.Remove(UndoList[UndoList.Count - 1]);
         }
         private bool CanExecuteRedoCommand(object arg) {
-            return true;
+            return RedoList.Count > 0;
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
+            if (RedoList[RedoList.Count - 1].before == RedoList[RedoList.Count - 1].after) {
+                for (int i = RedoList[RedoList.Count - 1].index; i < Wordlists.Count; i++)
+                    Wordlists[i].Index = Wordlists[i].Index - 1;
+                Wordlists.Remove(Wordlists[RedoList[RedoList.Count - 1].index]);
+            } else {
+                Wordlists.Remove(Wordlists[RedoList[RedoList.Count - 1].index]);
+                Wordlists.Insert(RedoList[RedoList.Count - 1].index, new ManageWordlistViewModel(this, RedoList[RedoList.Count - 1].after, AllWordlists, Wordlists, RedoList[RedoList.Count - 1].index));
+
+            }
+            UndoList.Add(RedoList[RedoList.Count - 1]);
+            RedoList.Remove(RedoList[RedoList.Count - 1]);
         }
     }
 }
