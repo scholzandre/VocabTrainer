@@ -88,5 +88,17 @@ namespace VocabTrainer.ViewModels {
                         i--;
                     }
         }
+        private bool CanExecuteUndoCommand(object arg) {
+            return true;
+        }
+        public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
+        private void Undo(object obj) {
+        }
+        private bool CanExecuteRedoCommand(object arg) {
+            return true;
+        }
+        public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
+        private void Redo(object obj) {
+        }
     }
 }
