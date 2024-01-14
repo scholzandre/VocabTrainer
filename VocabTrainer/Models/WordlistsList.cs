@@ -183,5 +183,15 @@ namespace VocabTrainer {
                    this.FirstLanguage == otherEntry.FirstLanguage &&
                    this.SecondLanguage == otherEntry.SecondLanguage;
         }
+        public override int GetHashCode() {
+            unchecked {
+                int hash = 17; // Ein Startwert, üblicherweise eine Primzahl
+                hash = hash * 23 + (this.WordlistName?.GetHashCode() ?? 0);
+                hash = hash * 23 + this.FirstLanguage.GetHashCode();
+                hash = hash * 23 + this.SecondLanguage.GetHashCode();
+                return hash;
+            }
+        }
+
     }
 }
