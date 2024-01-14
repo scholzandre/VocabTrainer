@@ -222,6 +222,10 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                if (!_parent.DeletedWordlists.ContainsKey(Wordlist))
+                    _parent.DeletedWordlists.Add(Wordlist, VocabularyEntry.GetData(new VocabularyEntry() { 
+                        FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                    }));
                 WordlistsList tempList = new WordlistsList() {
                     WordlistName = Wordlist.WordlistName,
                     FirstLanguage = Wordlist.FirstLanguage,
