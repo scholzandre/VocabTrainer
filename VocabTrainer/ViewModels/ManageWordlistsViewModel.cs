@@ -130,17 +130,24 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
+            List<WordlistsList> allWordlists = WordlistsList.GetWordlistsList();
             if (RedoList[RedoList.Count - 1].before == RedoList[RedoList.Count - 1].after) {
                 for (int i = RedoList[RedoList.Count - 1].index; i < Wordlists.Count; i++)
                     Wordlists[i].Index = Wordlists[i].Index - 1;
                 Wordlists.Remove(Wordlists[RedoList[RedoList.Count - 1].index]);
+                allWordlists.Remove(RedoList[RedoList.Count - 1].before);
+                File.Delete($"{VocabularyEntry.FirstPartFilePath}{RedoList[RedoList.Count - 1].before.WordlistName}_{RedoList[RedoList.Count - 1].before.FirstLanguage}_{RedoList[RedoList.Count - 1].before.SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
             } else {
                 Wordlists.Remove(Wordlists[RedoList[RedoList.Count - 1].index]);
                 Wordlists.Insert(RedoList[RedoList.Count - 1].index, new ManageWordlistViewModel(this, RedoList[RedoList.Count - 1].after, AllWordlists, Wordlists, RedoList[RedoList.Count - 1].index));
-
+                File.Move($"{VocabularyEntry.FirstPartFilePath}{RedoList[RedoList.Count - 1].before.WordlistName}_{RedoList[RedoList.Count - 1].before.FirstLanguage}_{RedoList[RedoList.Count - 1].before.SecondLanguage}{VocabularyEntry.SecondPartFilePath}",
+                          $"{VocabularyEntry.FirstPartFilePath}{RedoList[RedoList.Count - 1].after.WordlistName}_{RedoList[RedoList.Count - 1].after.FirstLanguage}_{RedoList[RedoList.Count - 1].after.SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
+                allWordlists.Remove(RedoList[RedoList.Count - 1].before);
+                allWordlists.Insert(RedoList[RedoList.Count - 1].index, RedoList[RedoList.Count - 1].after);
             }
             UndoList.Add(RedoList[RedoList.Count - 1]);
             RedoList.Remove(RedoList[RedoList.Count - 1]);
+            WordlistsList.WriteWordlistsList(allWordlists);
         }
     }
 }
