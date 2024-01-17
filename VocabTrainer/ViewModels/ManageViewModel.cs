@@ -119,10 +119,10 @@ namespace VocabTrainer.ViewModels {
             else
                 SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
-        private bool CanExecuteCommand(object arg) {
+        private bool CanExecuteSearchCommand(object arg) {
             return true;
         }
-        public ICommand SearchCommand => new RelayCommand(Search, CanExecuteCommand);
+        public ICommand SearchCommand => new RelayCommand(Search, CanExecuteSearchCommand);
         private void Search(object obj) {
             FillEntriesCollection();
             if (SearchingWord != "" && SearchingWord != "Searching...")
@@ -133,6 +133,22 @@ namespace VocabTrainer.ViewModels {
                     }
             AllEntriesCounter = SearchingWords.Count;
         }
+
+        private bool CanExecuteUndoCommand(object arg) {
+            return true;
+        }
+        public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
+        private void Undo(object obj) {
+        }
+
+        private bool CanExecuteRedoCommand(object arg) {
+            return true;
+        }
+        public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
+        private void Redo(object obj) {
+        }
+
+
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
             VocabularyEntry entry = new VocabularyEntry();
