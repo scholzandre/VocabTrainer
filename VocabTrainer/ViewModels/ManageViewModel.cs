@@ -14,6 +14,22 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
+        private List<(int index, VocabularyEntry, VocabularyEntry)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after)> UndoList {
+            get => _undoList;
+            set {
+                _undoList = value;
+                OnPropertyChanged(nameof(UndoList));
+            }
+        }
+        private List<(int index, VocabularyEntry, VocabularyEntry)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after)> RedoList {
+            get => _redoList;
+            set {
+                _redoList = value;
+                OnPropertyChanged(nameof(RedoList));
+            }
+        }
         private string _undoString = ButtonIcons.GetIconString(IconType.Undo);
         public string UndoString {
             get => _undoString;
@@ -135,14 +151,14 @@ namespace VocabTrainer.ViewModels {
         }
 
         private bool CanExecuteUndoCommand(object arg) {
-            return true;
+            return UndoList.Count > 0;
         }
         public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
         private void Undo(object obj) {
         }
 
         private bool CanExecuteRedoCommand(object arg) {
-            return true;
+            return RedoList.Count > 0;
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
