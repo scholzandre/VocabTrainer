@@ -174,11 +174,12 @@ namespace VocabTrainer.ViewModels {
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}{VocabularyEntry.SecondPartFilePath}";
             
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
+            int index = 0;
             foreach (VocabularyEntry tempEntry in entries) {
                 WordlistsList tempWordlist = new WordlistsList() {
                     WordlistName = $"{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}"
                 };
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, tempWordlist));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, tempWordlist, index));
             }
         }
     }
