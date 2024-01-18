@@ -74,13 +74,15 @@ namespace VocabTrainer.ViewModels {
         private ObservableCollection<ManageEntryViewModel> _views;
         private ManageViewModel _parent;
         private WordlistsList _selectedItem;
-        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem) {
+        private int _index;
+        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
             FirstWord = entry.SecondWord;
             SecondWord = entry.FirstWord;
             _entry = entry;
             _views = views;
             _parent = parent;
             _selectedItem = selectedItem;
+            _index = index;
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
@@ -155,7 +157,7 @@ namespace VocabTrainer.ViewModels {
                 entries.Remove(_entry);
                 VocabularyEntry.WriteData(_entry, entries);
 
-                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem).GetHashCode();
+                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem, _index).GetHashCode();
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
                     if (firstViewModel == secondViewModel) {
