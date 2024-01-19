@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -155,6 +156,16 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
         private void Undo(object obj) {
+            int index = UndoList[UndoList.Count - 1].index;
+            VocabularyEntry beforeTempEntry = UndoList[UndoList.Count - 1].before;
+            VocabularyEntry afterTempEntry = UndoList[UndoList.Count - 1].after;
+            WordlistsList tempWordlist = new WordlistsList {
+                WordlistName = $"{afterTempEntry.WordList}_{afterTempEntry.FirstLanguage}_{afterTempEntry.SecondLanguage}"
+            };
+            if (beforeTempEntry == afterTempEntry) { 
+                SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                UndoList.Remove(UndoList[UndoList.Count - 1]);
+            }
         }
 
         private bool CanExecuteRedoCommand(object arg) {
@@ -180,6 +191,7 @@ namespace VocabTrainer.ViewModels {
                     WordlistName = $"{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}"
                 };
                 SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, tempWordlist, index));
+                index++;
             }
         }
     }
