@@ -162,10 +162,24 @@ namespace VocabTrainer.ViewModels {
             WordlistsList tempWordlist = new WordlistsList {
                 WordlistName = $"{afterTempEntry.WordList}_{afterTempEntry.FirstLanguage}_{afterTempEntry.SecondLanguage}"
             };
-            if (beforeTempEntry == afterTempEntry) { 
-                SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
-                UndoList.Remove(UndoList[UndoList.Count - 1]);
+            VocabularyEntry tempEntry = new VocabularyEntry();
+            if (SelectedItem == "Marked (-, -)")
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
+            else
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
+            List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
+            if (beforeTempEntry == afterTempEntry) {
+                if (tempList.Count > 0) {
+                    tempList.Insert(index, afterTempEntry);
+                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                } else {
+                    tempList.Add(tempEntry);
+                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                }
             }
+            VocabularyEntry.WriteData(tempEntry, tempList);
+            RedoList.Add(UndoList[UndoList.Count - 1]);
+            UndoList.Remove(UndoList[UndoList.Count - 1]);
         }
 
         private bool CanExecuteRedoCommand(object arg) {
@@ -173,6 +187,8 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
+            UndoList.Add(RedoList[RedoList.Count - 1]);
+            RedoList.Remove(RedoList[RedoList.Count - 1]);
         }
 
 
