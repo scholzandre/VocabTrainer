@@ -152,6 +152,7 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                _parent.UndoList.Add((_index, _entry, _entry));
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 entries.Remove(_entry);
