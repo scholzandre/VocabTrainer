@@ -106,6 +106,27 @@ namespace VocabTrainer.ViewModels {
                 SecondWordWritable = false;
                 bool alreadyExists = false;
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
+                VocabularyEntry tempBeforeEntry = new VocabularyEntry() { 
+                    FirstWord = _entry.FirstWord,
+                    SecondWord = _entry.SecondWord,
+                    WordList = _entry.WordList,
+                    FirstLanguage = _entry.FirstLanguage,
+                    SecondLanguage = _entry.SecondLanguage,
+                    LastTimeWrong = _entry.LastTimeWrong,
+                    Repeated = _entry.Repeated,
+                    Seen = _entry.Seen
+                };
+                VocabularyEntry tempAfterEntry = new VocabularyEntry() {
+                    FirstWord = FirstWord,
+                    SecondWord = SecondWord,
+                    WordList = _entry.WordList,
+                    FirstLanguage = _entry.FirstLanguage,
+                    SecondLanguage = _entry.SecondLanguage,
+                    LastTimeWrong = _entry.LastTimeWrong,
+                    Repeated = _entry.Repeated,
+                    Seen = _entry.Seen
+                };
+                _parent.UndoList.Add((_index, tempBeforeEntry, tempAfterEntry));
                 foreach (VocabularyEntry entry in entries) 
                     if ((entry.SecondWord == FirstWord && FirstWord != _entry.SecondWord) || (entry.FirstWord == SecondWord && SecondWord != _entry.FirstWord)) {
                         alreadyExists = true;
