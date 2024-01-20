@@ -176,6 +176,16 @@ namespace VocabTrainer.ViewModels {
                     tempList.Add(tempEntry);
                     SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
                 }
+            } else {
+                tempList.Remove(tempList[index]);
+                SearchingWords.Remove(SearchingWords[index]);
+                if (tempList.Count > 0) {
+                    tempList.Insert(index, beforeTempEntry);
+                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index));
+                } else {
+                    tempList.Add(beforeTempEntry);
+                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index));
+                }
             }
             VocabularyEntry.WriteData(tempEntry, tempList);
             RedoList.Add(UndoList[UndoList.Count - 1]);
