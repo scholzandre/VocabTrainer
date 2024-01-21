@@ -185,6 +185,7 @@ namespace VocabTrainer.ViewModels {
                     if (firstViewModel == secondViewModel) {
                         _views.Remove(view);
                         _parent.AllEntriesCounter = _views.Count();
+                        _parent.UpdateIndex(-1, Index);
                         break;
                     }
                 }
