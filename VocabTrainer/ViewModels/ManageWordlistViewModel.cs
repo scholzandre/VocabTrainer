@@ -167,9 +167,8 @@ namespace VocabTrainer.ViewModels {
                             _entriesSpecialLists[i][j].SecondLanguage = SecondLanguage;
                         }
                     }
-                }
-                for (int i = 0; i < _entrySpecialLists.Count; i++)
                     VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
+                }
                 WordlistsList firstTempList = new WordlistsList() { 
                     WordlistName = Wordlist.WordlistName,
                     FirstLanguage = Wordlist.FirstLanguage,
