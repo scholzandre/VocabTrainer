@@ -74,7 +74,7 @@ namespace VocabTrainer.ViewModels {
         private ObservableCollection<ManageEntryViewModel> _views;
         private ManageViewModel _parent;
         private WordlistsList _selectedItem;
-        private int _index;
+        public int Index { get; set; }
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
             FirstWord = entry.SecondWord;
             SecondWord = entry.FirstWord;
@@ -82,7 +82,7 @@ namespace VocabTrainer.ViewModels {
             _views = views;
             _parent = parent;
             _selectedItem = selectedItem;
-            _index = index;
+            Index = index;
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
         }
@@ -126,7 +126,7 @@ namespace VocabTrainer.ViewModels {
                     Repeated = _entry.Repeated,
                     Seen = _entry.Seen
                 };
-                _parent.UndoList.Add((_index, tempBeforeEntry, tempAfterEntry));
+                _parent.UndoList.Add((Index, tempBeforeEntry, tempAfterEntry));
                 foreach (VocabularyEntry entry in entries) 
                     if ((entry.SecondWord == FirstWord && FirstWord != _entry.SecondWord) || (entry.FirstWord == SecondWord && SecondWord != _entry.FirstWord)) {
                         alreadyExists = true;
@@ -173,13 +173,13 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
-                _parent.UndoList.Add((_index, _entry, _entry));
+                _parent.UndoList.Add((Index, _entry, _entry));
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 entries.Remove(_entry);
                 VocabularyEntry.WriteData(_entry, entries);
 
-                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem, _index).GetHashCode();
+                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem, Index).GetHashCode();
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
                     if (firstViewModel == secondViewModel) {
