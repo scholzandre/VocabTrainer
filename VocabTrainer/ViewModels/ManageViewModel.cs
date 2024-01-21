@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.Windows.Input;
 using VocabTrainer.Models;
 using VocabTrainer.Views;
@@ -123,7 +122,7 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _openedWordlist = openedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
-            foreach (WordlistsList temp in tempWordlists) 
+            foreach (WordlistsList temp in tempWordlists)
                 if (temp.WordlistName != "Seen" &&
                     temp.WordlistName != "LastTimeWrong" &&
                     temp.WordlistName != "NotSeen") {
@@ -169,6 +168,7 @@ namespace VocabTrainer.ViewModels {
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             if (beforeTempEntry == afterTempEntry) {
+                UpdateIndex(1, index);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, afterTempEntry);
                     SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
@@ -176,6 +176,7 @@ namespace VocabTrainer.ViewModels {
                     tempList.Add(tempEntry);
                     SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
                 }
+
             } else {
                 tempList.Remove(tempList[index]);
                 SearchingWords.Remove(SearchingWords[index]);
@@ -197,19 +198,48 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
+            int index = RedoList[RedoList.Count - 1].index;
+            VocabularyEntry beforeTempEntry = RedoList[RedoList.Count - 1].before;
+            VocabularyEntry afterTempEntry = RedoList[RedoList.Count - 1].after;
+            WordlistsList tempWordlist = new WordlistsList {
+                WordlistName = $"{afterTempEntry.WordList}_{afterTempEntry.FirstLanguage}_{afterTempEntry.SecondLanguage}"
+            };
+            VocabularyEntry tempEntry = new VocabularyEntry();
+            if (SelectedItem == "Marked (-, -)")
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
+            else
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
+            List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
+            tempList.Remove(tempList[index]);
+            SearchingWords.Remove(SearchingWords[index]);
+            if (beforeTempEntry != afterTempEntry) {
+                if (tempList.Count > 0) {
+                    tempList.Insert(index, afterTempEntry);
+                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                } else {
+                    tempList.Add(afterTempEntry);
+                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                }
+            } else
+                UpdateIndex(-1, index);
+            VocabularyEntry.WriteData(tempEntry, tempList);
             UndoList.Add(RedoList[RedoList.Count - 1]);
             RedoList.Remove(RedoList[RedoList.Count - 1]);
         }
 
+        public void UpdateIndex(int number, int index) {
+            for (int i = index; i < SearchingWords.Count; i++)
+                SearchingWords[i].Index += number;
+        }
 
         private void FillEntriesCollection() {
             SearchingWords = new ObservableCollection<ManageEntryViewModel>();
             VocabularyEntry entry = new VocabularyEntry();
-            if (ComboBoxWordlists[SelectedItem].WordlistName != "Marked") 
+            if (ComboBoxWordlists[SelectedItem].WordlistName != "Marked")
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
-            else 
+            else
                 entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}{VocabularyEntry.SecondPartFilePath}";
-            
+
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             int index = 0;
             foreach (VocabularyEntry tempEntry in entries) {
