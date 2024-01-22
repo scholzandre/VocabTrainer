@@ -8,7 +8,7 @@ Your data is stored in json files in the corresponding folder. (Please do not to
 
 Long story short: You can learn your own entered vocabulary
 
-Long story short:
+Long story:
 
 You can create multiple lists in which you can enter and learn your vocabulary. In addition to creating these lists and entries, you can also manage and delete them. 
 
