@@ -19,11 +19,33 @@ namespace VocabTrainer.Views {
         public static string FirstPartFilePath { get => GeneralFilePath+"jsons\\"; }
         [JsonIgnore]
         public static string SecondPartFilePath { get => ".json"; }
+        [JsonIgnore]
+        public static readonly List<string> FilePathsSpecialLists = new List<string> {
+            $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}"
+        };
+        [JsonIgnore]
+        public static readonly List<VocabularyEntry> EntrySpecialWordlists = new List<VocabularyEntry> {
+            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" },
+            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}" }
+        };
+        [JsonIgnore]
+        public static readonly List<List<VocabularyEntry>> EntriesSpecialWordlists = new List<List<VocabularyEntry>> {
+            GetData(EntrySpecialWordlists[0]),
+            GetData(EntrySpecialWordlists[1]),
+            GetData(EntrySpecialWordlists[2]),
+            GetData(EntrySpecialWordlists[3])
+        };
+
         public VocabularyEntry() { }
         public static List<VocabularyEntry> GetData(VocabularyEntry entry) {
             List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
             if (File.Exists(entry.FilePath)) {
-                string jsonData = File.ReadAllText(entry.FilePath);
+                string jsonData = File.ReadAllText(entry.FilePath); 
                 vocabulary = JsonConvert.DeserializeObject<List<VocabularyEntry>>(jsonData);
             }
             return vocabulary;
