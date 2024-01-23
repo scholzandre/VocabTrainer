@@ -14,16 +14,16 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)> UndoList {
+        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> UndoList { 
             get => _undoList;
             set {
                 _undoList = value;
                 OnPropertyChanged(nameof(UndoList));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)> RedoList {
+        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> RedoList {
             get => _redoList;
             set {
                 _redoList = value;
@@ -176,6 +176,17 @@ namespace VocabTrainer.ViewModels {
                 } else {
                     tempList.Add(tempEntry);
                     SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                }
+
+                for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
+                    if (UndoList[UndoList.Count - 1].availability[i]) {
+                        if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0) {
+                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(UndoList[UndoList.Count - 1].indexM, beforeTempEntry);
+                        } else {
+                            VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
+                        }
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
+                    }
                 }
 
             } else {
