@@ -14,16 +14,16 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after)> UndoList {
+        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)> UndoList {
             get => _undoList;
             set {
                 _undoList = value;
                 OnPropertyChanged(nameof(UndoList));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after)> RedoList {
+        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
+        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)> RedoList {
             get => _redoList;
             set {
                 _redoList = value;
@@ -119,6 +119,7 @@ namespace VocabTrainer.ViewModels {
         private MainViewModel _parent;
         private string _openedWordlist;
         public ManageViewModel(MainViewModel parent, string openedWordlist) {
+            VocabularyEntry.UpdateSpecialLists();
             _parent = parent;
             _openedWordlist = openedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
