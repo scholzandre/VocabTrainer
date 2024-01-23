@@ -16,7 +16,7 @@ namespace VocabTrainer.Views {
         public string FilePath { get; set; }
         public static string GeneralFilePath { get => Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().Length - 9); }
         [JsonIgnore]
-        public static string FirstPartFilePath { get => GeneralFilePath+"jsons\\"; }
+        public static string FirstPartFilePath { get => GeneralFilePath + "jsons\\"; }
         [JsonIgnore]
         public static string SecondPartFilePath { get => ".json"; }
         [JsonIgnore]
@@ -34,7 +34,7 @@ namespace VocabTrainer.Views {
             new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}" }
         };
         [JsonIgnore]
-        public static readonly List<List<VocabularyEntry>> EntriesSpecialWordlists = new List<List<VocabularyEntry>> {
+        public static List<List<VocabularyEntry>> EntriesSpecialWordlists = new List<List<VocabularyEntry>> {
             GetData(EntrySpecialWordlists[0]),
             GetData(EntrySpecialWordlists[1]),
             GetData(EntrySpecialWordlists[2]),
@@ -45,7 +45,7 @@ namespace VocabTrainer.Views {
         public static List<VocabularyEntry> GetData(VocabularyEntry entry) {
             List<VocabularyEntry> vocabulary = new List<VocabularyEntry>();
             if (File.Exists(entry.FilePath)) {
-                string jsonData = File.ReadAllText(entry.FilePath); 
+                string jsonData = File.ReadAllText(entry.FilePath);
                 vocabulary = JsonConvert.DeserializeObject<List<VocabularyEntry>>(jsonData);
             }
             return vocabulary;
@@ -54,7 +54,7 @@ namespace VocabTrainer.Views {
             string json = JsonConvert.SerializeObject(vocabulary, Formatting.Indented);
             File.WriteAllText(entry.FilePath, json);
         }
-        
+
         public override bool Equals(object obj) {
             if (obj == null || GetType() != obj.GetType()) {
                 return false;
@@ -79,7 +79,7 @@ namespace VocabTrainer.Views {
             for (int i = 0; i < list.Count; i++)
                 if (list[i].FirstWord == entry.FirstWord && list[i].SecondWord == entry.SecondWord && list[i].WordList == entry.WordList)
                     alreadyExists = true;
-            if (!alreadyExists) { 
+            if (!alreadyExists) {
                 list.Add(entry);
                 VocabularyEntry.WriteData(tempEntry, list);
             }
@@ -105,7 +105,7 @@ namespace VocabTrainer.Views {
                 entries[index].Seen = true;
                 RemoveEntry("LastTimeWrong", entry);
                 isCorrect = true;
-            } else if (entries.Contains(entry)){
+            } else if (entries.Contains(entry)) {
                 int index = entries.IndexOf(entry);
                 entries[index].LastTimeWrong = true;
                 entries[index].Repeated = 0;
@@ -114,6 +114,15 @@ namespace VocabTrainer.Views {
             }
             WriteData(entry, entries);
             return isCorrect;
+        }
+
+        public static void UpdateSpecialLists() {
+            EntriesSpecialWordlists = new List<List<VocabularyEntry>> {
+                GetData(EntrySpecialWordlists[0]),
+                GetData(EntrySpecialWordlists[1]),
+                GetData(EntrySpecialWordlists[2]),
+                GetData(EntrySpecialWordlists[3])
+            };
         }
     }
 }
