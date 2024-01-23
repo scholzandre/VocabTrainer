@@ -75,6 +75,8 @@ namespace VocabTrainer.ViewModels {
         private ManageViewModel _parent;
         private WordlistsList _selectedItem;
         public int Index { get; set; }
+        private int _indexM;
+        private List<bool> _availability;
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
             FirstWord = entry.SecondWord;
             SecondWord = entry.FirstWord;
@@ -85,6 +87,13 @@ namespace VocabTrainer.ViewModels {
             Index = index;
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
+            _availability = new List<bool>() {
+                VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[3].Contains(entry)
+            };
+            _indexM = VocabularyEntry.EntriesSpecialWordlists[0].IndexOf(entry);
         }
         private bool CanDeleteEntry(object arg) {
             return true;
@@ -126,7 +135,9 @@ namespace VocabTrainer.ViewModels {
                     Repeated = _entry.Repeated,
                     Seen = _entry.Seen
                 };
-                _parent.UndoList.Add((Index, tempBeforeEntry, tempAfterEntry));
+                _parent.UndoList.Add((Index, tempBeforeEntry, tempAfterEntry, _indexM, _availability));
+                for (int i = 0; i < _availability.Count; i++)
+                
                 foreach (VocabularyEntry entry in entries) 
                     if ((entry.SecondWord == FirstWord && FirstWord != _entry.SecondWord) || (entry.FirstWord == SecondWord && SecondWord != _entry.FirstWord)) {
                         alreadyExists = true;
@@ -154,6 +165,7 @@ namespace VocabTrainer.ViewModels {
                             }
                         VocabularyEntry.WriteData(tempEntry, tempEntries);
                     }
+                    VocabularyEntry.UpdateSpecialLists();
                     _entry.SecondWord = FirstWord;
                     _entry.FirstWord = SecondWord;
                 } else { 
@@ -173,7 +185,12 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
-                _parent.UndoList.Add((Index, _entry, _entry));
+                _parent.UndoList.Add((Index, _entry, _entry, _indexM, _availability));
+                for (int i = 0; i < _availability.Count; i++) 
+                    if (_availability[i]) {
+                        VocabularyEntry.EntriesSpecialWordlists[i].Remove(_entry);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
+                    }
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(_entry);
                 entries.Remove(_entry);
