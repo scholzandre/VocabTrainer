@@ -199,6 +199,18 @@ namespace VocabTrainer.ViewModels {
                     tempList.Add(beforeTempEntry);
                     SearchingWords.Add(new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index));
                 }
+
+                for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
+                    if (UndoList[UndoList.Count - 1].availability[i]) {
+                        if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0) {
+                            VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
+                        } else {
+                            VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
+                            VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
+                        }
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
+                    }
+                }
             }
             VocabularyEntry.WriteData(tempEntry, tempList);
             RedoList.Add(UndoList[UndoList.Count - 1]);
