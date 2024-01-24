@@ -136,6 +136,7 @@ namespace VocabTrainer.ViewModels {
                     Seen = _entry.Seen
                 };
                 _parent.UndoList.Add((Index, tempBeforeEntry, tempAfterEntry, _indexM, _availability));
+                _parent.RedoList = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
                 for (int i = 0; i < _availability.Count; i++)
                 
                 foreach (VocabularyEntry entry in entries) 
@@ -186,6 +187,7 @@ namespace VocabTrainer.ViewModels {
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
                 _parent.UndoList.Add((Index, _entry, _entry, _indexM, _availability));
+                _parent.RedoList = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
                 for (int i = 0; i < _availability.Count; i++) 
                     if (_availability[i]) {
                         VocabularyEntry.EntriesSpecialWordlists[i].Remove(_entry);
