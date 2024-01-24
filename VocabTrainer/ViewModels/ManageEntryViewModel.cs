@@ -87,12 +87,7 @@ namespace VocabTrainer.ViewModels {
             Index = index;
             Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
             _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
-            _availability = new List<bool>() {
-                VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry),
-                VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry),
-                VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry),
-                VocabularyEntry.EntriesSpecialWordlists[3].Contains(entry)
-            };
+            CheckAvailability(entry);
             _indexM = VocabularyEntry.EntriesSpecialWordlists[0].IndexOf(entry);
         }
         private bool CanDeleteEntry(object arg) {
@@ -234,6 +229,14 @@ namespace VocabTrainer.ViewModels {
                 hashCode = (hashCode * 23) + (SecondWord?.GetHashCode() ?? 0);
                 return hashCode;
             }
+        }
+        public void CheckAvailability(VocabularyEntry entry) {
+            _availability = new List<bool>() {
+                VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry),
+                VocabularyEntry.EntriesSpecialWordlists[3].Contains(entry)
+            };
         }
     }
 }
