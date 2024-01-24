@@ -170,12 +170,14 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             if (beforeTempEntry == afterTempEntry) {
                 UpdateIndex(1, index);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index);
+                tempManageEntryView.CheckAvailability(beforeTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, afterTempEntry);
-                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                    SearchingWords.Insert(index, tempManageEntryView);
                 } else {
                     tempList.Add(tempEntry);
-                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                    SearchingWords.Add(tempManageEntryView);
                 }
 
                 for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
@@ -192,12 +194,14 @@ namespace VocabTrainer.ViewModels {
             } else {
                 tempList.Remove(tempList[index]);
                 SearchingWords.Remove(SearchingWords[index]);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index);
+                tempManageEntryView.CheckAvailability(afterTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, beforeTempEntry);
-                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index));
+                    SearchingWords.Insert(index, tempManageEntryView);
                 } else {
                     tempList.Add(beforeTempEntry);
-                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index));
+                    SearchingWords.Add(tempManageEntryView);
                 }
 
                 for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
@@ -231,18 +235,35 @@ namespace VocabTrainer.ViewModels {
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             tempList.Remove(tempList[index]);
+
             SearchingWords.Remove(SearchingWords[index]);
+            ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index);
+            tempManageEntryView.CheckAvailability(beforeTempEntry);
             if (beforeTempEntry != afterTempEntry) {
                 if (tempList.Count > 0) {
                     tempList.Insert(index, afterTempEntry);
-                    SearchingWords.Insert(index, new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                    SearchingWords.Insert(index, tempManageEntryView);
                 } else {
                     tempList.Add(afterTempEntry);
-                    SearchingWords.Add(new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index));
+                    SearchingWords.Add(tempManageEntryView);
                 }
             } else
                 UpdateIndex(-1, index);
             VocabularyEntry.WriteData(tempEntry, tempList);
+
+            for (int i = 0; i < RedoList[RedoList.Count - 1].availability.Count; i++) {
+                if (RedoList[RedoList.Count - 1].availability[i]) {
+                    VocabularyEntry.EntriesSpecialWordlists[i].Remove(beforeTempEntry);
+                    if (beforeTempEntry != afterTempEntry) { 
+                        if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0)
+                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(RedoList[RedoList.Count - 1].indexM, afterTempEntry);
+                        else
+                            VocabularyEntry.EntriesSpecialWordlists[i].Add(afterTempEntry);
+                    }
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
+                }
+            }
+
             UndoList.Add(RedoList[RedoList.Count - 1]);
             RedoList.Remove(RedoList[RedoList.Count - 1]);
         }
