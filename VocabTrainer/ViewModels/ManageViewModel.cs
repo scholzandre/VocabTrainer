@@ -15,7 +15,7 @@ namespace VocabTrainer.ViewModels {
             }
         }
         private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> UndoList { 
+        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> UndoList {
             get => _undoList;
             set {
                 _undoList = value;
@@ -202,12 +202,8 @@ namespace VocabTrainer.ViewModels {
 
                 for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
                     if (UndoList[UndoList.Count - 1].availability[i]) {
-                        if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0) {
-                            VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
-                        } else {
-                            VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
-                            VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
-                        }
+                        VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
+                        VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
                         VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
                     }
                 }
