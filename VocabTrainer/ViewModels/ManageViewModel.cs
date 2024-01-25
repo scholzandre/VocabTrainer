@@ -176,7 +176,7 @@ namespace VocabTrainer.ViewModels {
                     tempList.Insert(index, afterTempEntry);
                     SearchingWords.Insert(index, tempManageEntryView);
                 } else {
-                    tempList.Add(tempEntry);
+                    tempList.Add(afterTempEntry);
                     SearchingWords.Add(tempManageEntryView);
                 }
 
