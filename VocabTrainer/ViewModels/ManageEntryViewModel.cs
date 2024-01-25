@@ -78,8 +78,8 @@ namespace VocabTrainer.ViewModels {
         private int _indexM;
         private List<bool> _availability;
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
-            FirstWord = entry.SecondWord;
-            SecondWord = entry.FirstWord;
+            FirstWord = entry.FirstWord;
+            SecondWord = entry.SecondWord;
             _entry = entry;
             _views = views;
             _parent = parent;
@@ -104,6 +104,7 @@ namespace VocabTrainer.ViewModels {
                 FirstWordWritable = true;
                 SecondWordWritable = true;
             } else if (EditButtonText == ButtonIcons.GetIconString(IconType.Save)) {
+                CheckAvailability(_entry);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 FirstWordWritable = false;
@@ -142,8 +143,8 @@ namespace VocabTrainer.ViewModels {
                 if (!alreadyExists) {
                     for (int i = 0; i < entries.Count; i++) 
                         if (entries[i].SecondWord == _entry.SecondWord && entries[i].FirstWord == _entry.FirstWord) {
-                            entries[i].SecondWord = FirstWord;
-                            entries[i].FirstWord = SecondWord;
+                            entries[i].FirstWord = FirstWord;
+                            entries[i].SecondWord = SecondWord;
                             break;
                         }
                     VocabularyEntry.WriteData(_entry, entries);
@@ -155,18 +156,18 @@ namespace VocabTrainer.ViewModels {
                         List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
                         for (int j = 0; j < tempEntries.Count; j++) 
                             if (tempEntries[j].SecondWord == _entry.SecondWord && tempEntries[j].FirstWord == _entry.FirstWord) {
-                                tempEntries[j].SecondWord = FirstWord;
-                                tempEntries[j].FirstWord = SecondWord;
+                                tempEntries[j].FirstWord = FirstWord;
+                                tempEntries[j].SecondWord = SecondWord;
                                 break;
                             }
                         VocabularyEntry.WriteData(tempEntry, tempEntries);
                     }
                     VocabularyEntry.UpdateSpecialLists();
-                    _entry.SecondWord = FirstWord;
-                    _entry.FirstWord = SecondWord;
+                    _entry.SecondWord = SecondWord;
+                    _entry.FirstWord = FirstWord;
                 } else { 
-                    FirstWord = _entry.SecondWord;
-                    SecondWord = _entry.FirstWord;
+                    FirstWord = _entry.FirstWord;
+                    SecondWord = _entry.SecondWord;
                 } 
             } else { 
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
@@ -181,6 +182,7 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                CheckAvailability(_entry);
                 _parent.UndoList.Add((Index, _entry, _entry, _indexM, _availability));
                 _parent.RedoList = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
                 for (int i = 0; i < _availability.Count; i++) 
@@ -218,8 +220,8 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 FirstWordWritable = false;
                 SecondWordWritable = false;
-                FirstWord = _entry.SecondWord;
-                SecondWord = _entry.FirstWord;
+                FirstWord = _entry.FirstWord;
+                SecondWord = _entry.SecondWord;
             }
         }
         public override int GetHashCode() {
