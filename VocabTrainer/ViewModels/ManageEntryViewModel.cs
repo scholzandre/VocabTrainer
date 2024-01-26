@@ -77,6 +77,7 @@ namespace VocabTrainer.ViewModels {
         public int Index { get; set; }
         private int _indexM;
         private List<bool> _availability;
+        private string _fullWordlistName; 
         public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
             FirstWord = entry.FirstWord;
             SecondWord = entry.SecondWord;
@@ -85,8 +86,9 @@ namespace VocabTrainer.ViewModels {
             _parent = parent;
             _selectedItem = selectedItem;
             Index = index;
-            Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
-            _entry.FilePath = (_selectedItem.WordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : VocabularyEntry.FirstPartFilePath + _selectedItem.WordlistName + VocabularyEntry.SecondPartFilePath;
+            _fullWordlistName = $"{selectedItem.WordlistName}_{selectedItem.FirstLanguage}_{selectedItem.SecondLanguage}";
+            Editable = (_fullWordlistName == "Marked_-_-") ? false : true;
+            _entry.FilePath = (_fullWordlistName == "Marked_-_-")? VocabularyEntry.FirstPartFilePath + "Marked" + VocabularyEntry.SecondPartFilePath : $"{VocabularyEntry.FirstPartFilePath}{selectedItem.WordlistName}_{selectedItem.FirstLanguage}_{selectedItem.SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
             CheckAvailability(entry);
             _indexM = VocabularyEntry.EntriesSpecialWordlists[0].IndexOf(entry);
         }
@@ -131,8 +133,8 @@ namespace VocabTrainer.ViewModels {
                     Repeated = _entry.Repeated,
                     Seen = _entry.Seen
                 };
-                _parent.UndoList.Add((Index, tempBeforeEntry, tempAfterEntry, _indexM, _availability));
-                _parent.RedoList = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
+                _parent.UndoList[_parent.ComboBoxWordlists[_parent.SelectedItem]].Add((Index, tempBeforeEntry, tempAfterEntry, _indexM, _availability));
+                _parent.RedoList[_parent.ComboBoxWordlists[_parent.SelectedItem]] = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
                 for (int i = 0; i < _availability.Count; i++)
                 
                 foreach (VocabularyEntry entry in entries) 
@@ -172,7 +174,7 @@ namespace VocabTrainer.ViewModels {
             } else { 
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
-                Editable = (_selectedItem.WordlistName == "Marked_-_-") ? false : true;
+                Editable = (_fullWordlistName == "Marked_-_-") ? false : true;
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanDeleteEntry);
@@ -183,8 +185,8 @@ namespace VocabTrainer.ViewModels {
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
                 CheckAvailability(_entry);
-                _parent.UndoList.Add((Index, _entry, _entry, _indexM, _availability));
-                _parent.RedoList = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
+                _parent.UndoList[_parent.ComboBoxWordlists[_parent.SelectedItem]].Add((Index, _entry, _entry, _indexM, _availability));
+                _parent.RedoList[_parent.ComboBoxWordlists[_parent.SelectedItem]] = new List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool>)>();
                 for (int i = 0; i < _availability.Count; i++) 
                     if (_availability[i]) {
                         VocabularyEntry.EntriesSpecialWordlists[i].Remove(_entry);
@@ -206,7 +208,7 @@ namespace VocabTrainer.ViewModels {
                     }
                 }
 
-                if (_selectedItem.WordlistName != "Marked_-_-") 
+                if (_fullWordlistName != "Marked_-_-") 
                     for (int i = 0; i < filePathsSpecialLists.Count; i++) {
                         VocabularyEntry tempEntry = new VocabularyEntry() {
                             FilePath = filePathsSpecialLists[i]
