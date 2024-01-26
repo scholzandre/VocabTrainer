@@ -14,16 +14,16 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxEntries));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)> _undoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> UndoList {
+        private Dictionary<WordlistsList, List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)>> _undoList = new Dictionary<WordlistsList, List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>>();
+        public Dictionary<WordlistsList, List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)>> UndoList {
             get => _undoList;
             set {
                 _undoList = value;
                 OnPropertyChanged(nameof(UndoList));
             }
         }
-        private List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)> _redoList = new List<(int, VocabularyEntry, VocabularyEntry, int indexM, List<bool>)>();
-        public List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)> RedoList {
+        private Dictionary<WordlistsList, List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)>> _redoList = new Dictionary<WordlistsList, List<(int index, VocabularyEntry, VocabularyEntry, int indexM, List<bool> availability)>>();
+        public Dictionary<WordlistsList, List<(int index, VocabularyEntry before, VocabularyEntry after, int indexM, List<bool> availability)>> RedoList {
             get => _redoList;
             set {
                 _redoList = value;
@@ -130,6 +130,8 @@ namespace VocabTrainer.ViewModels {
                     string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
+                    UndoList.Add(temp, new List<(int, VocabularyEntry, VocabularyEntry, int, List<bool>)>());
+                    RedoList.Add(temp, new List<(int, VocabularyEntry, VocabularyEntry, int, List<bool>)>());
                 }
             if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))
                 SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
@@ -152,25 +154,22 @@ namespace VocabTrainer.ViewModels {
         }
 
         private bool CanExecuteUndoCommand(object arg) {
-            return UndoList.Count > 0;
+            return UndoList[ComboBoxWordlists[SelectedItem]].Count > 0;
         }
         public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
         private void Undo(object obj) {
-            int index = UndoList[UndoList.Count - 1].index;
-            VocabularyEntry beforeTempEntry = UndoList[UndoList.Count - 1].before;
-            VocabularyEntry afterTempEntry = UndoList[UndoList.Count - 1].after;
-            WordlistsList tempWordlist = new WordlistsList {
-                WordlistName = $"{afterTempEntry.WordList}_{afterTempEntry.FirstLanguage}_{afterTempEntry.SecondLanguage}"
-            };
+            int index = UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count-1].index;
+            VocabularyEntry beforeTempEntry = UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].before;
+            VocabularyEntry afterTempEntry = UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].after;
             VocabularyEntry tempEntry = new VocabularyEntry();
             if (SelectedItem == "Marked (-, -)")
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
             else
-                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             if (beforeTempEntry == afterTempEntry) {
                 UpdateIndex(1, index);
-                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index);
                 tempManageEntryView.CheckAvailability(beforeTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, afterTempEntry);
@@ -180,10 +179,10 @@ namespace VocabTrainer.ViewModels {
                     SearchingWords.Add(tempManageEntryView);
                 }
 
-                for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
-                    if (UndoList[UndoList.Count - 1].availability[i]) {
+                for (int i = 0; i < UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability.Count; i++) {
+                    if (UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability[i]) {
                         if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0) {
-                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(UndoList[UndoList.Count - 1].indexM, beforeTempEntry);
+                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].indexM, beforeTempEntry);
                         } else {
                             VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
                         }
@@ -194,7 +193,7 @@ namespace VocabTrainer.ViewModels {
             } else {
                 tempList.Remove(tempList[index]);
                 SearchingWords.Remove(SearchingWords[index]);
-                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, tempWordlist, index);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, ComboBoxWordlists[SelectedItem], index);
                 tempManageEntryView.CheckAvailability(afterTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, beforeTempEntry);
@@ -204,8 +203,8 @@ namespace VocabTrainer.ViewModels {
                     SearchingWords.Add(tempManageEntryView);
                 }
 
-                for (int i = 0; i < UndoList[UndoList.Count - 1].availability.Count; i++) {
-                    if (UndoList[UndoList.Count - 1].availability[i]) {
+                for (int i = 0; i < UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability.Count; i++) {
+                    if (UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability[i]) {
                         VocabularyEntry.EntriesSpecialWordlists[i].Remove(afterTempEntry);
                         VocabularyEntry.EntriesSpecialWordlists[i].Add(beforeTempEntry);
                         VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
@@ -213,31 +212,28 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             VocabularyEntry.WriteData(tempEntry, tempList);
-            RedoList.Add(UndoList[UndoList.Count - 1]);
-            UndoList.Remove(UndoList[UndoList.Count - 1]);
+            RedoList[ComboBoxWordlists[SelectedItem]].Add(UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
+            UndoList[ComboBoxWordlists[SelectedItem]].Remove(UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
         }
 
         private bool CanExecuteRedoCommand(object arg) {
-            return RedoList.Count > 0;
+            return RedoList[ComboBoxWordlists[SelectedItem]].Count > 0;
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
-            int index = RedoList[RedoList.Count - 1].index;
-            VocabularyEntry beforeTempEntry = RedoList[RedoList.Count - 1].before;
-            VocabularyEntry afterTempEntry = RedoList[RedoList.Count - 1].after;
-            WordlistsList tempWordlist = new WordlistsList {
-                WordlistName = $"{afterTempEntry.WordList}_{afterTempEntry.FirstLanguage}_{afterTempEntry.SecondLanguage}"
-            };
+            int index = RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].index;
+            VocabularyEntry beforeTempEntry = RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].before;
+            VocabularyEntry afterTempEntry = RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].after;
             VocabularyEntry tempEntry = new VocabularyEntry();
             if (SelectedItem == "Marked (-, -)")
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
             else
-                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist.WordlistName}{VocabularyEntry.SecondPartFilePath}";
+                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             tempList.Remove(tempList[index]);
 
             SearchingWords.Remove(SearchingWords[index]);
-            ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, tempWordlist, index);
+            ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index);
             tempManageEntryView.CheckAvailability(beforeTempEntry);
             if (beforeTempEntry != afterTempEntry) {
                 if (tempList.Count > 0) {
@@ -251,21 +247,20 @@ namespace VocabTrainer.ViewModels {
                 UpdateIndex(-1, index);
             VocabularyEntry.WriteData(tempEntry, tempList);
 
-            for (int i = 0; i < RedoList[RedoList.Count - 1].availability.Count; i++) {
-                if (RedoList[RedoList.Count - 1].availability[i]) {
+            for (int i = 0; i < RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability.Count; i++) {
+                if (RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].availability[i]) {
                     VocabularyEntry.EntriesSpecialWordlists[i].Remove(beforeTempEntry);
                     if (beforeTempEntry != afterTempEntry) { 
                         if (i == 0 && VocabularyEntry.EntriesSpecialWordlists[i].Count > 0)
-                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(RedoList[RedoList.Count - 1].indexM, afterTempEntry);
+                            VocabularyEntry.EntriesSpecialWordlists[i].Insert(RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].indexM, afterTempEntry);
                         else
                             VocabularyEntry.EntriesSpecialWordlists[i].Add(afterTempEntry);
                     }
                     VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
                 }
             }
-
-            UndoList.Add(RedoList[RedoList.Count - 1]);
-            RedoList.Remove(RedoList[RedoList.Count - 1]);
+            UndoList[ComboBoxWordlists[SelectedItem]].Add(RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
+            RedoList[ComboBoxWordlists[SelectedItem]].Remove(RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
         }
 
         public void UpdateIndex(int number, int index) {
@@ -284,10 +279,7 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             int index = 0;
             foreach (VocabularyEntry tempEntry in entries) {
-                WordlistsList tempWordlist = new WordlistsList() {
-                    WordlistName = $"{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}"
-                };
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, tempWordlist, index));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, ComboBoxWordlists[SelectedItem], index));
                 index++;
             }
         }
