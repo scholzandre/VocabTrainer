@@ -106,7 +106,7 @@ namespace VocabTrainer.ViewModels {
                 SelectedItem = (ComboBoxEntries.Count > 0) ? ComboBoxEntries[ComboBoxEntries.Count - 1] : null;
         }
         private bool CanExecuteAddCommand(object arg) {
-            return (FirstWord.Trim() != string.Empty && SecondWord.Trim() != string.Empty);
+            return (FirstWord.Trim() != string.Empty && SecondWord.Trim() != string.Empty && ComboBoxEntries.Count > 0);
         }
         private bool CanExecuteCommand(object arg) {
             return true;
