@@ -243,7 +243,7 @@ namespace VocabTrainer.ViewModels {
             GetPercentages();
             CreateDiagram();
             SetStrings();
-
+            SearchCommand.Execute(this);
         }
         public void GetPercentages() {
             KnownWords = 0;
