@@ -116,20 +116,67 @@ namespace VocabTrainer.ViewModels {
         public string AnalysisOpenedWordlist = "";
 
         private Type _addEntryViewType = typeof(AddView);
+        private AddViewModel _addEntryViewModel;
+        public AddViewModel AddEntryViewModel {
+            get => _addEntryViewModel;
+            set {
+                _addEntryViewModel = value;
+                OnPropertyChanged(nameof(AddEntryViewModel));
+            }
+        }
         public string AddEntryOpenedWordlist = "";
 
         private Type _manageEntryViewType = typeof(ManageView);
+        private ManageViewModel _manageEntryViewModel;
+        public ManageViewModel ManageEntryViewModel {
+            get => _manageEntryViewModel;
+            set {
+                _manageEntryViewModel = value;
+                OnPropertyChanged(nameof(ManageEntryViewModel));
+            }
+        }
         public string ManageEntryOpenedWordlist = "";
 
         private Type _addWordlistViewType = typeof(AddWordlistView);
         private AddWordlistViewModel _addWordlistViewModel;
+        public AddWordlistViewModel AddWordlistViewModel {
+            get => _addWordlistViewModel;
+            set {
+                _addWordlistViewModel = value;
+                OnPropertyChanged(nameof(AddWordlistViewModel));
+            }
+        }
 
         private Type _manageWordlistViewType = typeof(ManageWordlistsView);
+        private ManageWordlistsViewModel _manageWordlistViewModel;
+        public ManageWordlistsViewModel ManageWordlistViewModel {
+            get => _manageWordlistViewModel;
+            set {
+                _manageWordlistViewModel = value;
+                OnPropertyChanged(nameof(ManageWordlistViewModel));
+            }
+        }
 
         private Type _translatorViewType = typeof(TranslatorView);
+        private TranslatorViewModel _translatorViewModel;
+        public TranslatorViewModel TranslatorViewModel {
+            get => _translatorViewModel;
+            set {
+                _translatorViewModel = value;
+                OnPropertyChanged(nameof(TranslatorViewModel));
+            }
+        }
         public string TranslatorOpenedWordlist = "";
 
         private Type _settingsViewType = typeof(SettingsView);
+        private SettingsViewModel _settingsViewModel;
+        public SettingsViewModel SettingsViewModel {
+            get => _settingsViewModel;
+            set {
+                _settingsViewModel = value;
+                OnPropertyChanged(nameof(SettingsViewModel));
+            }
+        }
 
         public MainViewModel() {
             WordlistsList.CheckJsonFolder();
@@ -137,7 +184,7 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.CheckSpecialWordlists();
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
-            _addWordlistViewModel = new AddWordlistViewModel(this);
+            AddWordlistViewModel = new AddWordlistViewModel(this);
             OpenAnalysisViewCommand.Execute(this);
         }
 
@@ -164,7 +211,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenAddWordlistView(object obj) {
             SetEnabled(1);
             UserControl = (UserControl)Activator.CreateInstance(_addWordlistViewType);
-            UserControl.DataContext = _addWordlistViewModel;
+            UserControl.DataContext = AddWordlistViewModel;
         }
         public ICommand OpenManageWordlistsViewCommand => new RelayCommand(OpenManageWordlistsView, CanExecuteCommand);
         private void OpenManageWordlistsView(object obj) {
