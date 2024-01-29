@@ -7,7 +7,7 @@ using VocabTrainer.Models;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
-    internal class AddWordlistViewModel : BaseViewModel {
+    public class AddWordlistViewModel : BaseViewModel {
         private TextBox _wordlistTextBox;
         public TextBox WordlistTextBox {
             get => _wordlistTextBox;
