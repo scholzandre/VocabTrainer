@@ -35,7 +35,9 @@ namespace VocabTrainer.ViewModels {
         }
         public int Counter { get; set; } = 0;
         public Random Random = new Random();
-        public LearnViewModel() {
+        private MainViewModel _parent;
+        public LearnViewModel(MainViewModel parent) {
+            _parent = parent;
             GetSettings();
             GetEntries();
             ShowLearnMode();

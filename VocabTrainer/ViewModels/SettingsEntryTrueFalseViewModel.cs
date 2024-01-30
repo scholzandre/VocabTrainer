@@ -81,7 +81,7 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.WriteWordlistsList(_wordlists);
             Settings.WriteSettings(_settings);
             _settingsViewModel.FillCollection();
-            _parent.LearnEntryViewModel = new LearnViewModel();
+            _parent.LearnEntryViewModel = new LearnViewModel(_parent);
         }
         private bool EnoughWords(int minNumber) {
             int counter = 0;

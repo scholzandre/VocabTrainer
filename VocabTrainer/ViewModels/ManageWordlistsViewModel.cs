@@ -65,7 +65,9 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(SearchingWord));
             }
         }
-        public ManageWordlistsViewModel() {
+        MainViewModel _parent;
+        public ManageWordlistsViewModel(MainViewModel parent) {
+            _parent = parent;
             FillList();
         }
 
