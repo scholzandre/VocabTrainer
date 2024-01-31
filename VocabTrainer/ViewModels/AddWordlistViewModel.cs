@@ -103,6 +103,12 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.WriteWordlistsList(wordlists);
             _parent.ListWordlist = WordlistsList.GetWordlistsList();
             WordlistTextBox.Focus();
+
+            _parent.SettingsViewModel = new SettingsViewModel(_parent);
+            _parent.TranslatorViewModel = new TranslatorViewModel(_parent, _parent.TranslatorOpenedWordlist);
+            _parent.ManageEntryViewModel = new ManageViewModel(_parent, _parent.ManageEntryOpenedWordlist);
+            _parent.ManageWordlistViewModel = new ManageWordlistsViewModel(_parent);
+            _parent.AddEntryViewModel = new AddViewModel(_parent, _parent.AddEntryOpenedWordlist);
         }
     }
 }
