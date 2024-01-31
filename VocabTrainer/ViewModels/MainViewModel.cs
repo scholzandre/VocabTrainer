@@ -190,6 +190,7 @@ namespace VocabTrainer.ViewModels {
             AddWordlistViewModel = new AddWordlistViewModel(this);
             ManageWordlistViewModel = new ManageWordlistsViewModel(this);
             TranslatorViewModel = new TranslatorViewModel(this, TranslatorOpenedWordlist);
+            SettingsViewModel = new SettingsViewModel(this);
             OpenAnalysisViewCommand.Execute(this);
         }
 
