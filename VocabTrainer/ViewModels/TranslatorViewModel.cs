@@ -188,6 +188,8 @@ namespace VocabTrainer.ViewModels {
             }
             VocabularyEntry.AddEntry("NotSeen", entry);
             VocabularyEntry.WriteData(entry, entries);
+            _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntryOpenedWordlist);
+            _parent.LearnEntriesViewModel = new LearnViewModel(_parent);
         }
 
         static async Task<string> TranslateText(string apiKey, string text, string originLanguage, string targetLanguage) {
