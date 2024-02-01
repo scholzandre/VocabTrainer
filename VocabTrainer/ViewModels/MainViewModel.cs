@@ -104,11 +104,11 @@ namespace VocabTrainer.ViewModels {
         private Type _learnEntryViewType = typeof(LearnView);
 
         private LearnViewModel _learnEntryViewModel;
-        public LearnViewModel LearnEntryViewModel {
+        public LearnViewModel LearnEntriesViewModel {
             get => _learnEntryViewModel;
             set {
                 _learnEntryViewModel = value;
-                OnPropertyChanged(nameof(LearnEntryViewModel)); 
+                OnPropertyChanged(nameof(LearnEntriesViewModel)); 
             }
         }
 
@@ -128,11 +128,11 @@ namespace VocabTrainer.ViewModels {
 
         private Type _manageEntryViewType = typeof(ManageView);
         private ManageViewModel _manageEntryViewModel;
-        public ManageViewModel ManageEntryViewModel {
+        public ManageViewModel ManageEntriesViewModel {
             get => _manageEntryViewModel;
             set {
                 _manageEntryViewModel = value;
-                OnPropertyChanged(nameof(ManageEntryViewModel));
+                OnPropertyChanged(nameof(ManageEntriesViewModel));
             }
         }
         public string ManageEntryOpenedWordlist = "";
@@ -184,9 +184,9 @@ namespace VocabTrainer.ViewModels {
             WordlistsList.CheckSpecialWordlists();
             WordlistsList.CheckAvailabilityOfJSONFiles();
             SetColors();
-            LearnEntryViewModel = new LearnViewModel(this);
+            LearnEntriesViewModel = new LearnViewModel(this);
             AddEntryViewModel = new AddViewModel(this, AddEntryOpenedWordlist);
-            ManageEntryViewModel = new ManageViewModel(this, ManageEntryOpenedWordlist);
+            ManageEntriesViewModel = new ManageViewModel(this, ManageEntryOpenedWordlist);
             AddWordlistViewModel = new AddWordlistViewModel(this);
             ManageWordlistViewModel = new ManageWordlistsViewModel(this);
             TranslatorViewModel = new TranslatorViewModel(this, TranslatorOpenedWordlist);
@@ -211,7 +211,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenLearnView(object obj) {
             SetEnabled(0);
             UserControl = (UserControl)Activator.CreateInstance(_learnEntryViewType);
-            UserControl.DataContext = LearnEntryViewModel;
+            UserControl.DataContext = LearnEntriesViewModel;
         }
         public ICommand OpenAddWordlistViewCommand => new RelayCommand(OpenAddWordlistView, CanExecuteCommand);
         private void OpenAddWordlistView(object obj) {
@@ -235,7 +235,7 @@ namespace VocabTrainer.ViewModels {
         private void OpenManageWordsView(object obj) {
             SetEnabled(4);
             UserControl = (UserControl)Activator.CreateInstance(_manageEntryViewType);
-            UserControl.DataContext = ManageEntryViewModel;
+            UserControl.DataContext = ManageEntriesViewModel;
         }
         public ICommand OpenAnalysisViewCommand => new RelayCommand(OpenAnalysisView, CanExecuteCommand);
         private void OpenAnalysisView(object obj) {
