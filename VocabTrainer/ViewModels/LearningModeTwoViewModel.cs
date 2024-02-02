@@ -105,7 +105,9 @@ namespace VocabTrainer.ViewModels {
         private string _checkText = "check answer";
         private string _nextText = "next";
         private int _hints = 0;
-        public LearningModeTwoViewModel(LearnViewModel parent) {
+        MainViewModel _mainViewModel;
+        public LearningModeTwoViewModel(LearnViewModel parent, MainViewModel mainViewModel) {
+            _mainViewModel = mainViewModel;
             _parent = parent;
             _counter = _parent.Counter;
             _firstWord = _parent.Entries[_counter].SecondWord;
@@ -183,6 +185,7 @@ namespace VocabTrainer.ViewModels {
                 markedEntries.Remove(_parent.Entries[_counter]);
             }
             VocabularyEntry.WriteData(markEntry, markedEntries);
+            _mainViewModel.ManageEntriesViewModel = new ManageViewModel(_mainViewModel, _mainViewModel.ManageEntryOpenedWordlist);
         }
 
         public ICommand HintCommand => new RelayCommand(Hint, CanExecuteCommand);

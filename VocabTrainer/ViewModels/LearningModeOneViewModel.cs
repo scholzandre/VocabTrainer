@@ -50,7 +50,9 @@ namespace VocabTrainer.ViewModels {
         static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
         private List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _counter;
-        public LearningModeOneViewModel(LearnViewModel parent) { 
+        MainViewModel _mainViewModel;
+        public LearningModeOneViewModel(LearnViewModel parent, MainViewModel mainViewModel) {
+            _mainViewModel = mainViewModel;
             _parent = parent;
             _counter = _parent.Counter;
             FirstWord = _parent.Entries[_counter].SecondWord;
@@ -79,6 +81,7 @@ namespace VocabTrainer.ViewModels {
                 _markedEntries.Remove(_parent.Entries[_counter]);
             }
             VocabularyEntry.WriteData(_markEntry, _markedEntries);
+            _mainViewModel.ManageEntriesViewModel = new ManageViewModel(_mainViewModel, _mainViewModel.ManageEntryOpenedWordlist);
         }
     }
 }

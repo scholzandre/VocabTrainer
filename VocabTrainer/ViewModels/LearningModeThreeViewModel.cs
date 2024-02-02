@@ -96,7 +96,9 @@ namespace VocabTrainer.ViewModels {
         private readonly List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _positionCorrectItem;
         private bool _isOver = false;
-        public LearningModeThreeViewModel(LearnViewModel parent) {
+        MainViewModel _mainViewModel;
+        public LearningModeThreeViewModel(LearnViewModel parent, MainViewModel mainViewModel) {
+            _mainViewModel = mainViewModel;
             _parent = parent;
             _counter = _parent.Counter;
             _language = _parent.Random.Next(1, 3);
@@ -196,6 +198,7 @@ namespace VocabTrainer.ViewModels {
                 _markedEntries.Remove(_parent.Entries[_counter]);
             }
             VocabularyEntry.WriteData(_markEntry, _markedEntries);
+            _mainViewModel.ManageEntriesViewModel = new ManageViewModel(_mainViewModel, _mainViewModel.ManageEntryOpenedWordlist);
         }
     }
 }
