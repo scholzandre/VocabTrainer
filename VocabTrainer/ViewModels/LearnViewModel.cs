@@ -49,33 +49,33 @@ namespace VocabTrainer.ViewModels {
             if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 1 && Entries.Count >= 1 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeOneView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
-                UserControl.DataContext = new LearningModeOneViewModel(this);
+                UserControl.DataContext = new LearningModeOneViewModel(this, _parent);
             } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 2 && Entries.Count >= 1 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeTwoView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
-                UserControl.DataContext = new LearningModeTwoViewModel(this);
+                UserControl.DataContext = new LearningModeTwoViewModel(this, _parent);
             } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 3 && Entries.Count >= 5 && Entries.Count > Counter) {
                 Type viewType = typeof(LearningModeThreeView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
-                UserControl.DataContext = new LearningModeThreeViewModel(this);
+                UserControl.DataContext = new LearningModeThreeViewModel(this, _parent);
             } else if (_learningModes.Count >= 1 && _learningModes[learningMode].LearningMode == 4 && Entries.Count >= 5 && Entries.Count > Counter) {
-                List<VocabularyEntry> tempEntires = new List<VocabularyEntry>();
+                List<VocabularyEntry> tempEntries = new List<VocabularyEntry>();
                 for (int i = 0; i < 5; i++) {
-                    if (Counter < Entries.Count() && tempEntires.Contains(Entries[Counter])) {
+                    if (Counter < Entries.Count() && tempEntries.Contains(Entries[Counter])) {
                         i--;
                         Counter++;
                     } else if (Counter >= Entries.Count()) {
                         Counter = 0;
                         GetEntries();
-                        tempEntires.Add(Entries[Counter]);
+                        tempEntries.Add(Entries[Counter]);
                     } else {
-                        tempEntires.Add(Entries[Counter]);
+                        tempEntries.Add(Entries[Counter]);
                         Counter++;
                     }
                 }
                 Type viewType = typeof(LearningModeFourView);
                 UserControl = (UserControl)Activator.CreateInstance(viewType);
-                UserControl.DataContext = new LearningModeFourViewModel(this, tempEntires);
+                UserControl.DataContext = new LearningModeFourViewModel(this, tempEntries);
             } else
                 InfoText = "Not enough word available";
 
