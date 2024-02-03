@@ -169,7 +169,7 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
             if (beforeTempEntry == afterTempEntry) {
                 UpdateIndex(1, index);
-                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index, _parent);
                 tempManageEntryView.CheckAvailability(beforeTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, afterTempEntry);
@@ -193,7 +193,7 @@ namespace VocabTrainer.ViewModels {
             } else {
                 tempList.Remove(tempList[index]);
                 SearchingWords.Remove(SearchingWords[index]);
-                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, ComboBoxWordlists[SelectedItem], index);
+                ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, beforeTempEntry, this, ComboBoxWordlists[SelectedItem], index, _parent);
                 tempManageEntryView.CheckAvailability(afterTempEntry);
                 if (tempList.Count > 0) {
                     tempList.Insert(index, beforeTempEntry);
@@ -233,7 +233,7 @@ namespace VocabTrainer.ViewModels {
             tempList.Remove(tempList[index]);
 
             SearchingWords.Remove(SearchingWords[index]);
-            ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index);
+            ManageEntryViewModel tempManageEntryView = new ManageEntryViewModel(SearchingWords, afterTempEntry, this, ComboBoxWordlists[SelectedItem], index, _parent);
             tempManageEntryView.CheckAvailability(beforeTempEntry);
             if (beforeTempEntry != afterTempEntry) {
                 if (tempList.Count > 0) {
@@ -279,7 +279,7 @@ namespace VocabTrainer.ViewModels {
             List<VocabularyEntry> entries = VocabularyEntry.GetData(entry);
             int index = 0;
             foreach (VocabularyEntry tempEntry in entries) {
-                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, ComboBoxWordlists[SelectedItem], index));
+                SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, ComboBoxWordlists[SelectedItem], index, _parent));
                 index++;
             }
         }
