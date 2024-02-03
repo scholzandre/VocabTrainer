@@ -77,8 +77,10 @@ namespace VocabTrainer.ViewModels {
         public int Index { get; set; }
         private int _indexM;
         private List<bool> _availability;
-        private string _fullWordlistName; 
-        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index) {
+        private string _fullWordlistName;
+        private MainViewModel _mainViewModel;
+        public ManageEntryViewModel(ObservableCollection<ManageEntryViewModel> views, VocabularyEntry entry, ManageViewModel parent, WordlistsList selectedItem, int index, MainViewModel mainViewModel) {
+            _mainViewModel = mainViewModel;
             FirstWord = entry.FirstWord;
             SecondWord = entry.SecondWord;
             _entry = entry;
@@ -170,7 +172,8 @@ namespace VocabTrainer.ViewModels {
                 } else { 
                     FirstWord = _entry.FirstWord;
                     SecondWord = _entry.SecondWord;
-                } 
+                }
+                UpdateViewModels();
             } else { 
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
@@ -197,7 +200,7 @@ namespace VocabTrainer.ViewModels {
                 entries.Remove(_entry);
                 VocabularyEntry.WriteData(_entry, entries);
 
-                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem, Index).GetHashCode();
+                int secondViewModel = new ManageEntryViewModel(_views, _entry, _parent, _selectedItem, Index, _mainViewModel).GetHashCode();
                 foreach (ManageEntryViewModel view in _views) {
                     int firstViewModel = view.GetHashCode();
                     if (firstViewModel == secondViewModel) {
@@ -217,6 +220,7 @@ namespace VocabTrainer.ViewModels {
                         if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
                         VocabularyEntry.WriteData(tempEntry, tempEntries);    
                     }
+                UpdateViewModels();
             } else {
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
@@ -232,6 +236,12 @@ namespace VocabTrainer.ViewModels {
                 hashCode = (hashCode * 23) + (FirstWord?.GetHashCode() ?? 0);
                 hashCode = (hashCode * 23) + (SecondWord?.GetHashCode() ?? 0);
                 return hashCode;
+            }
+        }
+        private void UpdateViewModels() {
+            if (_mainViewModel.ListWordlist.Contains(_selectedItem) && _mainViewModel.ListWordlist[_mainViewModel.ListWordlist.IndexOf(_selectedItem)].IsTrue) {
+                _mainViewModel.LearnEntriesViewModel = new LearnViewModel(_mainViewModel);
+                _mainViewModel.SettingsViewModel = new SettingsViewModel(_mainViewModel);
             }
         }
         public void CheckAvailability(VocabularyEntry entry) {
