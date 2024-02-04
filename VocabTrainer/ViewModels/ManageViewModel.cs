@@ -68,7 +68,7 @@ namespace VocabTrainer.ViewModels {
             set {
                 if (_selectedItem != value) {
                     _selectedItem = value;
-                    _parent.ManageEntryOpenedWordlist = SelectedItem;
+                    _parent.ManageEntriesOpenedWordlist = SelectedItem;
                     OnPropertyChanged(nameof(SelectedItem));
                     FillEntriesCollection();
                     AllEntriesCounter = SearchingWords.Count;
@@ -212,6 +212,7 @@ namespace VocabTrainer.ViewModels {
                 }
             }
             VocabularyEntry.WriteData(tempEntry, tempList);
+            UpdateViewModels(ComboBoxWordlists[SelectedItem]);
             RedoList[ComboBoxWordlists[SelectedItem]].Add(UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
             UndoList[ComboBoxWordlists[SelectedItem]].Remove(UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
         }
@@ -259,6 +260,7 @@ namespace VocabTrainer.ViewModels {
                     VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
                 }
             }
+            UpdateViewModels(ComboBoxWordlists[SelectedItem]);
             UndoList[ComboBoxWordlists[SelectedItem]].Add(RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
             RedoList[ComboBoxWordlists[SelectedItem]].Remove(RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1]);
         }
@@ -281,6 +283,13 @@ namespace VocabTrainer.ViewModels {
             foreach (VocabularyEntry tempEntry in entries) {
                 SearchingWords.Add(new ManageEntryViewModel(SearchingWords, tempEntry, this, ComboBoxWordlists[SelectedItem], index, _parent));
                 index++;
+            }
+        }
+
+        public void UpdateViewModels(WordlistsList wordlist) {
+            if (_parent.ListWordlist.Contains(wordlist) && _parent.ListWordlist[_parent.ListWordlist.IndexOf(wordlist)].IsTrue) {
+                _parent.LearnEntriesViewModel = new LearnViewModel(_parent);
+                _parent.SettingsViewModel = new SettingsViewModel(_parent);
             }
         }
     }
