@@ -70,6 +70,7 @@ namespace VocabTrainer.ViewModels {
             for (int i = 0; i < _wordlists.Count; i++) {
                 if (Condition == _wordlists[i].WordlistName) {
                     _wordlists[i].IsTrue = (_wordlists[i].IsTrue) ? false : true;
+                    _parent.ListWordlist[_parent.ListWordlist.IndexOf(_wordlists[i])].IsTrue = _wordlists[i].IsTrue;
                 }
             }
 
