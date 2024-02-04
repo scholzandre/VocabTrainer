@@ -140,7 +140,7 @@ namespace VocabTrainer.ViewModels {
             } else 
                 InfoText = "This entry already exists.";
             FirstWordTextBox.Focus();
-            _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntryOpenedWordlist);
+            _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
             _parent.LearnEntriesViewModel = new LearnViewModel(_parent);
             _parent.SettingsViewModel = new SettingsViewModel(_parent);
         }

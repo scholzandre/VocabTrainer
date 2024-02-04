@@ -135,7 +135,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ManageEntriesViewModel));
             }
         }
-        public string ManageEntryOpenedWordlist = "";
+        public string ManageEntriesOpenedWordlist = "";
 
         private Type _addWordlistViewType = typeof(AddWordlistView);
         private AddWordlistViewModel _addWordlistViewModel;
@@ -186,7 +186,7 @@ namespace VocabTrainer.ViewModels {
             SetColors();
             LearnEntriesViewModel = new LearnViewModel(this);
             AddEntryViewModel = new AddViewModel(this, AddEntryOpenedWordlist);
-            ManageEntriesViewModel = new ManageViewModel(this, ManageEntryOpenedWordlist);
+            ManageEntriesViewModel = new ManageViewModel(this, ManageEntriesOpenedWordlist);
             AddWordlistViewModel = new AddWordlistViewModel(this);
             ManageWordlistViewModel = new ManageWordlistsViewModel(this);
             TranslatorViewModel = new TranslatorViewModel(this, TranslatorOpenedWordlist);

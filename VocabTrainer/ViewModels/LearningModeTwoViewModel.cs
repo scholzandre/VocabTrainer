@@ -185,7 +185,7 @@ namespace VocabTrainer.ViewModels {
                 markedEntries.Remove(_parent.Entries[_counter]);
             }
             VocabularyEntry.WriteData(markEntry, markedEntries);
-            _mainViewModel.ManageEntriesViewModel = new ManageViewModel(_mainViewModel, _mainViewModel.ManageEntryOpenedWordlist);
+            _mainViewModel.ManageEntriesViewModel = new ManageViewModel(_mainViewModel, _mainViewModel.ManageEntriesOpenedWordlist);
         }
 
         public ICommand HintCommand => new RelayCommand(Hint, CanExecuteCommand);
