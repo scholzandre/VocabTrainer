@@ -133,6 +133,7 @@ namespace VocabTrainer.ViewModels {
                 VocabularyEntry.WriteData(tempEntry, tempList);
             }
             WordlistsList.WriteWordlistsList(allWordlists);
+            UpdateViewModels(UndoList[UndoList.Count - 1].after);
             RedoList.Add(UndoList[UndoList.Count - 1]);
             UndoList.Remove(UndoList[UndoList.Count - 1]);
         }
@@ -167,9 +168,19 @@ namespace VocabTrainer.ViewModels {
                 }
                 VocabularyEntry.WriteData(tempEntry, tempList);
             }
+            UpdateViewModels(RedoList[RedoList.Count - 1].before);
             UndoList.Add(RedoList[RedoList.Count - 1]);
             RedoList.Remove(RedoList[RedoList.Count - 1]);
             WordlistsList.WriteWordlistsList(allWordlists);
+        }
+        public void UpdateViewModels(WordlistsList wordlist) {
+            if (_parent.ListWordlist.Contains(wordlist) && _parent.ListWordlist[_parent.ListWordlist.IndexOf(wordlist)].IsTrue) {
+                _parent.LearnEntriesViewModel = new LearnViewModel(_parent);
+                _parent.SettingsViewModel = new SettingsViewModel(_parent);
+                _parent.TranslatorViewModel = new TranslatorViewModel(_parent, _parent.TranslatorOpenedWordlist);
+                _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
+                _parent.AddWordlistViewModel = new AddWordlistViewModel(_parent);
+            }
         }
     }
 }
