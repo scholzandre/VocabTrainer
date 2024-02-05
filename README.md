@@ -1,5 +1,5 @@
 # VocabTrainer
-Version 1.0.77
+Version 1.0.95
 
 A simple vocabulary trainer with an built in translator programmed in C# and WPF.
 Your data is stored in json files in the corresponding folder. (Please do not touch, even if there are safety mechanisms in the code)
