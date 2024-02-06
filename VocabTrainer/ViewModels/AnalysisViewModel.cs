@@ -252,7 +252,6 @@ namespace VocabTrainer.ViewModels {
             SeenWords = 0;
             LastTimeWrong = 0;
             AllWords.Clear();
-            SearchingWords.Clear();
             List<WordlistsList> wordlistsList = WordlistsList.GetWordlistsList();
             List<VocabularyEntry> words;
             VocabularyEntry entry = new VocabularyEntry();
@@ -272,6 +271,7 @@ namespace VocabTrainer.ViewModels {
                 words = VocabularyEntry.GetData(entry);
                 AddCounters(words);
             }
+            SearchingWords = new List<VocabularyEntry>(AllWords);
         }
         public void AddCounters(List<VocabularyEntry> words) {
             foreach (VocabularyEntry word in words) {
