@@ -94,7 +94,7 @@ namespace VocabTrainer.ViewModels {
             get => _selectedItem;
             set {
                 _selectedItem = value;
-                if (SelectedItem == "All words") Wordlist = string.Empty;
+                if (SelectedItem == _standardChoice) Wordlist = string.Empty;
                 else Wordlist = SelectedItem;
                 _parent.AnalysisOpenedWordlist = SelectedItem;
                 GetPercentages();
@@ -144,6 +144,7 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(ComboBoxWordlists));
             }
         }
+        private string _standardChoice = "All words";
         private MainViewModel _parent;
         private string _openedWordlist;
         public AnalysisViewModel(MainViewModel parent, string openedWordlist) {
@@ -160,7 +161,7 @@ namespace VocabTrainer.ViewModels {
                     ComboBoxEntries.Add(tempString);
                 }
             }
-            ComboBoxEntries.Add("All words");
+            ComboBoxEntries.Add(_standardChoice);
             if (_openedWordlist != "" && ComboBoxEntries.Contains(_openedWordlist))  
                 SelectedItem = ComboBoxEntries[ComboBoxEntries.IndexOf(_openedWordlist)];
             else
