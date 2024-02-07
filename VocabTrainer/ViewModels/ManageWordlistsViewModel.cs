@@ -16,16 +16,16 @@ namespace VocabTrainer.ViewModels {
             }
         }
         public Dictionary<WordlistsList, List<VocabularyEntry>> DeletedWordlists { get; set; } = new Dictionary<WordlistsList, List<VocabularyEntry>>();
-        private List<(int index, WordlistsList, WordlistsList)> _undoList = new List<(int, WordlistsList, WordlistsList)>();
-        public List<(int index, WordlistsList before, WordlistsList after)> UndoList {
+        private List<(int index, WordlistsList, WordlistsList, List<(bool, VocabularyEntry)>)> _undoList = new List<(int, WordlistsList, WordlistsList, List<(bool, VocabularyEntry)>)>();
+        public List<(int index, WordlistsList before, WordlistsList after, List<(bool, VocabularyEntry)> Entries)> UndoList {
             get => _undoList;
             set {
                 _undoList = value;
                 OnPropertyChanged(nameof(UndoList));
             }
         }
-        private List<(int index, WordlistsList, WordlistsList)> _redoList = new List<(int, WordlistsList, WordlistsList)>();
-        public List<(int index, WordlistsList before, WordlistsList after)> RedoList {
+        private List<(int index, WordlistsList, WordlistsList, List<(bool, VocabularyEntry)>)> _redoList = new List<(int, WordlistsList, WordlistsList, List<(bool, VocabularyEntry)>)>();
+        public List<(int index, WordlistsList before, WordlistsList after, List<(bool, VocabularyEntry)> Entries)> RedoList {
             get => _redoList;
             set {
                 _redoList = value;
