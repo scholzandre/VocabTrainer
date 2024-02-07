@@ -182,8 +182,8 @@ namespace VocabTrainer.ViewModels {
                 Wordlist.WordlistName = WordlistName;
                 Wordlist.FirstLanguage = FirstLanguage;
                 Wordlist.SecondLanguage = SecondLanguage;
-                _parent.UndoList.Add((Index, firstTempList, secondTempList));
-                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after)>();
+                _parent.UndoList.Add((Index, firstTempList, secondTempList, new List<(bool, VocabularyEntry)>()));
+                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after, List<(bool, VocabularyEntry)>)>();
 
                 VocabularyEntry entry = new VocabularyEntry() { 
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
@@ -218,6 +218,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
             if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
@@ -231,8 +232,20 @@ namespace VocabTrainer.ViewModels {
                     FirstLanguage = Wordlist.FirstLanguage,
                     SecondLanguage = Wordlist.SecondLanguage,
                 };
-                _parent.UndoList.Add((Index, tempList, tempList));
-                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after)>();
+                VocabularyEntry tempEntry = new VocabularyEntry() {
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempList.WordlistName}_{tempList.FirstLanguage}_{tempList.SecondLanguage}_{VocabularyEntry.SecondPartFilePath}"
+                };
+                List<VocabularyEntry> entries = VocabularyEntry.GetData(tempEntry);
+                List<(bool, VocabularyEntry)> entriesUndo = new List<(bool, VocabularyEntry)>();
+                foreach (VocabularyEntry tempUndoEntry in entries) {
+                    if (VocabularyEntry.EntriesSpecialWordlists[0].Contains(tempUndoEntry))
+                        entriesUndo.Add((true, tempUndoEntry));
+                    else
+                        entriesUndo.Add((false, tempUndoEntry));
+                }
+
+                _parent.UndoList.Add((Index, tempList, tempList, entriesUndo));
+                _parent.RedoList = new List<(int index, WordlistsList before, WordlistsList after, List<(bool, VocabularyEntry)>)>();
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 int tempIndex = 0;
@@ -248,9 +261,6 @@ namespace VocabTrainer.ViewModels {
                 for (; tempIndex < _views.Count; tempIndex++) {
                     _views[tempIndex].Index = _views[tempIndex].Index-1;
                 }
-                List<VocabularyEntry> entries = VocabularyEntry.GetData(new VocabularyEntry() { 
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
-                });
                 for (int i = 0; i < entries.Count; i++) 
                     for (int j = 0; j < _entriesSpecialLists.Count; j++) 
                         _entriesSpecialLists[j].Remove(entries[i]);
