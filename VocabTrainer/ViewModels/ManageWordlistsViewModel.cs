@@ -102,6 +102,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand UndoCommand => new RelayCommand(Undo, CanExecuteUndoCommand);
         private void Undo(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
             List<WordlistsList> allWordlists = WordlistsList.GetWordlistsList();
             if (UndoList[UndoList.Count - 1].before == UndoList[UndoList.Count - 1].after) {
                 for (int i = UndoList[UndoList.Count - 1].index; i < Wordlists.Count; i++)
@@ -112,6 +113,20 @@ namespace VocabTrainer.ViewModels {
                     FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlist.WordlistName}_{wordlist.FirstLanguage}_{wordlist.SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                 };
                 VocabularyEntry.WriteData(tempEntry, DeletedWordlists[wordlist]);
+                foreach ((bool boolean, VocabularyEntry entry) in UndoList[UndoList.Count-1].Entries) {
+                    if (boolean)
+                        VocabularyEntry.EntriesSpecialWordlists[0].Add(entry);
+
+                    else if (entry.Seen)
+                        VocabularyEntry.EntriesSpecialWordlists[1].Add(entry);
+                    else if (!entry.Seen)
+                        VocabularyEntry.EntriesSpecialWordlists[2].Add(entry);
+                    else
+                        VocabularyEntry.EntriesSpecialWordlists[3].Add(entry);
+                }
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
+
                 allWordlists.Insert(UndoList[UndoList.Count - 1].index, wordlist);
             } else {
                 allWordlists.Remove(UndoList[UndoList.Count - 1].after);
