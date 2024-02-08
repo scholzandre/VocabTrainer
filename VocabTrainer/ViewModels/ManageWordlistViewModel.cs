@@ -228,12 +228,12 @@ namespace VocabTrainer.ViewModels {
                         FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                     }));
                 WordlistsList tempList = new WordlistsList() {
-                    WordlistName = Wordlist.WordlistName,
-                    FirstLanguage = Wordlist.FirstLanguage,
-                    SecondLanguage = Wordlist.SecondLanguage,
+                    WordlistName = WordlistName,
+                    FirstLanguage = FirstLanguage,
+                    SecondLanguage = SecondLanguage,
                 };
                 VocabularyEntry tempEntry = new VocabularyEntry() {
-                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempList.WordlistName}_{tempList.FirstLanguage}_{tempList.SecondLanguage}_{VocabularyEntry.SecondPartFilePath}"
+                    FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
                 };
                 List<VocabularyEntry> entries = VocabularyEntry.GetData(tempEntry);
                 List<(bool, VocabularyEntry)> entriesUndo = new List<(bool, VocabularyEntry)>();
