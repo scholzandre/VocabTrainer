@@ -114,14 +114,14 @@ namespace VocabTrainer.ViewModels {
                 };
                 VocabularyEntry.WriteData(tempEntry, DeletedWordlists[wordlist]);
                 foreach ((bool boolean, VocabularyEntry entry) in UndoList[UndoList.Count-1].Entries) {
-                    if (boolean)
+                    if (boolean && !VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[0].Add(entry);
 
-                    else if (entry.Seen)
+                    else if (entry.Seen && !VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[1].Add(entry);
-                    else if (!entry.Seen)
+                    else if (!entry.Seen && !VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[2].Add(entry);
-                    else
+                    else if (!VocabularyEntry.EntriesSpecialWordlists[3].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[3].Add(entry);
                 }
                 for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
