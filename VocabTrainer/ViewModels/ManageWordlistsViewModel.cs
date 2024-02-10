@@ -117,7 +117,7 @@ namespace VocabTrainer.ViewModels {
                     if (boolean && !VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[0].Add(entry);
 
-                    else if (entry.Seen && !VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
+                    if (entry.Seen && !VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[1].Add(entry);
                     else if (!entry.Seen && !VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[2].Add(entry);
@@ -168,7 +168,7 @@ namespace VocabTrainer.ViewModels {
                     if (boolean && VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[0].Remove(entry);
 
-                    else if (entry.Seen && VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
+                    if (entry.Seen && VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[1].Remove(entry);
                     else if (!entry.Seen && VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry))
                         VocabularyEntry.EntriesSpecialWordlists[2].Remove(entry);
