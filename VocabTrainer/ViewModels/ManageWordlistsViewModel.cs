@@ -164,6 +164,19 @@ namespace VocabTrainer.ViewModels {
                 Wordlists.Remove(Wordlists[RedoList[RedoList.Count - 1].index]);
                 allWordlists.Remove(RedoList[RedoList.Count - 1].before);
                 File.Delete($"{VocabularyEntry.FirstPartFilePath}{RedoList[RedoList.Count - 1].before.WordlistName}_{RedoList[RedoList.Count - 1].before.FirstLanguage}_{RedoList[RedoList.Count - 1].before.SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
+                foreach ((bool boolean, VocabularyEntry entry) in RedoList[RedoList.Count - 1].Entries) {
+                    if (boolean && VocabularyEntry.EntriesSpecialWordlists[0].Contains(entry))
+                        VocabularyEntry.EntriesSpecialWordlists[0].Remove(entry);
+
+                    else if (entry.Seen && VocabularyEntry.EntriesSpecialWordlists[1].Contains(entry))
+                        VocabularyEntry.EntriesSpecialWordlists[1].Remove(entry);
+                    else if (!entry.Seen && VocabularyEntry.EntriesSpecialWordlists[2].Contains(entry))
+                        VocabularyEntry.EntriesSpecialWordlists[2].Remove(entry);
+                    else if (VocabularyEntry.EntriesSpecialWordlists[3].Contains(entry))
+                        VocabularyEntry.EntriesSpecialWordlists[3].Remove(entry);
+                }
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
             } else {
                 allWordlists.Remove(RedoList[RedoList.Count - 1].before);
                 allWordlists.Insert(RedoList[RedoList.Count - 1].index, RedoList[RedoList.Count - 1].after);
