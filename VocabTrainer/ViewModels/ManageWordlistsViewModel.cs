@@ -146,6 +146,19 @@ namespace VocabTrainer.ViewModels {
                     tempList[i].SecondLanguage = UndoList[UndoList.Count - 1].before.SecondLanguage;
                 }
                 VocabularyEntry.WriteData(tempEntry, tempList);
+
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    for (int j = 0; j < VocabularyEntry.EntriesSpecialWordlists[i].Count; j++)
+                        if (VocabularyEntry.EntriesSpecialWordlists[i][j].WordList == UndoList[UndoList.Count - 1].after.WordlistName &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage == UndoList[UndoList.Count - 1].after.FirstLanguage &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage == UndoList[UndoList.Count - 1].after.SecondLanguage) {
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].WordList = UndoList[UndoList.Count - 1].before.WordlistName;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage = UndoList[UndoList.Count - 1].before.FirstLanguage;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage = UndoList[UndoList.Count - 1].before.SecondLanguage;
+                        }
+
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
             }
             WordlistsList.WriteWordlistsList(allWordlists);
             UpdateViewModels(UndoList[UndoList.Count - 1].after);
@@ -157,6 +170,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand RedoCommand => new RelayCommand(Redo, CanExecuteRedoCommand);
         private void Redo(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
             List<WordlistsList> allWordlists = WordlistsList.GetWordlistsList();
             if (RedoList[RedoList.Count - 1].before == RedoList[RedoList.Count - 1].after) {
                 for (int i = RedoList[RedoList.Count - 1].index; i < Wordlists.Count; i++)
@@ -195,6 +209,19 @@ namespace VocabTrainer.ViewModels {
                     tempList[i].SecondLanguage = RedoList[RedoList.Count - 1].after.SecondLanguage;
                 }
                 VocabularyEntry.WriteData(tempEntry, tempList);
+
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    for (int j = 0; j < VocabularyEntry.EntriesSpecialWordlists[i].Count; j++)
+                        if (VocabularyEntry.EntriesSpecialWordlists[i][j].WordList == RedoList[RedoList.Count - 1].before.WordlistName &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage == RedoList[RedoList.Count - 1].before.FirstLanguage  &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage == RedoList[RedoList.Count - 1].before.SecondLanguage) { 
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].WordList = RedoList[RedoList.Count - 1].after.WordlistName;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage = RedoList[RedoList.Count - 1].after.FirstLanguage;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage = RedoList[RedoList.Count - 1].after.SecondLanguage;
+                        }
+
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
             }
             UpdateViewModels(RedoList[RedoList.Count - 1].before);
             UndoList.Add(RedoList[RedoList.Count - 1]);
