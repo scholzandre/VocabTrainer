@@ -150,6 +150,7 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Save);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Cancel);
             } else if (EditButtonText == ButtonIcons.GetIconString(IconType.Save)) {
+                VocabularyEntry.UpdateSpecialLists();
                 Writable = false;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
@@ -157,17 +158,17 @@ namespace VocabTrainer.ViewModels {
                     File.Move($"{VocabularyEntry.FirstPartFilePath}{_original.WordlistName}_{_original.FirstLanguage}_{_original.SecondLanguage}{VocabularyEntry.SecondPartFilePath}",
                               $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
                 }
-                for (int i = 0; i < _entriesSpecialLists.Count; i++) {
-                    for (int j = 0; j < _entriesSpecialLists[i].Count; j++) {
-                        if (_entriesSpecialLists[i][j].WordList == Wordlist.WordlistName &&
-                            _entriesSpecialLists[i][j].FirstLanguage == Wordlist.FirstLanguage &&
-                            _entriesSpecialLists[i][j].SecondLanguage == Wordlist.SecondLanguage) {
-                            _entriesSpecialLists[i][j].WordList = WordlistName;
-                            _entriesSpecialLists[i][j].FirstLanguage = FirstLanguage;
-                            _entriesSpecialLists[i][j].SecondLanguage = SecondLanguage;
+                for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++) {
+                    for (int j = 0; j < VocabularyEntry.EntriesSpecialWordlists[i].Count; j++) {
+                        if (VocabularyEntry.EntriesSpecialWordlists[i][j].WordList == Wordlist.WordlistName &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage == Wordlist.FirstLanguage &&
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage == Wordlist.SecondLanguage) {
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].WordList = WordlistName;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].FirstLanguage = FirstLanguage;
+                            VocabularyEntry.EntriesSpecialWordlists[i][j].SecondLanguage = SecondLanguage;
                         }
                     }
-                    VocabularyEntry.WriteData(_entrySpecialLists[i], _entriesSpecialLists[i]);
+                    VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
                 }
                 WordlistsList firstTempList = new WordlistsList() { 
                     WordlistName = Wordlist.WordlistName,
