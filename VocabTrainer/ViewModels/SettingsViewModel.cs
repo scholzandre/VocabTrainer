@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Input;
+using VocabTrainer.Models;
 using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
@@ -67,6 +69,14 @@ namespace VocabTrainer.ViewModels {
                 tempControl.DataContext = new SettingsEntryTrueFalseViewModel(_wordlists[i].WordlistName, _wordlists[i].IsTrue, _settings, this, _wordlists, $"{_wordlists[i].WordlistName} ({_wordlists[i].FirstLanguage}, {_wordlists[i].SecondLanguage})", _parent);
                 ListWordlists.Add(tempControl);
             }
+        }
+
+        private bool CanExecuteCommand(object arg) {
+            return true;
+        }
+        public ICommand ImportListCommand => new RelayCommand(ImportList, CanExecuteCommand);
+        private void ImportList(object obj) {
+            throw new NotImplementedException();
         }
     }
 }
