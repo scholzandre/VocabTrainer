@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using VocabTrainer.Models;
@@ -24,6 +25,14 @@ namespace VocabTrainer.ViewModels {
             set {
                 _listWordlists = value;
                 OnPropertyChanged(nameof(ListWordlists));
+            }
+        }
+        public string _importInformation;
+        public string ImportInformation {
+            get => _importInformation;
+            set {
+                _importInformation = value;
+                OnPropertyChanged(nameof(ImportInformation));
             }
         }
         private MainViewModel _parent;
@@ -76,7 +85,23 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand ImportListCommand => new RelayCommand(ImportList, CanExecuteCommand);
         private void ImportList(object obj) {
-            throw new NotImplementedException();
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName = "Document";
+            dialog.DefaultExt = ".json"; 
+            dialog.Filter = "Text documents (.json)|*.json"; 
+            bool? result = dialog.ShowDialog();
+            if (result == true) {
+                ImportInformation = string.Empty;
+                string wholeWordlist = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
+                if (wholeWordlist.Count(x => x == '_') == 2) {
+                    string wordlist = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
+                    string firstlanguage = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
+                    string secondLanguage = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
+                    ImportInformation = "Import successfully";
+                } else {
+                    ImportInformation = "File name not valid";
+                }
+            }
         }
     }
 }
