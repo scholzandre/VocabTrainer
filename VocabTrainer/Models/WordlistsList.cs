@@ -83,16 +83,14 @@ namespace VocabTrainer {
                 if (filenameList[i].Contains("_")) {
                     file = filenameList[i].Substring(VocabularyEntry.FirstPartFilePath.Length);
                     wordlistName = file.Substring(0, file.IndexOf("_"));
-                    if (!namesList.Contains(wordlistName)) {
+                    if (!namesList.Contains(wordlistName) && file.Contains('_')) {
                         MessageBoxResult result = MessageBox.Show($"Do you want to add {file} to your program?", "Problem with wordlists", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                         if (result == MessageBoxResult.Yes) {
                             VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FirstPartFilePath + file };
                             WordlistsList newWordlist = new WordlistsList();
-                            if (file.Contains('_')) {
-                                newWordlist.FirstLanguage = file.Substring(file.IndexOf('_') + 1, file.LastIndexOf('_') - 1 - file.IndexOf('_'));
-                                newWordlist.SecondLanguage = file.Substring(file.LastIndexOf('_') + 1, file.Length - file.LastIndexOf('_') - 1 - VocabularyEntry.SecondPartFilePath.Length);
-                            }
+                            newWordlist.FirstLanguage = file.Substring(file.IndexOf('_') + 1, file.LastIndexOf('_') - 1 - file.IndexOf('_'));
+                            newWordlist.SecondLanguage = file.Substring(file.LastIndexOf('_') + 1, file.Length - file.LastIndexOf('_') - 1 - VocabularyEntry.SecondPartFilePath.Length);
                             newWordlist.WordlistName = wordlistName;
                             allWordLists.Add(newWordlist);
 
