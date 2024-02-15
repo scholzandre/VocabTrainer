@@ -91,12 +91,24 @@ namespace VocabTrainer.ViewModels {
             dialog.Filter = "Text documents (.json)|*.json"; 
             bool? result = dialog.ShowDialog();
             if (result == true) {
+                List<WordlistsList> list = WordlistsList.GetWordlistsList();
                 ImportInformation = string.Empty;
                 string wholeWordlist = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
                 if (wholeWordlist.Count(x => x == '_') == 2) {
-                    string wordlist = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
-                    string firstlanguage = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
-                    string secondLanguage = dialog.FileName.Substring(dialog.FileName.LastIndexOf(@"\")+1);
+                    string wordlist = wholeWordlist.Substring(0, wholeWordlist.IndexOf("_"));
+                    string firstlanguage = wholeWordlist.Substring(wordlist.Length+1, wholeWordlist.Substring(wordlist.Length+1).IndexOf("_"));
+                    string secondLanguage = wholeWordlist.Substring(wholeWordlist.LastIndexOf("_")+1, wholeWordlist.Length - wholeWordlist.LastIndexOf("_") - 1 - VocabularyEntry.SecondPartFilePath.Length);
+                    WordlistsList wordlistsList = new WordlistsList() { 
+                        WordlistName = wordlist, 
+                        FirstLanguage = firstlanguage,
+                        SecondLanguage = secondLanguage
+                    };
+                    if (!list.Contains(wordlistsList)) {
+                        list.Add(wordlistsList);
+                        WordlistsList.WriteWordlistsList(list);
+                    } else {
+                        ImportInformation = "List already exists.";
+                    }
                     ImportInformation = "Import successfully";
                 } else {
                     ImportInformation = "File name not valid";
