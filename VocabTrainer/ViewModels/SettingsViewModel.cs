@@ -122,6 +122,11 @@ namespace VocabTrainer.ViewModels {
                         VocabularyEntry.UpdateSpecialLists();
                         VocabularyEntry.EntriesSpecialWordlists[2].AddRange(tempList);
                         VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[2], VocabularyEntry.EntriesSpecialWordlists[2]);
+                        _parent.SettingsViewModel = new SettingsViewModel(_parent);
+                        _parent.TranslatorViewModel = new TranslatorViewModel(_parent, _parent.TranslatorOpenedWordlist);
+                        _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
+                        _parent.ManageWordlistViewModel = new ManageWordlistsViewModel(_parent);
+                        _parent.AddEntryViewModel = new AddViewModel(_parent, _parent.AddEntryOpenedWordlist);
                         ImportInformation = "Import successfully";
                     } else {
                         ImportInformation = "List already exists.";
