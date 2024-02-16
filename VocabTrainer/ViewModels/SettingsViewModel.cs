@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -106,10 +107,25 @@ namespace VocabTrainer.ViewModels {
                     if (!list.Contains(wordlistsList)) {
                         list.Add(wordlistsList);
                         WordlistsList.WriteWordlistsList(list);
+                        File.Copy(dialog.FileName, VocabularyEntry.FirstPartFilePath + wholeWordlist);
+
+                        VocabularyEntry tempEntry = new VocabularyEntry() {
+                            FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlist}_{firstlanguage}_{secondLanguage}{VocabularyEntry.SecondPartFilePath}"
+                        };
+                        List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
+                        for (int i = 0; i < tempList.Count; i++) {
+                            tempList[i].Seen = false;
+                            tempList[i].Repeated = 0;
+                            tempList[i].LastTimeWrong = false;
+                        }
+                        VocabularyEntry.WriteData(tempEntry, tempList);
+                        VocabularyEntry.UpdateSpecialLists();
+                        VocabularyEntry.EntriesSpecialWordlists[2].AddRange(tempList);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[2], VocabularyEntry.EntriesSpecialWordlists[2]);
+                        ImportInformation = "Import successfully";
                     } else {
                         ImportInformation = "List already exists.";
                     }
-                    ImportInformation = "Import successfully";
                 } else {
                     ImportInformation = "File name not valid";
                 }
