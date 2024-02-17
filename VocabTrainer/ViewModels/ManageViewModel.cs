@@ -163,7 +163,7 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry afterTempEntry = UndoList[ComboBoxWordlists[SelectedItem]][UndoList[ComboBoxWordlists[SelectedItem]].Count - 1].after;
             VocabularyEntry tempEntry = new VocabularyEntry();
             if (SelectedItem == "Marked (-, -)")
-                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
+                tempEntry.FilePath = VocabularyEntry.FilePathsSpecialLists[0];
             else
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);
@@ -227,7 +227,7 @@ namespace VocabTrainer.ViewModels {
             VocabularyEntry afterTempEntry = RedoList[ComboBoxWordlists[SelectedItem]][RedoList[ComboBoxWordlists[SelectedItem]].Count - 1].after;
             VocabularyEntry tempEntry = new VocabularyEntry();
             if (SelectedItem == "Marked (-, -)")
-                tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}";
+                tempEntry.FilePath = VocabularyEntry.FilePathsSpecialLists[0];
             else
                 tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{ComboBoxWordlists[SelectedItem].WordlistName}_{ComboBoxWordlists[SelectedItem].FirstLanguage}_{ComboBoxWordlists[SelectedItem].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
             List<VocabularyEntry> tempList = VocabularyEntry.GetData(tempEntry);

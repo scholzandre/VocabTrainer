@@ -63,12 +63,6 @@ namespace VocabTrainer.ViewModels {
                 OnPropertyChanged(nameof(DeleteButtonText));
             }
         }
-        private readonly List<string> filePathsSpecialLists = new List<string> { 
-            $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}"
-        };
 
         private VocabularyEntry _entry;
         private ObservableCollection<ManageEntryViewModel> _views;
@@ -102,6 +96,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand ChangeTextCommand => new RelayCommand(ChangeText, CanChangeEntry);
         private void ChangeText(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
             if (EditButtonText == ButtonIcons.GetIconString(IconType.Edit)) {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Save);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Cancel);
@@ -153,18 +148,14 @@ namespace VocabTrainer.ViewModels {
                         }
                     VocabularyEntry.WriteData(_entry, entries);
 
-                    for (int i = 0; i < filePathsSpecialLists.Count; i++) {
-                        VocabularyEntry tempEntry = new VocabularyEntry() {
-                            FilePath = filePathsSpecialLists[i]
-                        };
-                        List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
-                        for (int j = 0; j < tempEntries.Count; j++) 
-                            if (tempEntries[j].SecondWord == _entry.SecondWord && tempEntries[j].FirstWord == _entry.FirstWord) {
-                                tempEntries[j].FirstWord = FirstWord;
-                                tempEntries[j].SecondWord = SecondWord;
+                    for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++) {
+                        for (int j = 0; j < VocabularyEntry.EntriesSpecialWordlists[i].Count; j++) 
+                            if (VocabularyEntry.EntriesSpecialWordlists[i][j].SecondWord == _entry.SecondWord && VocabularyEntry.EntriesSpecialWordlists[i][j].FirstWord == _entry.FirstWord) {
+                                VocabularyEntry.EntriesSpecialWordlists[i][j].FirstWord = FirstWord;
+                                VocabularyEntry.EntriesSpecialWordlists[i][j].SecondWord = SecondWord;
                                 break;
                             }
-                        VocabularyEntry.WriteData(tempEntry, tempEntries);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
                     }
                     VocabularyEntry.UpdateSpecialLists();
                     _entry.SecondWord = SecondWord;
@@ -182,6 +173,7 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanDeleteEntry);
         private void DeleteEntry(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
             if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
                 Editable = true;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
@@ -212,13 +204,9 @@ namespace VocabTrainer.ViewModels {
                 }
 
                 if (_fullWordlistName != "Marked_-_-") 
-                    for (int i = 0; i < filePathsSpecialLists.Count; i++) {
-                        VocabularyEntry tempEntry = new VocabularyEntry() {
-                            FilePath = filePathsSpecialLists[i]
-                        };
-                        List<VocabularyEntry> tempEntries = VocabularyEntry.GetData(tempEntry);
-                        if (tempEntries.Contains(_entry)) tempEntries.Remove(_entry);
-                        VocabularyEntry.WriteData(tempEntry, tempEntries);    
+                    for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++) {
+                        if (VocabularyEntry.EntriesSpecialWordlists[i].Contains(_entry)) VocabularyEntry.EntriesSpecialWordlists[i].Remove(_entry);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);    
                     }
                 _parent.UpdateViewModels(_selectedItem);
             } else {

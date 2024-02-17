@@ -99,7 +99,7 @@ namespace VocabTrainer.ViewModels {
         }
         public bool IsMarked { get; set; }
         private readonly LearnViewModel _parent;
-        static VocabularyEntry markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        static VocabularyEntry markEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FilePathsSpecialLists[0] };
         private List<VocabularyEntry> markedEntries = VocabularyEntry.GetData(markEntry);
         private int _counter;
         private string _checkText = "check answer";

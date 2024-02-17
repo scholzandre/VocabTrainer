@@ -92,7 +92,7 @@ namespace VocabTrainer.ViewModels {
         private List<VocabularyEntry> _entries;
         private readonly int _language = 0;
         private readonly int _counter;
-        static readonly VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        static readonly VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FilePathsSpecialLists[0] };
         private readonly List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _positionCorrectItem;
         private bool _isOver = false;

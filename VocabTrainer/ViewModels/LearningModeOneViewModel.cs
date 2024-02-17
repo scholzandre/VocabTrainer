@@ -47,7 +47,7 @@ namespace VocabTrainer.ViewModels {
         }
         public bool IsMarked { get; set; }
         private readonly LearnViewModel _parent;
-        static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" };
+        static VocabularyEntry _markEntry = new VocabularyEntry() { FilePath = VocabularyEntry.FilePathsSpecialLists[0] };
         private List<VocabularyEntry> _markedEntries = VocabularyEntry.GetData(_markEntry);
         private int _counter;
         MainViewModel _mainViewModel;
