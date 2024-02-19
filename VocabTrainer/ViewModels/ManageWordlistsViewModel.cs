@@ -161,9 +161,9 @@ namespace VocabTrainer.ViewModels {
                     VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
             }
             WordlistsList.WriteWordlistsList(allWordlists);
-            UpdateViewModels(UndoList[UndoList.Count - 1].after);
             RedoList.Add(UndoList[UndoList.Count - 1]);
             UndoList.Remove(UndoList[UndoList.Count - 1]);
+            UpdateViewModels(RedoList[RedoList.Count - 1].after);
         }
         private bool CanExecuteRedoCommand(object arg) {
             return RedoList.Count > 0;
@@ -223,12 +223,14 @@ namespace VocabTrainer.ViewModels {
                 for (int i = 0; i < VocabularyEntry.EntriesSpecialWordlists.Count; i++)
                     VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[i], VocabularyEntry.EntriesSpecialWordlists[i]);
             }
-            UpdateViewModels(RedoList[RedoList.Count - 1].before);
             UndoList.Add(RedoList[RedoList.Count - 1]);
             RedoList.Remove(RedoList[RedoList.Count - 1]);
             WordlistsList.WriteWordlistsList(allWordlists);
+            UpdateViewModels(UndoList[UndoList.Count - 1].before);
         }
         public void UpdateViewModels(WordlistsList wordlist) {
+            _parent.TranslatorOpenedWordlist = ""; 
+            _parent.ManageEntriesOpenedWordlist = "";
             _parent.SettingsViewModel = new SettingsViewModel(_parent);
             _parent.TranslatorViewModel = new TranslatorViewModel(_parent, _parent.TranslatorOpenedWordlist);
             _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
