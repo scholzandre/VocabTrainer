@@ -209,7 +209,6 @@ namespace VocabTrainer.ViewModels {
                         _views[i].Wordlist = Wordlist;
                         break;
                     }
-
                 WordlistsList.WriteWordlistsList(AllWordlists);
                 _parent.UpdateViewModels(Wordlist);
             } else {
@@ -271,6 +270,7 @@ namespace VocabTrainer.ViewModels {
                 
                 if (File.Exists($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"))
                     File.Delete($"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}");
+                WordlistsList.WriteWordlistsList(AllWordlists);
                 _parent.UpdateViewModels(Wordlist);
             } else {
                 Writable = false;
@@ -278,7 +278,6 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 SetOriginalValues();
             }
-            WordlistsList.WriteWordlistsList(AllWordlists);
         }
     }
 }
