@@ -231,10 +231,11 @@ namespace VocabTrainer.ViewModels {
         public void UpdateViewModels(WordlistsList wordlist) {
             _parent.TranslatorOpenedWordlist = ""; 
             _parent.ManageEntriesOpenedWordlist = "";
+            _parent.AddEntryOpenedWordlist = "";
             _parent.SettingsViewModel = new SettingsViewModel(_parent);
             _parent.TranslatorViewModel = new TranslatorViewModel(_parent, _parent.TranslatorOpenedWordlist);
             _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
-            _parent.AddWordlistViewModel = new AddWordlistViewModel(_parent);
+            _parent.AddEntryViewModel = new AddViewModel(_parent, _parent.AddEntryOpenedWordlist);
             if (_parent.ListWordlist.Contains(wordlist) && _parent.ListWordlist[_parent.ListWordlist.IndexOf(wordlist)].IsTrue) {
                 _parent.LearnEntriesViewModel = new LearnViewModel(_parent);
             }
