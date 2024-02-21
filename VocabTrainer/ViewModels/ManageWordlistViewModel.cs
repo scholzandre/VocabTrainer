@@ -150,6 +150,7 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Save);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Cancel);
             } else if (EditButtonText == ButtonIcons.GetIconString(IconType.Save)) {
+                AllWordlists = WordlistsList.GetWordlistsList();
                 VocabularyEntry.UpdateSpecialLists();
                 Writable = false;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
@@ -218,11 +219,12 @@ namespace VocabTrainer.ViewModels {
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
-            VocabularyEntry.UpdateSpecialLists();
             if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
+                AllWordlists = WordlistsList.GetWordlistsList();
+                VocabularyEntry.UpdateSpecialLists();
                 if (!_parent.DeletedWordlists.ContainsKey(Wordlist))
                     _parent.DeletedWordlists.Add(Wordlist, VocabularyEntry.GetData(new VocabularyEntry() { 
                         FilePath = $"{VocabularyEntry.FirstPartFilePath}{WordlistName}_{FirstLanguage}_{SecondLanguage}{VocabularyEntry.SecondPartFilePath}"
