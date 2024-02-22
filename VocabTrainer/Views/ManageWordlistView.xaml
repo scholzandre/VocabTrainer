@@ -15,10 +15,10 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox IsEnabled="{Binding Writable}" Text="{Binding WordlistName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Width="350" Margin="5,0,0,0"/>
-        <TextBox IsEnabled="{Binding Writable}" Text="{Binding FirstLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="145" Margin="5,0,0,0"/>
-        <TextBox IsEnabled="{Binding Writable}" Text="{Binding SecondLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Width="145" Margin="5,0,0,0"/>
-        <Button Grid.Column="3" Content="{Binding EditButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding ChangeTextCommand}" IsEnabled="{Binding Editable}"/>
-        <Button Grid.Column="4" Content="{Binding DeleteButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding DeleteEntryCommand}" IsEnabled="{Binding Deletable}"/>
+        <TextBox Background="{Binding BackgroundTextbox}" IsEnabled="{Binding Writable}" Text="{Binding WordlistName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Width="350" Margin="5,0,0,0"/>
+        <TextBox Background="{Binding BackgroundTextbox}" IsEnabled="{Binding Writable}" Text="{Binding FirstLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="145" Margin="5,0,0,0"/>
+        <TextBox Background="{Binding BackgroundTextbox}" IsEnabled="{Binding Writable}" Text="{Binding SecondLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Width="145" Margin="5,0,0,0"/>
+        <Button Background="{Binding BackgroundTextbox}" Grid.Column="3" Content="{Binding EditButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding ChangeTextCommand}" IsEnabled="{Binding Editable}"/>
+        <Button Background="{Binding BackgroundTextbox}" Grid.Column="4" Content="{Binding DeleteButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding DeleteEntryCommand}" IsEnabled="{Binding Deletable}"/>
     </Grid>
 </UserControl>
