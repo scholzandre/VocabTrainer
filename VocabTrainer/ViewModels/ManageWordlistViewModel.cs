@@ -7,6 +7,16 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class ManageWordlistViewModel : BaseViewModel {
+        private static readonly string _normalTextboxBackground = "white";
+        private static readonly string _deleteTextboxBackground = "red";
+        private string _backgroundTextbox = _normalTextboxBackground;
+        public string BackgroundTextbox {
+            get => _backgroundTextbox;
+            set {
+                _backgroundTextbox = value;
+                OnPropertyChanged(nameof(BackgroundTextbox));
+            }
+        }
         private string _editButtonText;
         public string EditButtonText {
             get => _editButtonText;
@@ -213,6 +223,7 @@ namespace VocabTrainer.ViewModels {
                 WordlistsList.WriteWordlistsList(AllWordlists);
                 _parent.UpdateViewModels(Wordlist);
             } else {
+                BackgroundTextbox = _normalTextboxBackground;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
             }
@@ -220,6 +231,7 @@ namespace VocabTrainer.ViewModels {
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanExecuteCommand);
         private void DeleteEntry(object obj) {
             if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Delete)) {
+                BackgroundTextbox = _deleteTextboxBackground;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
