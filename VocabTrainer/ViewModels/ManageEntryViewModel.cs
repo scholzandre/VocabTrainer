@@ -7,6 +7,16 @@ using VocabTrainer.Views;
 
 namespace VocabTrainer.ViewModels {
     public class ManageEntryViewModel : BaseViewModel {
+        private static readonly string _normalTextboxBackground = "white";
+        private static readonly string _deleteTextboxBackground = "red";
+        private string _backgroundTextbox = _normalTextboxBackground;
+        public string BackgroundTextbox {
+            get => _backgroundTextbox;
+            set {
+                _backgroundTextbox = value;
+                OnPropertyChanged(nameof(BackgroundTextbox));
+            }
+        }
         private string _firstWord;
         public string FirstWord { 
             get => _firstWord;
@@ -169,6 +179,7 @@ namespace VocabTrainer.ViewModels {
                 EditButtonText = ButtonIcons.GetIconString(IconType.Edit);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Delete);
                 Editable = (_fullWordlistName == "Marked_-_-") ? false : true;
+                BackgroundTextbox = _normalTextboxBackground;
             }
         }
         public ICommand DeleteEntryCommand => new RelayCommand(DeleteEntry, CanDeleteEntry);
@@ -178,6 +189,7 @@ namespace VocabTrainer.ViewModels {
                 Editable = true;
                 EditButtonText = ButtonIcons.GetIconString(IconType.Cancel);
                 DeleteButtonText = ButtonIcons.GetIconString(IconType.Approve);
+                BackgroundTextbox = _deleteTextboxBackground;
             } else if (DeleteButtonText == ButtonIcons.GetIconString(IconType.Approve)) {
                 CheckAvailability(_entry);
                 _parent.UndoList[_parent.ComboBoxWordlists[_parent.SelectedItem]].Add((Index, _entry, _entry, _indexM, _availability));
