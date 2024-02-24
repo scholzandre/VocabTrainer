@@ -92,10 +92,7 @@ namespace VocabTrainer.ViewModels {
             _openedWordlist = OpenedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
             foreach (WordlistsList temp in tempWordlists) 
-                if (temp.WordlistName != "Marked" &&
-                    temp.WordlistName != "Seen" &&
-                    temp.WordlistName != "LastTimeWrong" &&
-                    temp.WordlistName != "NotSeen") {
+                if (!VocabularyEntry.SpecialWordlistname.Contains(temp.WordlistName)) {
                     string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
@@ -107,9 +104,6 @@ namespace VocabTrainer.ViewModels {
         }
         private bool CanExecuteAddCommand(object arg) {
             return (FirstWord.Trim() != string.Empty && SecondWord.Trim() != string.Empty && ComboBoxEntries.Count > 0);
-        }
-        private bool CanExecuteCommand(object arg) {
-            return true;
         }
 
         public ICommand AddEntryCommand => new RelayCommand(AddEntry, CanExecuteAddCommand);
