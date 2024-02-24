@@ -20,18 +20,25 @@ namespace VocabTrainer.Views {
         [JsonIgnore]
         public static string SecondPartFilePath { get => ".json"; }
         [JsonIgnore]
+        public static readonly List<string> SpecialWordlistname = new List<string> {
+            "Marked",
+            "Seen",
+            "NotSeen",
+            "LastTimeWrong"
+        };
+        [JsonIgnore]
         public static readonly List<string> FilePathsSpecialLists = new List<string> {
-            $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}",
-            $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}"
+            $"{VocabularyEntry.FirstPartFilePath}{SpecialWordlistname[0]}{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}{SpecialWordlistname[1]}{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}{SpecialWordlistname[2]}{VocabularyEntry.SecondPartFilePath}",
+            $"{VocabularyEntry.FirstPartFilePath}{SpecialWordlistname[3]}{VocabularyEntry.SecondPartFilePath}"
         };
         [JsonIgnore]
         public static readonly List<VocabularyEntry> EntrySpecialWordlists = new List<VocabularyEntry> {
-            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}Marked{VocabularyEntry.SecondPartFilePath}" },
-            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" },
-            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" },
-            new VocabularyEntry(){ FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}" }
+            new VocabularyEntry(){ FilePath = FilePathsSpecialLists[0] },
+            new VocabularyEntry(){ FilePath = FilePathsSpecialLists[1] },
+            new VocabularyEntry(){ FilePath = FilePathsSpecialLists[2] },
+            new VocabularyEntry(){ FilePath = FilePathsSpecialLists[3] }
         };
         [JsonIgnore]
         public static List<List<VocabularyEntry>> EntriesSpecialWordlists = new List<List<VocabularyEntry>> {
