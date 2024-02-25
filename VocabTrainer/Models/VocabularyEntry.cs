@@ -79,45 +79,43 @@ namespace VocabTrainer.Views {
             hash = hash * 31 + (FirstWord ?? "").GetHashCode();
             return hash;
         }
-        public static void AddEntry(string fileName, VocabularyEntry entry) {
+        public static void AddEntry(int index, VocabularyEntry entry) {
+            UpdateSpecialLists();
             bool alreadyExists = false;
-            VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}" };
-            List<VocabularyEntry> list = VocabularyEntry.GetData(tempEntry);
-            for (int i = 0; i < list.Count; i++)
-                if (list[i].FirstWord == entry.FirstWord && list[i].SecondWord == entry.SecondWord && list[i].WordList == entry.WordList)
+            for (int i = 0; i < EntriesSpecialWordlists[index].Count; i++)
+                if (EntriesSpecialWordlists[index][i].FirstWord == entry.FirstWord && EntriesSpecialWordlists[index][i].SecondWord == entry.SecondWord && EntriesSpecialWordlists[index][i].WordList == entry.WordList)
                     alreadyExists = true;
             if (!alreadyExists) {
-                list.Add(entry);
-                VocabularyEntry.WriteData(tempEntry, list);
+                EntriesSpecialWordlists[index].Add(entry);
+                VocabularyEntry.WriteData(EntrySpecialWordlists[index], EntriesSpecialWordlists[index]);
             }
         }
 
-        public static void RemoveEntry(string fileName, VocabularyEntry entry) {
-            VocabularyEntry tempEntry = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}{fileName}{VocabularyEntry.SecondPartFilePath}" };
-            List<VocabularyEntry> list = VocabularyEntry.GetData(tempEntry);
-            list.Remove(entry);
-            VocabularyEntry.WriteData(tempEntry, list);
+        public static void RemoveEntry(int index, VocabularyEntry entry) {
+            UpdateSpecialLists();
+            EntriesSpecialWordlists[index].Remove(entry);
+            VocabularyEntry.WriteData(EntrySpecialWordlists[index], EntriesSpecialWordlists[index]);
         }
 
         public static bool CheckAnswer(VocabularyEntry entry, VocabularyEntry answer) {
             bool isCorrect = false;
             entry.FilePath = $"{FirstPartFilePath}{entry.WordList}_{entry.FirstLanguage}_{entry.SecondLanguage}{SecondPartFilePath}";
             List<VocabularyEntry> entries = GetData(entry);
-            RemoveEntry("NotSeen", entry);
-            AddEntry("Seen", entry);
+            RemoveEntry(SpecialWordlistname.IndexOf("NotSeen"), entry);
+            AddEntry(SpecialWordlistname.IndexOf("Seen"), entry);
             if (entries.Contains(answer)) {
                 int index = entries.IndexOf(answer);
                 entries[index].LastTimeWrong = false;
                 entries[index].Repeated += 1;
                 entries[index].Seen = true;
-                RemoveEntry("LastTimeWrong", entry);
+                RemoveEntry(SpecialWordlistname.IndexOf("LastTimeWrong"), entry);
                 isCorrect = true;
             } else if (entries.Contains(entry)) {
                 int index = entries.IndexOf(entry);
                 entries[index].LastTimeWrong = true;
                 entries[index].Repeated = 0;
                 entries[index].Seen = true;
-                AddEntry("LastTimeWrong", entry);
+                AddEntry(SpecialWordlistname.IndexOf("LastTimeWrong"), entry);
             }
             WriteData(entry, entries);
             return isCorrect;
