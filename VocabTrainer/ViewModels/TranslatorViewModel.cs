@@ -186,7 +186,7 @@ namespace VocabTrainer.ViewModels {
                 entries.Add(entry);
                 InfoText = $"{FirstLanguageWord}, {SecondLanguageWord} has been added.";
             }
-            VocabularyEntry.AddEntry("NotSeen", entry);
+            VocabularyEntry.AddEntry(VocabularyEntry.SpecialWordlistname.IndexOf("NotSeen"), entry);
             VocabularyEntry.WriteData(entry, entries);
             _parent.ManageEntriesViewModel = new ManageViewModel(_parent, _parent.ManageEntriesOpenedWordlist);
             _parent.LearnEntriesViewModel = new LearnViewModel(_parent);

@@ -151,19 +151,19 @@ namespace VocabTrainer.ViewModels {
                     else SecondWordForeground = Brushes.Orange;
                     entries[index].Seen = true;
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
-                    VocabularyEntry.RemoveEntry("NotSeen", entries[index]);
-                    VocabularyEntry.AddEntry("Seen", entries[index]);
+                    VocabularyEntry.RemoveEntry(VocabularyEntry.SpecialWordlistname.IndexOf("NotSeen"), entries[index]);
+                    VocabularyEntry.AddEntry(VocabularyEntry.SpecialWordlistname.IndexOf("Seen"), entries[index]);
                     VocabularyEntry.WriteData(tempEntry, entries);
                 } else if (isCorrect && !isWrong) {
                     if (FirstWordWritable) FirstWordForeground = Brushes.Green;
                     else SecondWordForeground = Brushes.Green;
                     VocabularyEntry.CheckAnswer(entries[index], entries[index]);
-                    VocabularyEntry.RemoveEntry("LastTimeWrong", _parent.Entries[_counter]);
+                    VocabularyEntry.RemoveEntry(VocabularyEntry.SpecialWordlistname.IndexOf("LastTimeWrong"), _parent.Entries[_counter]);
                 } else if (isWrong && !isCorrect) { 
                     if (FirstWordWritable) FirstWordForeground = Brushes.Red;
                     else SecondWordForeground = Brushes.Red;
                     VocabularyEntry.CheckAnswer(entries[index], new VocabularyEntry());
-                    VocabularyEntry.AddEntry("LastTimeWrong", entries[index]);
+                    VocabularyEntry.AddEntry(VocabularyEntry.SpecialWordlistname.IndexOf("LastTimeWrong"), entries[index]);
                     InfoText = $"The correct answer would have been\n{FirstLanguage}\n{_firstWord}\n\n{SecondLanguage}\n{_secondWord}";
                 }
                 

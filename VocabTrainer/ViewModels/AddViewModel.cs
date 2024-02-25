@@ -130,7 +130,7 @@ namespace VocabTrainer.ViewModels {
                 FirstWord = string.Empty;
                 SecondWord = string.Empty;
 
-                VocabularyEntry.AddEntry("NotSeen", entry);
+                VocabularyEntry.AddEntry(VocabularyEntry.SpecialWordlistname.IndexOf("NotSeen"), entry);
             } else 
                 InfoText = "This entry already exists.";
             FirstWordTextBox.Focus();
