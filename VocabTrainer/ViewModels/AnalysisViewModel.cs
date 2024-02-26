@@ -152,10 +152,7 @@ namespace VocabTrainer.ViewModels {
             _openedWordlist = openedWordlist;
             List<WordlistsList> tempWordlists = WordlistsList.GetWordlistsList();
             foreach (WordlistsList temp in tempWordlists) {
-                if (temp.WordlistName != "Marked" &&
-                    temp.WordlistName != "Seen" &&
-                    temp.WordlistName != "LastTimeWrong" &&
-                    temp.WordlistName != "NotSeen") {
+                if (!VocabularyEntry.SpecialWordlistname.Contains(temp.WordlistName)) {
                     string tempString = $"{temp.WordlistName} ({temp.FirstLanguage}, {temp.SecondLanguage})";
                     ComboBoxWordlists.Add(tempString, temp);
                     ComboBoxEntries.Add(tempString);
@@ -212,10 +209,7 @@ namespace VocabTrainer.ViewModels {
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
-                    if (wordlists[i].WordlistName != "Marked" &&
-                        wordlists[i].WordlistName != "Seen" &&
-                        wordlists[i].WordlistName != "NotSeen" &&
-                        wordlists[i].WordlistName != "LastTimeWrong") {
+                    if (!VocabularyEntry.SpecialWordlistname.Contains(wordlists[i].WordlistName)) {
                         entry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{wordlists[i].WordlistName}_{wordlists[i].FirstLanguage}_{wordlists[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                         entries = VocabularyEntry.GetData(entry);
                         for (int j = 0; j < entries.Count; j++) {
