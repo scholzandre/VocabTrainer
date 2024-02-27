@@ -184,6 +184,10 @@ namespace VocabTrainer.ViewModels {
         public ICommand ResetCommand => new RelayCommand(Reset, CanExecuteResetCommand);
 
         private void Reset(object obj) {
+            VocabularyEntry.UpdateSpecialLists();
+            int notSeenIndex = VocabularyEntry.SpecialWordlistname.IndexOf("NotSeen");
+            int seenIndex = VocabularyEntry.SpecialWordlistname.IndexOf("NotSeen");
+            int ltwIndex = VocabularyEntry.SpecialWordlistname.IndexOf("LastTimeWrong");
             VocabularyEntry entry = new VocabularyEntry();
             List<VocabularyEntry> entries;
             if (Wordlist != "") {
@@ -194,18 +198,14 @@ namespace VocabTrainer.ViewModels {
                     entries[i].LastTimeWrong = false;
                     entries[i].Repeated = 0;
                 }
-                VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
-                VocabularyEntry seenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" };
-                List <VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
-                List <VocabularyEntry> seen = VocabularyEntry.GetData(seenVar);
                 for (int i = 0; i < entries.Count; i++)
-                    if (!notSeen.Contains(entries[i])) { 
-                        notSeen.Add(entries[i]);
-                        seen.Remove(entries[i]);
+                    if (!VocabularyEntry.EntriesSpecialWordlists[notSeenIndex].Contains(entries[i])) {
+                        VocabularyEntry.EntriesSpecialWordlists[notSeenIndex].Add(entries[i]);
+                        VocabularyEntry.EntriesSpecialWordlists[seenIndex].Remove(entries[i]);
                     }
                 VocabularyEntry.WriteData(entry, entries);
-                VocabularyEntry.WriteData(notSeenVar, notSeen);
-                VocabularyEntry.WriteData(seenVar, seen);
+                VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[notSeenIndex], VocabularyEntry.EntriesSpecialWordlists[notSeenIndex]);
+                VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[seenIndex], VocabularyEntry.EntriesSpecialWordlists[seenIndex]);
             } else {
                 List<WordlistsList> wordlists = WordlistsList.GetWordlistsList();
                 for (int i = 0; i < wordlists.Count; i++) {
@@ -217,20 +217,14 @@ namespace VocabTrainer.ViewModels {
                             entries[j].LastTimeWrong = false;
                             entries[j].Repeated = 0;
                         }
-                        VocabularyEntry notSeenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}NotSeen{VocabularyEntry.SecondPartFilePath}" };
-                        VocabularyEntry seenVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}Seen{VocabularyEntry.SecondPartFilePath}" };
-                        VocabularyEntry ltmVar = new VocabularyEntry() { FilePath = $"{VocabularyEntry.FirstPartFilePath}LastTimeWrong{VocabularyEntry.SecondPartFilePath}" };
-                        List<VocabularyEntry> notSeen = VocabularyEntry.GetData(notSeenVar);
-                        List<VocabularyEntry> seen = VocabularyEntry.GetData(seenVar);
-                        List<VocabularyEntry> ltw = VocabularyEntry.GetData(ltmVar);
                         for (int j = 0; j < entries.Count; j++) { 
-                            if (!notSeen.Contains(entries[j])) notSeen.Add(entries[j]);
-                            if (seen.Contains(entries[j])) seen.Remove(entries[j]);
-                            if (ltw.Contains(entries[j])) ltw.Remove(entries[j]);
+                            if (!VocabularyEntry.EntriesSpecialWordlists[notSeenIndex].Contains(entries[j])) VocabularyEntry.EntriesSpecialWordlists[notSeenIndex].Add(entries[j]);
+                            if (VocabularyEntry.EntriesSpecialWordlists[seenIndex].Contains(entries[j])) VocabularyEntry.EntriesSpecialWordlists[seenIndex].Remove(entries[j]);
+                            if (VocabularyEntry.EntriesSpecialWordlists[ltwIndex].Contains(entries[j])) VocabularyEntry.EntriesSpecialWordlists[ltwIndex].Remove(entries[j]);
                         }
-                        VocabularyEntry.WriteData(notSeenVar, notSeen);
-                        VocabularyEntry.WriteData(seenVar, seen);
-                        VocabularyEntry.WriteData(ltmVar, ltw);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[notSeenIndex], VocabularyEntry.EntriesSpecialWordlists[notSeenIndex]);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[seenIndex], VocabularyEntry.EntriesSpecialWordlists[seenIndex]);
+                        VocabularyEntry.WriteData(VocabularyEntry.EntrySpecialWordlists[ltwIndex], VocabularyEntry.EntriesSpecialWordlists[ltwIndex]);
                         VocabularyEntry.WriteData(entry, entries);
                     }
                 }
