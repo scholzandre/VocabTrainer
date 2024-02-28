@@ -101,6 +101,8 @@ namespace VocabTrainer.ViewModels {
         private int _language;
         private int _counter = 1;
         private Brush _clickColor = Brushes.Gray;
+        private string _questionIdentifier = "question";
+        private string _answerIdentifier = "answer";
         public LearningModeFourViewModel(LearnViewModel parent, List<VocabularyEntry> tempEntry) {
             _parent = parent;
             _entries = tempEntry;
@@ -140,52 +142,52 @@ namespace VocabTrainer.ViewModels {
         public ICommand SetFirstQuestionCommand => new RelayCommand(SetFirstQuestion, CanExecuteCommand);
         private void SetFirstQuestion(object obj) {
             _question = (QuestionString[0], 0);
-            CheckAnswer("question"); 
+            CheckAnswer(_questionIdentifier); 
         }
         public ICommand SetSecondQuestionCommand => new RelayCommand(SetSecondQuestion, CanExecuteCommand);
         private void SetSecondQuestion(object obj) {
             _question = (QuestionString[1], 1);
-            CheckAnswer("question"); 
+            CheckAnswer(_questionIdentifier); 
         }
         public ICommand SetThirdQuestionCommand => new RelayCommand(SetThirdQuestion, CanExecuteCommand);
         private void SetThirdQuestion(object obj) {
             _question = (QuestionString[2], 2);
-            CheckAnswer("question"); 
+            CheckAnswer(_questionIdentifier); 
         }
         public ICommand SetFourthQuestionCommand => new RelayCommand(SetFourthQuestion, CanExecuteCommand);
         private void SetFourthQuestion(object obj) {
             _question = (QuestionString[3], 3);
-            CheckAnswer("question"); 
+            CheckAnswer(_questionIdentifier); 
         }
         public ICommand SetFifthQuestionCommand => new RelayCommand(SetFifthQuestion, CanExecuteCommand);
         private void SetFifthQuestion(object obj) {
             _question = (QuestionString[4], 4);
-            CheckAnswer("question"); 
+            CheckAnswer(_questionIdentifier); 
         }
         public ICommand SetFirstAnswerCommand => new RelayCommand(SetFirstAnswer, CanExecuteCommand);
         private void SetFirstAnswer(object obj) {
             _answer = (AnswerString[0], 0);
-            CheckAnswer("answer"); 
+            CheckAnswer(_answerIdentifier); 
         }
         public ICommand SetSecondAnswerCommand => new RelayCommand(SetSecondAnswer, CanExecuteCommand);
         private void SetSecondAnswer(object obj) {
             _answer = (AnswerString[1], 1);
-            CheckAnswer("answer"); 
+            CheckAnswer(_answerIdentifier); 
         }
         public ICommand SetThirdAnswerCommand => new RelayCommand(SetThirdAnswer, CanExecuteCommand);
         private void SetThirdAnswer(object obj) {
             _answer = (AnswerString[2], 2);
-            CheckAnswer("answer"); 
+            CheckAnswer(_answerIdentifier); 
         }
         public ICommand SetFourthAnswerCommand => new RelayCommand(SetFourthAnswer, CanExecuteCommand);
         private void SetFourthAnswer(object obj) {
             _answer = (AnswerString[3], 3);
-            CheckAnswer("answer"); 
+            CheckAnswer(_answerIdentifier); 
         }
         public ICommand SetFifthAnswerCommand => new RelayCommand(SetFifthAnswer, CanExecuteCommand);
         private void SetFifthAnswer(object obj) {
             _answer = (AnswerString[4], 4);
-            CheckAnswer("answer");
+            CheckAnswer(_answerIdentifier);
         }
         private async void CheckAnswer(string field) {
             if (_question.Item1 != string.Empty && _answer.Item1 != string.Empty) {
@@ -229,7 +231,7 @@ namespace VocabTrainer.ViewModels {
                     _parent.ShowLearnMode();
                 }
             } else {
-                if (field == "answer") 
+                if (field == _answerIdentifier) 
                     SetAnswerBackground(_clickColor);
                 else 
                     SetQuestionBackground(_clickColor);
