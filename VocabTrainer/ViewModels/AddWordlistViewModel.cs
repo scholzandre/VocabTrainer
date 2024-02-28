@@ -57,7 +57,8 @@ namespace VocabTrainer.ViewModels {
             '"',
             '<',
             '>',
-            '|'
+            '|',
+            '_'
         };
         private MainViewModel _parent;
         public AddWordlistViewModel(MainViewModel parent) {
