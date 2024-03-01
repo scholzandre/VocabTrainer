@@ -102,10 +102,7 @@ namespace VocabTrainer.ViewModels {
             for (int i = 0; i < tempWordlist.Count; i++) 
                 if (tempWordlist[i].IsTrue) {
                     VocabularyEntry tempEntry = new VocabularyEntry();
-                    if (tempWordlist[i].WordlistName != "Marked" &&
-                        tempWordlist[i].WordlistName != "Seen" &&
-                        tempWordlist[i].WordlistName != "NotSeen" &&
-                        tempWordlist[i].WordlistName != "LastTimeWrong") {
+                    if (!VocabularyEntry.SpecialWordlistname.Contains(tempWordlist[i].WordlistName)) {
                         tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist[i].WordlistName}_{tempWordlist[i].FirstLanguage}_{tempWordlist[i].SecondLanguage}{VocabularyEntry.SecondPartFilePath}";
                     } else {
                         tempEntry.FilePath = $"{VocabularyEntry.FirstPartFilePath}{tempWordlist[i].WordlistName}{VocabularyEntry.SecondPartFilePath}";
