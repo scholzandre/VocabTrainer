@@ -58,15 +58,25 @@
                     <TextBlock Style="{StaticResource TextBoxStyle}" Text="{Binding LastTimeWrongString}" Grid.Row="5" x:Name="lastTimeWrong" Grid.ColumnSpan="3" Margin="31,33,0,0" Grid.RowSpan="2"/>
                     <Button x:Name="resetButton" Grid.Row="6" Width="80" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Reset progress" Command="{Binding ResetCommand}" Grid.ColumnSpan="2" Margin="31,33,0,0" Grid.RowSpan="2"/>
                 </Grid>
-
             </Grid>
             <StackPanel Orientation="Horizontal">
                 <TextBlock HorizontalAlignment="Left" Text="Ltw = Last time wrong" Foreground="white" Width="520" FontSize="10" VerticalAlignment="Bottom"/>
                 <TextBox Width="200" x:Name="SearchingBox" HorizontalAlignment="Right" Text="{Binding SearchingWord, Mode=TwoWay}"/>
                 <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
             </StackPanel>
-            <DataGrid ItemsSource="{Binding SearchingWords}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" MaxHeight="300" CanUserAddRows="False">
-                <DataGrid.Columns>
+            <DataGrid RowBackground="Transparent" Background="Transparent" ItemsSource="{Binding SearchingWords}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" MaxHeight="300" CanUserAddRows="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </DataGrid.Resources>
+                
+                <DataGrid.Columns> 
                     <DataGridTextColumn IsReadOnly="True" Header="FirstWord" Binding="{Binding FirstWord}" MinWidth="221"/>
                     <DataGridTextColumn IsReadOnly="True" Header="SecondWord" Binding="{Binding SecondWord}" MinWidth="221"/>
                     <DataGridCheckBoxColumn IsReadOnly="True" Header="Seen" Binding="{Binding Seen}"/>
