@@ -21,7 +21,18 @@
             <TextBox x:Name="searchWord" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding SearchingWord}" VerticalAlignment="Center" Width="137" Height="21"/>
             <Button Width="20" Height="20" Content="🔎" Command="{Binding SearchCommand}" IsDefault="True"/>
         </StackPanel>
-        <ListBox x:Name="itemListBox" ItemsSource="{Binding SearchingWords}" Background="Transparent" Grid.Row="1" ScrollViewer.CanContentScroll="True" MaxHeight="410" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <ListBox Padding="5,5,0,0" x:Name="itemListBox" ItemsSource="{Binding SearchingWords}" Background="Transparent" Grid.Row="1" ScrollViewer.CanContentScroll="True" MaxHeight="410" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <VirtualizingStackPanel>
