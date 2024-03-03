@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <TextBox Background="{Binding BackgroundTextbox}" Grid.Column="0" IsEnabled="{Binding FirstWordWritable}" Width="325" Text="{Binding FirstWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBox Background="{Binding BackgroundTextbox}" Grid.Column="1" IsEnabled="{Binding SecondWordWritable}" Width="325" Margin="5,0,0,0" Text="{Binding SecondWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Background="{Binding BackgroundTextbox}" Grid.Column="2" Content="{Binding EditButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding ChangeTextCommand}" IsEnabled="{Binding Editable}"/>
-        <Button Background="{Binding BackgroundTextbox}" Grid.Column="3" Content="{Binding DeleteButtonText}" Height="20" Width="20" Margin="5,0,0,0" Command="{Binding DeleteEntryCommand}"/>
+        <Button Background="{Binding BackgroundTextbox}" Grid.Column="2" Content="{Binding EditButtonText}" Height="20" Width="20" Command="{Binding ChangeTextCommand}" IsEnabled="{Binding Editable}"/>
+        <Button Background="{Binding BackgroundTextbox}" Grid.Column="3" Content="{Binding DeleteButtonText}" Height="20" Width="20" Margin="-15,0,0,0" Command="{Binding DeleteEntryCommand}"/>
     </Grid>
 </UserControl>
